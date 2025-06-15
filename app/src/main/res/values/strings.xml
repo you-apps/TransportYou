@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name" translatable="false">Transport You</string>
+
+    <string name="search">Search</string>
+    <string name="origin">Origin</string>
+    <string name="destination">Destination</string>
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+    <string name="directions">Directions</string>
+    <string name="total">Total</string>
+</resources>
