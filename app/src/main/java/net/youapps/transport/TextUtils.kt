@@ -36,7 +36,8 @@ object TextUtils {
                 val unitName = unitDisplayName(durationUnits[index])
                 if (part != "00") "${part}${unitName}" else null
             }
-            .takeLast(2)
+            .reversed()
+            .take(2)
             .filterNotNull()
             .joinToString(" ") { it.removePrefix("0") }
     }
@@ -56,7 +57,7 @@ object TextUtils {
     }
 
     fun formatDistance(distance: Int): String {
-        if (distance < 1000) return "${this}m"
+        if (distance < 1000) return "${distance}m"
 
         return "%.1f".format(distance.toFloat() / 1000) + " km"
     }
