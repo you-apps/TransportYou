@@ -1,12 +1,14 @@
 package net.youapps.transport.models
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import de.schildbach.pte.dto.Location
+import de.schildbach.pte.dto.Product
 import de.schildbach.pte.dto.QueryTripsContext
 import de.schildbach.pte.dto.Trip
 import de.schildbach.pte.dto.TripOptions
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
 import java.util.Date
@@ -37,7 +40,16 @@ class DirectionsModel(
     private var tripsFirstPageContext: QueryTripsContext? = null
     private var tripsLastPageContext: QueryTripsContext? = null
 
-    val tripOptions = MutableStateFlow<TripOptions>(TripOptions())
+    val enabledProducts = mutableStateListOf<Product>(
+        *productTypes.map { it.key }.toTypedArray()
+    )
+    private val tripOptions get() = TripOptions(
+        enabledProducts.toSet(), // products
+        null, // optimize
+        null, // walk speed
+        null, // accessibility
+        null, // flags
+    )
 
     fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
         tripsFirstPageContext = null
@@ -50,7 +62,7 @@ class DirectionsModel(
                 destination.value, // end
                 date.value ?: Date(), // date
                 isDepartureDate.value, // is date departure date?
-                tripOptions.value // advanced trip options
+                tripOptions // advanced trip options
             )
         } catch (e: Exception) {
             Log.e("fetching trips", e.toString())
@@ -80,6 +92,12 @@ class DirectionsModel(
         }
     }
 
+    fun swapOriginAndDestination() {
+        val temp = origin.value
+        origin.value = destination.value
+        destination.value = temp
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -88,5 +106,17 @@ class DirectionsModel(
                 return DirectionsModel(app.networkRepository) as T
             }
         }
+
+        val productTypes = mapOf(
+            Product.HIGH_SPEED_TRAIN to R.string.product_high_speed_train,
+            Product.REGIONAL_TRAIN to R.string.product_regional_train,
+            Product.SUBURBAN_TRAIN to R.string.product_suburban_train,
+            Product.TRAM to R.string.product_tram,
+            Product.SUBWAY to R.string.product_subway,
+            Product.BUS to R.string.product_bus,
+            Product.CABLECAR to R.string.product_cablecar,
+            Product.FERRY to R.string.product_ferry,
+            Product.ON_DEMAND to R.string.product_on_demand
+        )
     }
 }
