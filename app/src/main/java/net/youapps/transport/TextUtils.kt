@@ -13,7 +13,8 @@ import java.util.Locale
 fun Date.toDateTime() = this.toInstant().atZone(ZoneId.systemDefault())
 
 object TextUtils {
-    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
     
     private val durationUnits = arrayOf(
         MeasureUnit.SECOND,
@@ -24,7 +25,12 @@ object TextUtils {
 
     fun formatTime(time: Date): String {
         val dateTime = time.toDateTime()
-        return dateFormatter.format(dateTime)
+        return timeFormatter.format(dateTime)
+    }
+
+    fun formatDateTime(time: Date): String {
+        val dateTime = time.toDateTime()
+        return dateTimeFormatter.format(dateTime)
     }
 
     fun prettifyDuration(durationMillis: Long): String {

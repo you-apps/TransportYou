@@ -114,6 +114,10 @@ fun DirectionsScreen(
                     .padding(horizontal = 10.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val selectedDate by directionsModel.date.collectAsState()
+                val isDepartureDate by directionsModel.isDepartureDate.collectAsState()
+                var showDateTimePicker by rememberSaveable { mutableStateOf(false) }
+
                 Card(
                     modifier = Modifier
                         .clip(CardDefaults.shape)
@@ -126,6 +130,36 @@ fun DirectionsScreen(
                         text = selectedDate?.let { TextUtils.formatDateTime(it) }
                             ?: stringResource(R.string.now)
                     )
+                }
+
+                if (showDateTimePicker) {
+                    DateTimePickerDialog(
+                        value = selectedDate ?: Date(),
+                        onDismissRequest = { showDateTimePicker = false },
+                        extraDialogContent = {
+                            Row {
+                                FilterChip(
+                                    selected = isDepartureDate,
+                                    onClick = {
+                                        scope.launch { directionsModel.isDepartureDate.emit(true) }
+                                    }, label = {
+                                        Text(stringResource(R.string.departure))
+                                    }
+                                )
+
+                                FilterChip(
+                                    selected = !isDepartureDate,
+                                    onClick = {
+                                        scope.launch { directionsModel.isDepartureDate.emit(false) }
+                                    }, label = {
+                                        Text(stringResource(R.string.arrival))
+                                    }
+                                )
+                            }
+                        }
+                    ) { newDate ->
+                        scope.launch { directionsModel.date.emit(newDate) }
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
