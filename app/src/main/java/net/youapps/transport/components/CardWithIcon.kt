@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -17,13 +18,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardWithIcon(imageVector: ImageVector?, text: String?, onClick: (() -> Unit)? = null) {
+fun CardWithIcon(
+    imageVector: ImageVector?,
+    text: String?,
+    colors: CardColors = CardDefaults.cardColors(),
+    onClick: (() -> Unit)? = null
+) {
     Card(
         modifier = Modifier
             .clip(CardDefaults.shape)
             .clickable(enabled = onClick != null) {
                 onClick?.invoke()
-            }
+            },
+        colors = colors
     ) {
         Row(
             modifier = Modifier

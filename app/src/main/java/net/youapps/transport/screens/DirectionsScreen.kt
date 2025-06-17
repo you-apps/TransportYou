@@ -1,5 +1,6 @@
 package net.youapps.transport.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +18,13 @@ import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -123,13 +127,14 @@ fun DirectionsScreen(
                 val isDepartureDate by directionsModel.isDepartureDate.collectAsState()
                 var showDateTimePicker by rememberSaveable { mutableStateOf(false) }
 
-                CardWithIcon(
-                    imageVector = null,
-                    text = (stringResource(if (isDepartureDate) R.string.departure else R.string.arrival))
-                            + ": " + (selectedDate?.let { TextUtils.formatDateTime(it.toZonedDateTime()) }
-                        ?: stringResource(R.string.now))
+                Button(
+                    onClick = { showDateTimePicker = true }
                 ) {
-                    showDateTimePicker = true
+                    Text(
+                        text = (stringResource(if (isDepartureDate) R.string.departure else R.string.arrival))
+                                + ": " + (selectedDate?.let { TextUtils.formatDateTime(it.toZonedDateTime()) }
+                            ?: stringResource(R.string.now))
+                    )
                 }
 
                 if (showDateTimePicker) {
@@ -166,7 +171,8 @@ fun DirectionsScreen(
 
                 TooltipIconButton(
                     imageVector = Icons.Default.SwapVert,
-                    contentDescription = stringResource(R.string.swap)
+                    contentDescription = stringResource(R.string.swap),
+                    filled = true
                 ) {
                     directionsModel.swapOriginAndDestination()
                     syncLocationsFromDirectionsModel()
@@ -174,7 +180,8 @@ fun DirectionsScreen(
 
                 TooltipIconButton(
                     imageVector = Icons.Default.FilterAlt,
-                    contentDescription = stringResource(R.string.trip_options)
+                    contentDescription = stringResource(R.string.trip_options),
+                    filled = true
                 ) {
                     showTripOptions = true
                 }
