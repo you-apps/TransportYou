@@ -13,6 +13,9 @@
     <string name="now">Now</string>
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
+    <string name="trip_time">Trip time</string>
 
     <string name="product_high_speed_train">High speed train</string>
     <string name="product_regional_train">Regional train</string>

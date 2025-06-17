@@ -5,15 +5,18 @@ import android.icu.util.MeasureUnit
 import android.os.Build
 import android.text.format.DateUtils
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Date
 import java.util.Locale
 
-fun Date.toDateTime() = this.toInstant().atZone(ZoneId.systemDefault())
+fun Date.toZonedDateTime() = this.toInstant().atZone(ZoneId.systemDefault())
+fun ZonedDateTime.toJavaDate() = Date(this.toInstant().toEpochMilli())
 
 object TextUtils {
-    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
     
     private val durationUnits = arrayOf(
@@ -23,15 +26,11 @@ object TextUtils {
         MeasureUnit.DAY
     )
 
-    fun formatTime(time: Date): String {
-        val dateTime = time.toDateTime()
-        return timeFormatter.format(dateTime)
-    }
+    fun formatDateTime(time: ZonedDateTime): String = dateTimeFormatter.format(time)
 
-    fun formatDateTime(time: Date): String {
-        val dateTime = time.toDateTime()
-        return dateTimeFormatter.format(dateTime)
-    }
+    fun formatDate(time: ZonedDateTime): String = dateFormatter.format(time)
+
+    fun formatTime(time: ZonedDateTime): String = timeFormatter.format(time)
 
     fun prettifyDuration(durationMillis: Long): String {
         val duration = DateUtils.formatElapsedTime(durationMillis / 1000)
@@ -79,9 +78,9 @@ object TextUtils {
     fun displayDepartureTimeWithDelay(planned: Date?, predicted: Date?): String {
         if (planned != null && predicted != null) {
             val timeDiff = formatTimeDiff(planned, predicted)
-            return formatTime(planned) + " ($timeDiff)"
+            return formatTime(planned.toZonedDateTime()) + " ($timeDiff)"
         }
 
-        return (planned ?: predicted)?.let { formatTime(it) }.orEmpty()
+        return (planned ?: predicted)?.let { formatTime(it.toZonedDateTime()) }.orEmpty()
     }
 }

@@ -25,6 +25,7 @@ import de.schildbach.pte.dto.Stop
 import de.schildbach.pte.dto.Trip
 import net.youapps.transport.TextUtils
 import net.youapps.transport.extensions.displayName
+import net.youapps.transport.toZonedDateTime
 
 enum class StopType {
     Departure,
@@ -169,7 +170,7 @@ fun TripLegIndividual(leg: Trip.Individual, onLocationClick: (Location) -> Unit)
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Text(TextUtils.formatTime(leg.departureTime))
+            Text(TextUtils.formatTime(leg.departureTime.toZonedDateTime()))
 
             Text(leg.departure.displayName())
         }
@@ -177,7 +178,7 @@ fun TripLegIndividual(leg: Trip.Individual, onLocationClick: (Location) -> Unit)
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Text(TextUtils.formatTime(leg.arrivalTime))
+            Text(TextUtils.formatTime(leg.arrivalTime.toZonedDateTime()))
 
             Text(leg.arrival.displayName())
         }
