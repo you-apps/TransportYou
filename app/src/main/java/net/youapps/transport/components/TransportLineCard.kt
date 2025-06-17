@@ -14,7 +14,6 @@ import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.runtime.Composable
 import de.schildbach.pte.dto.Line
 import de.schildbach.pte.dto.Product
-import kotlin.collections.get
 
 val transportIcons = mapOf(
     Product.HIGH_SPEED_TRAIN to Icons.Default.DirectionsRailway,

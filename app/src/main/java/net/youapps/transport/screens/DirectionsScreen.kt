@@ -1,6 +1,5 @@
 package net.youapps.transport.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,23 +7,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Directions
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +37,6 @@ import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
-import net.youapps.transport.components.CardWithIcon
 import net.youapps.transport.components.DateTimePickerDialog
 import net.youapps.transport.components.FilterChipWithIcon
 import net.youapps.transport.components.LocationSearchBar
