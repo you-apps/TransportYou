@@ -163,9 +163,27 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
 @Composable
 fun TripLegIndividual(leg: Trip.Individual, onLocationClick: (Location) -> Unit) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        IndividualTripCard(leg)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IndividualTripCard(leg)
+
+            Card {
+                Text(
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                    text = TextUtils.prettifyDuration(
+                        leg.arrivalTime.time - leg.departureTime.time
+                    )
+                )
+            }
+        }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
