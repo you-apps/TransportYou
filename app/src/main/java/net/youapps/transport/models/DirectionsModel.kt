@@ -28,6 +28,10 @@ class DirectionsModel(
     val origin = MutableStateFlow<Location?>(null)
     val destination = MutableStateFlow<Location?>(null)
 
+    val hasAnyLocation = combine(origin, destination) { (origin, destination) ->
+        origin != null || destination != null
+    }
+
     val hasValidLocations = combine(origin, destination) { (origin, destination) ->
         origin != null && destination != null
     }

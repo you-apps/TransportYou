@@ -1,5 +1,6 @@
 package net.youapps.transport.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -160,13 +161,16 @@ fun DirectionsScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                TooltipIconButton(
-                    imageVector = Icons.Default.SwapVert,
-                    contentDescription = stringResource(R.string.swap),
-                    filled = true
-                ) {
-                    directionsModel.swapOriginAndDestination()
-                    syncLocationsFromDirectionsModel()
+                val hasAnyLocation by directionsModel.hasAnyLocation.collectAsState(false)
+                AnimatedVisibility(visible = hasAnyLocation) {
+                    TooltipIconButton(
+                        imageVector = Icons.Default.SwapVert,
+                        contentDescription = stringResource(R.string.swap),
+                        filled = true
+                    ) {
+                        directionsModel.swapOriginAndDestination()
+                        syncLocationsFromDirectionsModel()
+                    }
                 }
 
                 TooltipIconButton(
