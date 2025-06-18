@@ -1,12 +1,15 @@
 package net.youapps.transport.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MediumTopAppBar
@@ -41,9 +44,11 @@ fun DeparturesScreen(
     location: Location
 ) {
     val scope = rememberCoroutineScope()
+    val isLocationSaved by departuresModel.isLocationSaved.collectAsStateWithLifecycle(false)
 
     LaunchedEffect(Unit) {
-        departuresModel.fetchDepartures(location)
+        departuresModel.location.emit(location)
+        departuresModel.fetchDepartures()
     }
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -61,6 +66,17 @@ fun DeparturesScreen(
                         contentDescription = stringResource(R.string.back)
                     ) {
                         navController.popBackStack()
+                    }
+                },
+                actions = {
+                    Row {
+                        TooltipIconButton(
+                            imageVector = if (isLocationSaved) Icons.Default.Star else Icons.Default.StarBorder,
+                            contentDescription = stringResource(R.string.save)
+                        ) {
+                            if (isLocationSaved) departuresModel.removeSavedLocation()
+                            else departuresModel.addSavedLocation()
+                        }
                     }
                 }
             )

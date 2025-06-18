@@ -106,7 +106,7 @@ class DirectionsModel(
         @Suppress("UNCHECKED_CAST")
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                val app = extras[APPLICATION_KEY] as TransportYouApp
+                val app = checkNotNull(extras[APPLICATION_KEY]) as TransportYouApp
                 return DirectionsModel(app.networkRepository) as T
             }
         }

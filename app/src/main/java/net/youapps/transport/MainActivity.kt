@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import net.youapps.transport.models.DeparturesModel
 import net.youapps.transport.models.DirectionsModel
+import net.youapps.transport.models.HomeModel
 import net.youapps.transport.models.LocationsModel
 import net.youapps.transport.screens.DeparturesScreen
 import net.youapps.transport.screens.DirectionsScreen
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
     val departuresModel: DeparturesModel by viewModels { DeparturesModel.Factory }
     val locationsModel: LocationsModel by viewModels { LocationsModel.Factory }
     val directionsModel: DirectionsModel by viewModels { DirectionsModel.Factory }
+    val homeModel: HomeModel by viewModels { HomeModel.Factory }
 
     // TODO: use https://github.com/maplibre/maplibre-compose
 
@@ -49,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<NavRoutes.Home> {
-                        HomeScreen(navController, locationsModel)
+                        HomeScreen(navController, homeModel, locationsModel)
                     }
                 }
             }
