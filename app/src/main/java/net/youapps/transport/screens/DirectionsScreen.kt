@@ -200,6 +200,7 @@ fun DirectionsScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // TODO: routes pagination
                 items(trips) { trip ->
                     HorizontalDivider()
 

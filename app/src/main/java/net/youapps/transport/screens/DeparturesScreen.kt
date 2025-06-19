@@ -46,6 +46,7 @@ fun DeparturesScreen(
     val scope = rememberCoroutineScope()
     val isLocationSaved by departuresModel.isLocationSaved.collectAsStateWithLifecycle(false)
 
+    // TODO: periodic refresh
     LaunchedEffect(Unit) {
         departuresModel.location.emit(location)
         departuresModel.fetchDepartures()
