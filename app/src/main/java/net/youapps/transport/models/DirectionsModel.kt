@@ -1,6 +1,7 @@
 package net.youapps.transport.models
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -14,8 +15,11 @@ import de.schildbach.pte.dto.Trip
 import de.schildbach.pte.dto.TripOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
@@ -54,12 +58,11 @@ class DirectionsModel(
     private var tripsFirstPageContext: QueryTripsContext? = null
     private var tripsLastPageContext: QueryTripsContext? = null
 
-    // TODO: store in app data
-    val enabledProducts = mutableStateListOf<Product>(
-        *productTypes.map { it.key }.toTypedArray()
-    )
+    val enabledProducts = appDataRepository.savedProductsFlow
+        .stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(), emptySet())
+
     private val tripOptions get() = TripOptions(
-        enabledProducts.toSet(), // products
+        enabledProducts.value, // products
         null, // optimize
         null, // walk speed
         null, // accessibility
@@ -127,6 +130,14 @@ class DirectionsModel(
 
         val route = newProtobufRoute(origin, location)
         appDataRepository.removeSavedRoute(route)
+    }
+
+    fun addProductType(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        appDataRepository.addProduct(product)
+    }
+
+    fun removeProductType(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        appDataRepository.removeProduct(product)
     }
 
     companion object {

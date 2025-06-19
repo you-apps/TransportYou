@@ -16,12 +16,15 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.youapps.transport.models.DirectionsModel
+import net.youapps.transport.models.DirectionsModel.Companion.productTypes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,15 +40,17 @@ fun TripOptionsSheet(directionsModel: DirectionsModel, onDismissRequest: () -> U
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
+            val enabledProducts by directionsModel.enabledProducts.collectAsState()
+
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(DirectionsModel.productTypes.entries.toList()) { (product, stringRes) ->
-                    val isEnabled = directionsModel.enabledProducts.contains(product)
+                items(productTypes.entries.toList()) { (product, stringRes) ->
+                    val isEnabled = enabledProducts.contains(product)
 
                     fun toggleProduct() {
-                        if (isEnabled) directionsModel.enabledProducts.remove(product)
-                        else directionsModel.enabledProducts.add(product)
+                        if (isEnabled) directionsModel.removeProductType(product)
+                        else directionsModel.addProductType(product)
                     }
 
                     Row(
@@ -55,7 +60,7 @@ fun TripOptionsSheet(directionsModel: DirectionsModel, onDismissRequest: () -> U
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                               toggleProduct()
+                                toggleProduct()
                             }
                             .padding(horizontal = 10.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,

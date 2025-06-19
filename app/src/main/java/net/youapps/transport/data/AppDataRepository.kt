@@ -1,6 +1,7 @@
 package net.youapps.transport.data
 
 import android.content.Context
+import de.schildbach.pte.dto.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import net.youapps.transport.ProtobufLocation
@@ -16,6 +17,11 @@ class AppDataRepository(private val context: Context) {
     val savedRoutesFlow: Flow<List<ProtobufRoute>> = context.appData.data
         .map { appData ->
             appData.savedRoutes.routesList
+        }
+
+    val savedProductsFlow: Flow<Set<Product>> = context.appData.data
+        .map { appData ->
+            appData.savedRouteConfig.productsList.map { Product.valueOf(it) }.toSet()
         }
 
     suspend fun addSavedLocation(location: ProtobufLocation) {
@@ -62,6 +68,31 @@ class AppDataRepository(private val context: Context) {
             appData.toBuilder().apply {
                 savedRoutes = savedRoutes.toBuilder()
                     .removeRoutes(indexToRemove)
+                    .build()
+            }
+                .build()
+        }
+    }
+
+    suspend fun addProduct(product: Product) {
+        context.appData.updateData { appData ->
+            appData.toBuilder().apply {
+                savedRouteConfig = savedRouteConfig.toBuilder()
+                    .addProducts(product.name)
+                    .build()
+            }
+                .build()
+        }
+    }
+
+    suspend fun removeProduct(product: Product) {
+        context.appData.updateData { appData ->
+            val products = appData.savedRouteConfig.productsList - product.name
+
+            appData.toBuilder().apply {
+                savedRouteConfig = savedRouteConfig.toBuilder()
+                    .clearProducts()
+                    .addAllProducts(products)
                     .build()
             }
                 .build()
