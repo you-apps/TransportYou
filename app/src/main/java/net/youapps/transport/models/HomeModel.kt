@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import de.schildbach.pte.dto.Departure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
@@ -22,18 +24,24 @@ class HomeModel(
     val savedLocations = settingsRepository.savedLocationsFlow
     val selectedLocation = MutableStateFlow<ProtobufLocation?>(null)
 
-    val departures = selectedLocation.map { location ->
-        if (location == null) return@map emptyList()
+    private val _departures = MutableStateFlow<Map<ProtobufLocation, List<Departure>>>(emptyMap())
+    val departures = _departures.asStateFlow()
 
-        return@map withContext(Dispatchers.IO) {
-            try {
-                val departures = networkRepository.provider
-                    .queryDepartures(location.id, Date(), 30, true)
-                departures.stationDepartures.flatMap { it.departures }.filterNotNull()
-            } catch (e: Exception) {
-                Log.e("exc", e.stackTraceToString())
-                return@withContext emptyList()
-            }
+    fun updateDeparturesForSelectedLocation() = viewModelScope.launch(Dispatchers.IO) {
+        val location = selectedLocation.value ?: return@launch
+
+        try {
+            val departures = networkRepository.provider
+                .queryDepartures(location.id, Date(), 10, true)
+                .stationDepartures
+                .flatMap { it.departures }
+                .filterNotNull()
+
+            val departuresMap = _departures.value.toMutableMap()
+            departuresMap.put(location, departures)
+            _departures.emit(departuresMap)
+        } catch (e: Exception) {
+            Log.e("exc", e.stackTraceToString())
         }
     }
 

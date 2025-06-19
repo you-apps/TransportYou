@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,14 +64,14 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
 
             val selectedLocation by homeModel.selectedLocation.collectAsStateWithLifecycle()
             val savedLocations by homeModel.savedLocations.collectAsStateWithLifecycle(emptyList())
-            val departures by homeModel.departures.collectAsStateWithLifecycle(emptyList())
+            val departuresMap by homeModel.departures.collectAsStateWithLifecycle(emptyMap())
 
             LaunchedEffect(savedLocations) {
                 if (savedLocations.isNotEmpty()) homeModel.selectedLocation.emit(savedLocations.first())
             }
 
             selectedLocation?.let { selectedLocation ->
-                Card(
+                OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp)
@@ -79,17 +80,20 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
                     val pagerState = rememberPagerState(
                         pageCount = { savedLocations.size }
                     )
-                    // TODO: cache departures instead of reloading
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.currentPage }.collect { page ->
-                            homeModel.selectedLocation.emit(savedLocations[page])
+                            val newLocation = savedLocations[page]
+                            homeModel.selectedLocation.emit(newLocation)
+
+                            if (departuresMap[newLocation].isNullOrEmpty()) {
+                                homeModel.updateDeparturesForSelectedLocation()
+                            }
                         }
                     }
 
                     HorizontalPager(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 10.dp)
                             .padding(top = 6.dp),
                         state = pagerState
                     ) { page ->
@@ -99,26 +103,25 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Text(
+                                modifier = Modifier.padding(horizontal = 10.dp),
                                 text = listOfNotNull(selectedLocation.name, selectedLocation.place)
                                     .filterNot { it.isEmpty() }
                                     .joinToString(", "),
                                 style = MaterialTheme.typography.headlineSmall
                             )
 
-                            if (location == selectedLocation) {
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 6.dp, horizontal = 12.dp)
-                                ) {
-                                    items(departures) { departure ->
-                                        DepartureItem(departure) { location ->
-                                            navController.navigate(
-                                                NavRoutes.DeparturesFromLocation(
-                                                    location
-                                                )
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp)
+                            ) {
+                                items(departuresMap[location].orEmpty()) { departure ->
+                                    DepartureItem(departure) { location ->
+                                        navController.navigate(
+                                            NavRoutes.DeparturesFromLocation(
+                                                location
                                             )
-                                        }
+                                        )
                                     }
                                 }
                             }
@@ -128,7 +131,7 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
             }
 
             // TODO: list of saved routes (static)
-            Card(
+            OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
