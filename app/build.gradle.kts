@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.protobuf.javalite)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.okhttp)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

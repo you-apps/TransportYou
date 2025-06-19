@@ -1,16 +1,73 @@
 package net.youapps.transport.data
 
+import de.schildbach.pte.AvvAachenProvider
+import de.schildbach.pte.AvvAugsburgProvider
+import de.schildbach.pte.BartProvider
+import de.schildbach.pte.BayernProvider
+import de.schildbach.pte.BsvagProvider
 import de.schildbach.pte.BvgProvider
+import de.schildbach.pte.CHSearchProvider
+import de.schildbach.pte.CmtaProvider
 import de.schildbach.pte.DbProvider
+import de.schildbach.pte.DingProvider
+import de.schildbach.pte.DsbProvider
+import de.schildbach.pte.DubProvider
+import de.schildbach.pte.GvhProvider
+import de.schildbach.pte.InvgProvider
+import de.schildbach.pte.KvvProvider
+import de.schildbach.pte.LinzProvider
+import de.schildbach.pte.LuProvider
+import de.schildbach.pte.MerseyProvider
+import de.schildbach.pte.MvgProvider
+import de.schildbach.pte.MvvProvider
+import de.schildbach.pte.NasaProvider
 import de.schildbach.pte.NetworkId
 import de.schildbach.pte.NetworkProvider
+import de.schildbach.pte.NsProvider
+import de.schildbach.pte.NvbwProvider
 import de.schildbach.pte.NvvProvider
+import de.schildbach.pte.OebbProvider
+import de.schildbach.pte.RtaChicagoProvider
+import de.schildbach.pte.SeProvider
+import de.schildbach.pte.ShProvider
+import de.schildbach.pte.SncbProvider
+import de.schildbach.pte.SydneyProvider
+import de.schildbach.pte.TlemProvider
+import de.schildbach.pte.VbbProvider
+import de.schildbach.pte.VblProvider
+import de.schildbach.pte.VbnProvider
+import de.schildbach.pte.VgnProvider
+import de.schildbach.pte.VgsProvider
+import de.schildbach.pte.VmobilProvider
+import de.schildbach.pte.VmtProvider
+import de.schildbach.pte.VmvProvider
+import de.schildbach.pte.VrnProvider
+import de.schildbach.pte.VrrProvider
+import de.schildbach.pte.VrsProvider
+import de.schildbach.pte.VvmProvider
+import de.schildbach.pte.VvoProvider
+import de.schildbach.pte.VvsProvider
+import de.schildbach.pte.VvtProvider
+import de.schildbach.pte.VvvProvider
+import de.schildbach.pte.WienProvider
+import de.schildbach.pte.ZvvProvider
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 enum class Country {
     Germany,
     Austria,
     France,
-    Australia
+    Australia,
+    Denmark,
+    GreatBritain,
+    Belgium,
+    Switzerland,
+    Liechtenstein,
+    Luxembourg,
+    USA,
+    Netherlands,
+    Sweden,
+    UnitedArabEmirates
 }
 
 enum class Continent {
@@ -32,7 +89,6 @@ class TransportNetwork(
 )
 
 object TransportNetworks {
-    // TODO: finish adding all supported networks
     val networks = arrayOf(
         TransportNetwork(
             id = NetworkId.DB,
@@ -60,396 +116,395 @@ object TransportNetworks {
             continent = Continent.Europe,
             factory = { NvvProvider("{\"type\":\"AID\",\"aid\":\"Kt8eNOH7qjVeSxNA\"}") }
         ),
+        TransportNetwork(
+            id = NetworkId.BVG,
+            name = "BVG",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                BvgProvider("{\"aid\":\"1Rxs112shyHLatUX4fofnmdxK\",\"type\":\"AID\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VBB,
+            name = "VBB",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                VbbProvider("{\"type\":\"AID\",\"aid\":\"hafas-vbb-apps\"}", "RCTJM2fFxFfxxQfI".toByteArray(Charsets.UTF_8))
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.BAYERN,
+            name = "Bayern",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { BayernProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.AVV_AUGSBURG,
+            name = "AVV Augsburg",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                AvvAugsburgProvider("{\"type\":\"AID\",\"aid\":\"jK91AVVZU77xY5oH\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.MVV,
+            name = "MVV",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { MvvProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.INVG,
+            name = "INVG",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                InvgProvider("{\"type\":\"AID\",\"aid\":\"GITvwi3BGOmTQ2a5\"}", "ERxotxpwFT7uYRsI".toByteArray(Charsets.UTF_8))
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VBN,
+            name = "VBN",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                VbnProvider("{\"type\":\"AID\",\"aid\":\"rnOHBWhesvc7gFkd\"}", "SP31mBufSyCLmNxp".toByteArray(Charsets.UTF_8))
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.SH,
+            name = "nah.sh",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                ShProvider("{\"type\":\"AID\",\"aid\":\"r0Ot9FLFNAFxijLW\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.AVV_AACHEN,
+            name = "AVV Aachen",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                AvvAachenProvider("{\"type\":\"AID\",\"aid\":\"4vV1AcH3N511icH\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VGN,
+            name = "VGN",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VgnProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VVM,
+            name = "VVM",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VvmProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VMV,
+            name = "VMV",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VmvProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.GVH,
+            name = "GVH",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { GvhProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.BSVAG,
+            name = "BSVAG",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { BsvagProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VVO,
+            name = "VVO",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VvoProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.NASA,
+            name = "NASA",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { NasaProvider("{\"aid\":\"nasa-apps\",\"type\":\"AID\"}") }
+        ),
+        TransportNetwork(
+            id = NetworkId.VRR,
+            name = "VRR",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VrrProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.MVG,
+            name = "MVG",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { MvgProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VRN,
+            name = "VRN",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VrnProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VVS,
+            name = "VVS Stuttgart",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VvsProvider("http://www2.vvs.de/oeffi/".toHttpUrlOrNull()) }
+        ),
+        TransportNetwork(
+            id = NetworkId.DING,
+            name = "DING",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { DingProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.KVV,
+            name = "KVV Karlsruhe",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { KvvProvider("https://projekte.kvv-efa.de/oeffi/".toHttpUrlOrNull()) }
+        ),
+        TransportNetwork(
+            id = NetworkId.NVBW,
+            name = "NVBW",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { NvbwProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VVV,
+            name = "VVV",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VvvProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VGS,
+            name = "VGS",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = {
+                VgsProvider(
+                    "{\"type\":\"AID\",\"aid\":\"51XfsVqgbdA6oXzHrx75jhlocRg6Xe\"}",
+                    "HJtlubisvxiJxss".toByteArray(Charsets.UTF_8)
+                )
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VRS,
+            name = "VRS",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VrsProvider() }
+        ),
+        TransportNetwork(
+            id = NetworkId.VMT,
+            name = "VMT",
+            country = Country.Germany,
+            continent = Continent.Europe,
+            factory = { VmtProvider("{\"aid\":\"vj5d7i3g9m5d7e3\",\"type\":\"AID\"}") }
+        ),
+        TransportNetwork(
+            id = NetworkId.OEBB,
+            name = "OEBB",
+            country = Country.Austria,
+            continent = Continent.Europe,
+            factory = {
+                OebbProvider("{\"type\":\"AID\",\"aid\":\"OWDL4fE4ixNiPBBm\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.LINZ,
+            name = "Linz",
+            country = Country.Austria,
+            continent = Continent.Europe,
+            factory = {
+                LinzProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VVT,
+            name = "VVT",
+            country = Country.Austria,
+            continent = Continent.Europe,
+            factory = {
+                VvtProvider("{\"type\":\"AID\",\"aid\":\"wf7mcf9bv3nv8g5f\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.WIEN,
+            name = "Wien",
+            country = Country.Austria,
+            continent = Continent.Europe,
+            factory = {
+                WienProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VMOBIL,
+            name = "Vmobil",
+            country = Country.Liechtenstein,
+            continent = Continent.Europe,
+            factory = {
+                VmobilProvider(VAO)
+            },
+        ),
+        TransportNetwork(
+            id = NetworkId.SEARCHCH,
+            name = "SBB",
+            country = Country.Switzerland,
+            continent = Continent.Europe,
+            factory = {
+                CHSearchProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.VBL,
+            name = "VBL",
+            country = Country.Switzerland,
+            continent = Continent.Europe,
+            factory = {
+                VblProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.ZVV,
+            name = "ZVV",
+            country = Country.Switzerland,
+            continent = Continent.Europe,
+            factory = {
+                ZvvProvider("{\"type\":\"AID\",\"aid\":\"hf7mcf9bv3nv8g5f\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.SNCB,
+            name = "SNCB",
+            country = Country.Belgium,
+            continent = Continent.Europe,
+            factory = {
+                SncbProvider("{\"type\":\"AID\",\"aid\":\"sncb-mobi\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.LU,
+            name = "Luxembourg",
+            country = Country.Luxembourg,
+            continent = Continent.Europe,
+            factory = {
+                LuProvider("{\"type\":\"AID\",\"aid\":\"Aqf9kNqJLjxFx6vv\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.NS,
+            name = "NS",
+            country = Country.Netherlands,
+            continent = Continent.Europe,
+            factory = {
+                NsProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.DSB,
+            name = "Danish State Railways",
+            country = Country.Denmark,
+            continent = Continent.Europe,
+            factory = {
+                DsbProvider("{\"type\":\"AID\",\"aid\":\"irkmpm9mdznstenr-android\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.SE,
+            name = "Swedish Railways",
+            country = Country.Sweden,
+            continent = Continent.Europe,
+            factory = {
+                SeProvider("{\"type\":\"AID\",\"aid\":\"h5o3n7f4t2m8l9x1\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.TLEM,
+            name = "TLEM",
+            country = Country.GreatBritain,
+            continent = Continent.Europe,
+            factory = {
+                TlemProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.MERSEY,
+            name = "Merseyside",
+            country = Country.GreatBritain,
+            continent = Continent.Europe,
+            factory = {
+                MerseyProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.RTACHICAGO,
+            name = "Chicago Transit",
+            country = Country.USA,
+            continent = Continent.NorthAmerica,
+            factory = {
+                RtaChicagoProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.BART,
+            name = "BART",
+            country = Country.USA,
+            continent = Continent.NorthAmerica,
+            factory = {
+                BartProvider("{\"type\":\"AID\",\"aid\":\"kEwHkFUCIL500dym\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.CMTA,
+            name = "CMTA",
+            country = Country.USA,
+            continent = Continent.NorthAmerica,
+            factory = {
+                CmtaProvider("{\"type\":\"AID\",\"aid\":\"web9j2nak29uz41irb\"}")
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.DUB,
+            name = "Dubai",
+            country = Country.UnitedArabEmirates,
+            continent = Continent.Asia,
+            factory = {
+                DubProvider()
+            }
+        ),
+        TransportNetwork(
+            id = NetworkId.SYDNEY,
+            name = "Sydney",
+            country = Country.Australia,
+            continent = Continent.Oceania,
+            factory = {
+                SydneyProvider()
+            }
+        )
     )
 
-//    private val networkfdfds = arrayOf(
-//        Continent(
-//            R.string.np_continent_europe, R.drawable.continent_europe,
-//            listOf(
-//                Country(
-//                    R.string.np_region_germany, flag = "🇩🇪", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.DB,
-//                            name = R.string.np_name_db,
-//                            description = R.string.np_desc_db,
-//                            logo = R.drawable.network_db_logo,
-//                            itemIdExtra = 1,
-//                            factory = { DbProvider("{\"type\":\"AID\",\"aid\":\"n91dB8Z77MLdoR0K\"}", "bdI8UVj40K5fvxwf".toByteArray(Charsets.UTF_8)) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.BVG,
-//                            description = R.string.np_desc_bvg,
-//                            logo = R.drawable.network_bvg_logo,
-//                            factory = { BvgProvider("{\"aid\":\"1Rxs112shyHLatUX4fofnmdxK\",\"type\":\"AID\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VBB,
-//                            description = R.string.np_desc_vbb,
-//                            logo = R.drawable.network_vbb_logo,
-//                            factory = { VbbProvider("{\"type\":\"AID\",\"aid\":\"hafas-vbb-apps\"}", "RCTJM2fFxFfxxQfI".toByteArray(Charsets.UTF_8)) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.BAYERN,
-//                            name = R.string.np_name_bayern,
-//                            description = R.string.np_desc_bayern,
-//                            logo = R.drawable.network_bayern_logo,
-//                            factory = { BayernProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.AVV_AUGSBURG,
-//                            name = R.string.np_name_avv,
-//                            description = R.string.np_desc_avv,
-//                            logo = R.drawable.network_avv_logo,
-//                            factory = { AvvAugsburgProvider("{\"type\":\"AID\",\"aid\":\"jK91AVVZU77xY5oH\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.MVV,
-//                            description = R.string.np_desc_mvv,
-//                            logo = R.drawable.network_mvv_logo,
-//                            factory = { MvvProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.INVG,
-//                            description = R.string.np_desc_invg,
-//                            logo = R.drawable.network_invg_logo,
-//                            status = BETA,
-//                            factory = { InvgProvider("{\"type\":\"AID\",\"aid\":\"GITvwi3BGOmTQ2a5\"}", "ERxotxpwFT7uYRsI".toByteArray(Charsets.UTF_8)) }
-//                        ),
-//                        TransportNetwork (
-//                            id = NetworkId.VBN,
-//                            description = R.string.np_desc_vbn,
-//                            logo = R.drawable.network_vbn_logo,
-//                            factory = { VbnProvider("{\"type\":\"AID\",\"aid\":\"rnOHBWhesvc7gFkd\"}", "SP31mBufSyCLmNxp".toByteArray(Charsets.UTF_8)) }
-//                        ),
-//                        TransportNetwork (
-//                            id = NetworkId.SH,
-//                            name = R.string.np_name_sh,
-//                            description = R.string.np_desc_sh,
-//                            logo = R.drawable.network_sh_logo,
-//                            factory = { ShProvider("{\"type\":\"AID\",\"aid\":\"r0Ot9FLFNAFxijLW\"}") }
-//                        ),
-//                        TransportNetwork (
-//                            id = NetworkId.AVV_AACHEN,
-//                            name = R.string.np_name_avvaachen,
-//                            description = R.string.np_desc_avvaachen,
-//                            logo = R.drawable.network_avvaachen_logo,
-//                            factory = { AvvAachenProvider("{\"type\":\"AID\",\"aid\":\"4vV1AcH3N511icH\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VGN,
-//                            description = R.string.np_desc_vgn,
-//                            agencies = R.string.np_desc_vgn_networks,
-//                            logo = R.drawable.network_vgn_logo,
-//                            status = BETA,
-//                            factory = { VgnProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VVM,
-//                            description = R.string.np_desc_vvm,
-//                            logo = R.drawable.network_vvm_logo,
-//                            factory = { VvmProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VMV,
-//                            description = R.string.np_desc_vmv,
-//                            logo = R.drawable.network_vmv_logo,
-//                            factory = { VmvProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.GVH,
-//                            description = R.string.np_desc_gvh,
-//                            logo = R.drawable.network_gvh_logo,
-//                            factory = { GvhProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.BSVAG,
-//                            name = R.string.np_name_bsvag,
-//                            description = R.string.np_desc_bsvag,
-//                            logo = R.drawable.network_bsvag_logo,
-//                            factory = { BsvagProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VVO,
-//                            description = R.string.np_desc_vvo,
-//                            logo = R.drawable.network_vvo_logo,
-//                            factory = { VvoProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.NASA,
-//                            name = R.string.np_name_nasa,
-//                            description = R.string.np_desc_nasa,
-//                            logo = R.drawable.network_nasa_logo,
-//                            status = BETA,
-//                            factory = { NasaProvider("{\"aid\":\"nasa-apps\",\"type\":\"AID\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VRR,
-//                            description = R.string.np_desc_vrr,
-//                            logo = R.drawable.network_vrr_logo,
-//                            factory = { VrrProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.MVG,
-//                            description = R.string.np_desc_mvg,
-//                            logo = R.drawable.network_mvg_logo,
-//                            factory = { MvgProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VRN,
-//                            description = R.string.np_desc_vrn,
-//                            logo = R.drawable.network_vrn_logo,
-//                            factory = { VrnProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VVS,
-//                            description = R.string.np_desc_vvs,
-//                            logo = R.drawable.network_vvs_logo,
-//                            factory = { VvsProvider("http://www2.vvs.de/oeffi/".toHttpUrlOrNull()) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.DING,
-//                            description = R.string.np_desc_ding,
-//                            logo = R.drawable.network_ding_logo,
-//                            factory = { DingProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.KVV,
-//                            description = R.string.np_desc_kvv,
-//                            logo = R.drawable.network_kvv_logo,
-//                            factory = { KvvProvider("https://projekte.kvv-efa.de/oeffi/".toHttpUrlOrNull()) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.NVBW,
-//                            description = R.string.np_desc_nvbw,
-//                            logo = R.drawable.network_nvbw_logo,
-//                            factory = { NvbwProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VVV,
-//                            description = R.string.np_desc_vvv,
-//                            logo = R.drawable.network_vvv_logo,
-//                            factory = { VvvProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VGS,
-//                            name = R.string.np_name_vgs,
-//                            description = R.string.np_desc_vgs,
-//                            logo = R.drawable.network_vgs_logo,
-//                            factory = { VgsProvider("{\"type\":\"AID\",\"aid\":\"51XfsVqgbdA6oXzHrx75jhlocRg6Xe\"}", "HJtlubisvxiJxss".toByteArray(Charsets.UTF_8)) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VRS,
-//                            description = R.string.np_desc_vrs,
-//                            logo = R.drawable.network_vrs_logo,
-//                            factory = { VrsProvider(VRS) }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VMT,
-//                            description = R.string.np_desc_vmt,
-//                            factory = { VmtProvider("{\"aid\":\"vj5d7i3g9m5d7e3\",\"type\":\"AID\"}") }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_austria, flag = "🇦🇹", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.OEBB,
-//                            name = R.string.np_name_oebb,
-//                            description = R.string.np_desc_oebb,
-//                            logo = R.drawable.network_oebb_logo,
-//                            factory = { OebbProvider("{\"type\":\"AID\",\"aid\":\"OWDL4fE4ixNiPBBm\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.LINZ,
-//                            name = R.string.np_name_linz,
-//                            description = R.string.np_desc_linz,
-//                            logo = R.drawable.network_linz_logo,
-//                            factory = { LinzProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VVT,
-//                            description = R.string.np_desc_vvt,
-//                            logo = R.drawable.network_vvt_logo,
-//                            factory = { VvtProvider("{\"type\":\"AID\",\"aid\":\"wf7mcf9bv3nv8g5f\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.WIEN,
-//                            name = R.string.np_name_wien,
-//                            description = R.string.np_desc_wien,
-//                            logo = R.drawable.network_wien_logo,
-//                            factory = { WienProvider() }
-//                        ),
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_liechtenstein, flag = "🇱🇮", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.VMOBIL,
-//                            name = R.string.np_name_vmobil,
-//                            description = R.string.np_desc_vmobil,
-//                            logo = R.drawable.network_vmobil_logo,
-//                            itemIdExtra = 1,
-//                            factory = { VmobilProvider(VAO) }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_switzerland, flag = "🇨🇭", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.SEARCHCH,
-//                            name = R.string.np_name_sbb,
-//                            description = R.string.np_desc_sbb,
-//                            logo = R.drawable.network_sbb_logo,
-//                            factory = { CHSearchProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.VBL,
-//                            description = R.string.np_desc_vbl,
-//                            logo = R.drawable.network_vbl_logo,
-//                            factory = { VblProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.ZVV,
-//                            description = R.string.np_desc_zvv,
-//                            logo = R.drawable.network_zvv_logo,
-//                            factory = { ZvvProvider("{\"type\":\"AID\",\"aid\":\"hf7mcf9bv3nv8g5f\"}") }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_belgium, flag = "🇧🇪", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.SNCB,
-//                            name = R.string.np_region_belgium,
-//                            description = R.string.np_desc_sncb,
-//                            agencies = R.string.np_desc_sncb_networks,
-//                            logo = R.drawable.network_sncb_logo,
-//                            factory = { SncbProvider("{\"type\":\"AID\",\"aid\":\"sncb-mobi\"}") }
-//                        )
-//                    )
-//                )
-//                Country(
-//                    R.string.np_region_luxembourg, flag = "🇱🇺", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.LU,
-//                            name = R.string.np_name_lu,
-//                            description = R.string.np_desc_lu,
-//                            agencies = R.string.np_desc_lu_networks,
-//                            logo = R.drawable.network_lu_logo,
-//                            factory = { LuProvider("{\"type\":\"AID\",\"aid\":\"Aqf9kNqJLjxFx6vv\"}") }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_netherlands, flag = "🇳🇱", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.NS,
-//                            description = R.string.np_desc_ns,
-//                            logo = R.drawable.network_ns_logo,
-//                            status = BETA,
-//                            factory = { NsProvider() }
-//                        ),
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_denmark, flag = "🇩🇰", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.DSB,
-//                            description = R.string.np_desc_dsb,
-//                            logo = R.drawable.network_dsb_logo,
-//                            factory = { DsbProvider("{\"type\":\"AID\",\"aid\":\"irkmpm9mdznstenr-android\"}") }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_sweden, flag = "🇸🇪", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.SE,
-//                            description = R.string.np_desc_se,
-//                            logo = R.drawable.network_se_logo,
-//                            factory = { SeProvider("{\"type\":\"AID\",\"aid\":\"h5o3n7f4t2m8l9x1\"}") }
-//                        )
-//                    )
-//                ),
-//                Country(
-//                    R.string.np_region_gb, flag = "🇬🇧", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.TLEM,
-//                            description = R.string.np_desc_tlem,
-//                            factory = { TlemProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.MERSEY,
-//                            name = R.string.np_name_mersey,
-//                            description = R.string.np_desc_mersey,
-//                            logo = R.drawable.network_mersey_logo,
-//                            factory = { MerseyProvider() }
-//                        )
-//                    )
-//                ),
-//            )
-//        ),
-//        Continent(
-//            R.string.np_continent_north_america, R.drawable.continent_north_america, countries = listOf(
-//                Country(
-//                    R.string.np_region_usa, "🇺🇸", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.RTACHICAGO,
-//                            name = R.string.np_name_rtachicago,
-//                            description = R.string.np_desc_rtachicago,
-//                            agencies = R.string.np_desc_rtachicago_networks,
-//                            logo = R.drawable.network_rtachicago_logo,
-//                            status = BETA,
-//                            factory = { RtaChicagoProvider() }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.BART,
-//                            description = R.string.np_desc_bart,
-//                            logo = R.drawable.network_bart_logo,
-//                            status = BETA,
-//                            factory = { BartProvider("{\"type\":\"AID\",\"aid\":\"kEwHkFUCIL500dym\"}") }
-//                        ),
-//                        TransportNetwork(
-//                            id = NetworkId.CMTA,
-//                            name = R.string.np_name_cmta,
-//                            description = R.string.np_desc_cmta,
-//                            logo = R.drawable.network_cmta_logo,
-//                            status = BETA,
-//                            factory = { CmtaProvider("{\"type\":\"AID\",\"aid\":\"web9j2nak29uz41irb\"}") }
-//                        ),
-//                    )
-//                ),
-//            )
-//        ),
-//        Continent(
-//            R.string.np_continent_asia, R.drawable.continent_asia, countries = listOf(
-//                Country(
-//                    R.string.np_region_uae, "🇦🇪", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.DUB,
-//                            name = R.string.np_name_dub,
-//                            description = R.string.np_desc_dub,
-//                            status = BETA,
-//                            factory = { DubProvider() }
-//                        )
-//                    )
-//                )
-//            )
-//        ),
-//        Continent(
-//            R.string.np_continent_oceania, R.drawable.continent_oceania, countries = listOf(
-//                Country(
-//                    R.string.np_region_australia, flag = "🇦🇺", networks = listOf(
-//                        TransportNetwork(
-//                            id = NetworkId.SYDNEY,
-//                            name = R.string.np_name_sydney,
-//                            description = R.string.np_desc_sydney,
-//                            logo = R.drawable.network_sydney_logo,
-//                            factory = { SydneyProvider() }
-//                        )
-//                    )
-//                ),
-//            )
-//        )
-//    )
+    private const val VAO = "{\"aid\":\"hf7mcf9bv3nv8g5f\",\"pw\":\"87a6f8ZbnBih32\",\"type\":\"USER\",\"user\":\"mobile\"}"
 }
