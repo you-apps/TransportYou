@@ -8,13 +8,13 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.06.00"
+composeBom = "2025.06.01"
 materialIconsExtended = "1.7.8"
 navigationCompose = "2.9.0"
 okhttp = "4.12.0"
 protobufJavalite = "3.18.0"
-publicTransportEnabler = "4fb8989054"
-material3 = "1.4.0-alpha15"
+publicTransportEnabler = "54b213b1"
+material3 = "1.4.0-alpha16"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,4 +42,3 @@ public-transport-enabler = { module = "com.gitlab.opentransitmap:public-transpor
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

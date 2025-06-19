@@ -8,6 +8,6 @@ class NetworkRepository {
 
     init {
         // TODO: user preference via data store
-        _provider = TransportNetworks.networks[2].factory()
+        _provider = TransportNetworks.networks[0].factory()
     }
 }
