@@ -12,7 +12,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,16 +28,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.components.DepartureItem
 import net.youapps.transport.components.LocationSearchBar
+import net.youapps.transport.components.RouteRow
 import net.youapps.transport.components.TooltipExtendedFAB
+import net.youapps.transport.data.toLocation
+import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel
 import net.youapps.transport.models.LocationsModel
 
 @Composable
-fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsModel: LocationsModel) {
+fun HomeScreen(
+    navController: NavController,
+    homeModel: HomeModel,
+    locationsModel: LocationsModel,
+    directionsModel: DirectionsModel
+) {
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         floatingActionButton = {
             TooltipExtendedFAB(
@@ -82,7 +94,7 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
                     )
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.currentPage }.collect { page ->
-                            val newLocation = savedLocations[page]
+                            val newLocation = savedLocations.getOrNull(page) ?: return@collect
                             homeModel.selectedLocation.emit(newLocation)
 
                             if (departuresMap[newLocation].isNullOrEmpty()) {
@@ -116,12 +128,12 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
                                     .padding(vertical = 6.dp)
                             ) {
                                 items(departuresMap[location].orEmpty()) { departure ->
-                                    DepartureItem(departure) { location ->
-                                        navController.navigate(
-                                            NavRoutes.DeparturesFromLocation(
-                                                location
-                                            )
-                                        )
+                                    DepartureItem(departure) { destination ->
+                                        scope.launch {
+                                            directionsModel.origin.emit(location.toLocation())
+                                            directionsModel.destination.emit(destination)
+                                            navController.navigate(NavRoutes.Directions)
+                                        }
                                     }
                                 }
                             }
@@ -130,13 +142,39 @@ fun HomeScreen(navController: NavController, homeModel: HomeModel, locationsMode
                 }
             }
 
-            // TODO: list of saved routes (static)
+            val savedRoutes by homeModel.savedRoutes.collectAsStateWithLifecycle(emptyList())
+
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
                     .weight(1f)
-            ) {}
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(vertical = 6.dp)
+                ) {
+                    item {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 10.dp),
+                            text = stringResource(R.string.saved_routes),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                    }
+
+                    items(savedRoutes) { route ->
+                        RouteRow(route.origin.toLocation(), route.destination.toLocation()) {
+                            scope.launch {
+                                directionsModel.origin.emit(route.origin.toLocation())
+                                directionsModel.destination.emit(route.destination.toLocation())
+                                navController.navigate(NavRoutes.Directions)
+                            }
+                        }
+
+                        HorizontalDivider()
+                    }
+                }
+            }
         }
     }
 }

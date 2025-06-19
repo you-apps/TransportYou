@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<NavRoutes.Home> {
-                        HomeScreen(navController, homeModel, locationsModel)
+                        HomeScreen(navController, homeModel, locationsModel, directionsModel)
                     }
                 }
             }

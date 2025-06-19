@@ -14,14 +14,15 @@ import kotlinx.coroutines.launch
 import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
-import net.youapps.transport.data.SettingsRepository
+import net.youapps.transport.data.AppDataRepository
 import java.util.Date
 
 class HomeModel(
     private val networkRepository: NetworkRepository,
-    private val settingsRepository: SettingsRepository
+    private val appDataRepository: AppDataRepository
 ) : ViewModel() {
-    val savedLocations = settingsRepository.savedLocationsFlow
+    val savedLocations = appDataRepository.savedLocationsFlow
+    val savedRoutes = appDataRepository.savedRoutesFlow
     val selectedLocation = MutableStateFlow<ProtobufLocation?>(null)
 
     private val _departures = MutableStateFlow<Map<ProtobufLocation, List<Departure>>>(emptyMap())
@@ -50,7 +51,7 @@ class HomeModel(
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val app = checkNotNull(extras[APPLICATION_KEY]) as TransportYouApp
-                return HomeModel(app.networkRepository, app.settingsRepository) as T
+                return HomeModel(app.networkRepository, app.appDataRepository) as T
             }
         }
     }

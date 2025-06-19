@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -160,6 +162,18 @@ fun DirectionsScreen(
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
+
+                val isRouteSaved by directionsModel.isRouteSaved.collectAsState(false)
+                AnimatedVisibility(visible = hasValidLocations) {
+                    TooltipIconButton(
+                        imageVector = if (isRouteSaved) Icons.Default.Star else Icons.Default.StarBorder,
+                        contentDescription = stringResource(R.string.save),
+                        filled = true
+                    ) {
+                        if (isRouteSaved) directionsModel.removeSavedRoute()
+                        else directionsModel.addSavedRoute()
+                    }
+                }
 
                 val hasAnyLocation by directionsModel.hasAnyLocation.collectAsState(false)
                 AnimatedVisibility(visible = hasAnyLocation) {

@@ -20,13 +20,17 @@ import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
+import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.newProtobufRoute
 import java.util.Date
 
 class DirectionsModel(
-    private val networkRepository: NetworkRepository
+    private val networkRepository: NetworkRepository,
+    private val appDataRepository: AppDataRepository
 ): ViewModel() {
     val origin = MutableStateFlow<Location?>(null)
     val destination = MutableStateFlow<Location?>(null)
+    val savedRoutes = appDataRepository.savedRoutesFlow
 
     val hasAnyLocation = combine(origin, destination) { (origin, destination) ->
         origin != null || destination != null
@@ -34,6 +38,12 @@ class DirectionsModel(
 
     val hasValidLocations = combine(origin, destination) { (origin, destination) ->
         origin != null && destination != null
+    }
+
+    val isRouteSaved = combine(origin, destination, savedRoutes) { origin, destination, savedRoutes ->
+        if (origin == null || destination == null) return@combine false
+
+        savedRoutes.any { it.origin.id == origin.id && it.destination.id == destination.id }
     }
 
     val date = MutableStateFlow<Date?>(null)
@@ -44,6 +54,7 @@ class DirectionsModel(
     private var tripsFirstPageContext: QueryTripsContext? = null
     private var tripsLastPageContext: QueryTripsContext? = null
 
+    // TODO: store in app data
     val enabledProducts = mutableStateListOf<Product>(
         *productTypes.map { it.key }.toTypedArray()
     )
@@ -102,12 +113,28 @@ class DirectionsModel(
         destination.value = temp
     }
 
+    fun addSavedRoute() = viewModelScope.launch(Dispatchers.IO) {
+        val origin = origin.value ?: return@launch
+        val location = destination.value ?: return@launch
+
+        val route = newProtobufRoute(origin, location)
+        appDataRepository.addSavedRoute(route)
+    }
+
+    fun removeSavedRoute() = viewModelScope.launch(Dispatchers.IO) {
+        val origin = origin.value ?: return@launch
+        val location = destination.value ?: return@launch
+
+        val route = newProtobufRoute(origin, location)
+        appDataRepository.removeSavedRoute(route)
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val app = checkNotNull(extras[APPLICATION_KEY]) as TransportYouApp
-                return DirectionsModel(app.networkRepository) as T
+                return DirectionsModel(app.networkRepository, app.appDataRepository) as T
             }
         }
 

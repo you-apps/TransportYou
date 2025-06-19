@@ -11,21 +11,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
-import net.youapps.transport.data.SettingsRepository
+import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.toProtobufLocation
 import java.util.Date
 
 class DeparturesModel(
     private val networkRepository: NetworkRepository,
-    private val settingsRepository: SettingsRepository
+    private val appDataRepository: AppDataRepository
 ) : ViewModel() {
     val location = MutableStateFlow<Location?>(null)
 
-    private val savedLocations = settingsRepository.savedLocationsFlow
+    private val savedLocations = appDataRepository.savedLocationsFlow
     val isLocationSaved = combine(location, savedLocations) { location, savedLocations ->
         savedLocations.any { it.id == location?.id }
     }
@@ -49,23 +48,13 @@ class DeparturesModel(
     fun addSavedLocation() = viewModelScope.launch(Dispatchers.IO) {
         val location = location.value ?: return@launch
 
-        val protoLocation = ProtobufLocation.getDefaultInstance().toBuilder()
-            .setId(location.id)
-            .setName(location.name)
-            .build()
-
-        settingsRepository.addSavedLocation(protoLocation)
+        appDataRepository.addSavedLocation(location.toProtobufLocation())
     }
 
     fun removeSavedLocation() = viewModelScope.launch(Dispatchers.IO) {
         val location = location.value ?: return@launch
 
-        val protoLocation = ProtobufLocation.getDefaultInstance().toBuilder()
-            .setId(location.id)
-            .setName(location.name)
-            .build()
-
-        settingsRepository.removeSavedLocation(protoLocation)
+        appDataRepository.removeSavedLocation(location.toProtobufLocation())
     }
 
     companion object {
@@ -74,7 +63,7 @@ class DeparturesModel(
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val app =
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY]) as TransportYouApp
-                return DeparturesModel(app.networkRepository, app.settingsRepository) as T
+                return DeparturesModel(app.networkRepository, app.appDataRepository) as T
             }
         }
     }

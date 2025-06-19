@@ -4,11 +4,31 @@ option java_package = "net.youapps.transport";
 option java_multiple_files = true;
 
 message ProtobufLocation {
-  string id = 1;
-  string name = 2;
-  string place = 3;
+  string type = 1;
+  string id = 2;
+  string name = 3;
+  string place = 4;
 }
 
 message ProtobufSavedLocations {
   repeated ProtobufLocation locations = 1;
+}
+
+message ProtobufRoute {
+  ProtobufLocation origin = 1;
+  ProtobufLocation destination = 2;
+}
+
+message ProtobufSavedRoutes {
+  repeated ProtobufRoute routes = 1;
+}
+
+message ProtobufSavedRouteConfig {
+  repeated string products = 1;
+}
+
+message ProtobufAppData {
+  ProtobufSavedLocations savedLocations = 1;
+  ProtobufSavedRoutes savedRoutes = 2;
+  ProtobufSavedRouteConfig savedRouteConfig = 3;
 }
