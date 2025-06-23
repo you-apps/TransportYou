@@ -30,6 +30,7 @@ fun TripDetailsBottomSheet(
     onLocationClick: (Location) -> Unit,
     onDismissRequest: () -> Unit
 ) {
+    // TODO: manual refresh
     ModalBottomSheet(onDismissRequest = onDismissRequest) {
         LazyColumn {
             item {

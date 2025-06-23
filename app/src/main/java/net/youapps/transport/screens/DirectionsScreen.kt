@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.FilterAlt
@@ -25,8 +26,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -48,6 +51,8 @@ import net.youapps.transport.components.TooltipIconButton
 import net.youapps.transport.components.TripItem
 import net.youapps.transport.components.TripOptionsSheet
 import net.youapps.transport.extensions.displayName
+import net.youapps.transport.extensions.reachedBottom
+import net.youapps.transport.extensions.reachedTop
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.LocationsModel
 import net.youapps.transport.toJavaDate
@@ -197,10 +202,20 @@ fun DirectionsScreen(
             }
 
             val trips by directionsModel.trips.collectAsState()
+            val routesState = rememberLazyListState()
+            val isBottomReached by remember { derivedStateOf { routesState.reachedBottom() } }
+            val isTopReached by remember { derivedStateOf { routesState.reachedTop() } }
+            LaunchedEffect(isBottomReached) {
+                if (isBottomReached) directionsModel.getMoreTrips(laterTrips = true)
+            }
+            LaunchedEffect(isTopReached) {
+                if (isTopReached) directionsModel.getMoreTrips(laterTrips = false)
+            }
+
             LazyColumn(
+                state = routesState,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // TODO: routes pagination
                 items(trips) { trip ->
                     HorizontalDivider()
 
