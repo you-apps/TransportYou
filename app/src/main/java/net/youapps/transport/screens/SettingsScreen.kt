@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -59,12 +60,15 @@ fun SettingsScreen(navController: NavController, settingsModel: SettingsModel) {
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
             val savedNetwork by settingsModel.savedNetworkFlow.collectAsStateWithLifecycle(NetworkId.DB)
+            val networkGroups = remember {
+                TransportNetworks.networks.sortedBy { it.continent }
+                    .groupBy { it.country to it.continent }
+            }
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                for ((group, networks) in TransportNetworks.networks.sortedBy { it.continent }
-                    .groupBy { it.country to it.continent }) {
+                for ((group, networks) in networkGroups) {
                     stickyHeader {
                         Row(
                             modifier = Modifier
