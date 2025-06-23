@@ -12,10 +12,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,11 +54,22 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            TooltipExtendedFAB(
-                imageVector = Icons.Default.ForkRight,
-                contentDescription = stringResource(R.string.directions)
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                navController.navigate(NavRoutes.Directions)
+                SmallFloatingActionButton(onClick = {
+                    navController.navigate(NavRoutes.Settings)
+                }) {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                }
+
+                TooltipExtendedFAB(
+                    imageVector = Icons.Default.ForkRight,
+                    contentDescription = stringResource(R.string.directions)
+                ) {
+                    navController.navigate(NavRoutes.Directions)
+                }
             }
         }
     ) { pV ->
@@ -151,7 +165,8 @@ fun HomeScreen(
                     .weight(1f)
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(vertical = 6.dp)
                 ) {
                     item {

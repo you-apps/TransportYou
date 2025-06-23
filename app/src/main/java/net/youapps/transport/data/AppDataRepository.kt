@@ -1,6 +1,7 @@
 package net.youapps.transport.data
 
 import android.content.Context
+import de.schildbach.pte.NetworkId
 import de.schildbach.pte.dto.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,6 +25,12 @@ class AppDataRepository(private val context: Context) {
             appData.savedRouteConfig.productsList.map { Product.valueOf(it) }.toSet()
         }
 
+    val savedNetworkFlow: Flow<NetworkId> = context.appData.data
+        .map { appData ->
+            appData.savedSettings.networkId.takeIf { it.isNotEmpty() }?.let { NetworkId.valueOf(it) }
+                ?: NetworkId.DB
+        }
+
     suspend fun addSavedLocation(location: ProtobufLocation) {
         context.appData.updateData { appData ->
             appData.toBuilder().apply {
@@ -42,6 +49,17 @@ class AppDataRepository(private val context: Context) {
             appData.toBuilder().apply {
                 savedLocations = savedLocations.toBuilder()
                     .removeLocations(indexToRemove)
+                    .build()
+            }
+                .build()
+        }
+    }
+
+    suspend fun clearSavedLocations() {
+        context.appData.updateData { appData ->
+            appData.toBuilder().apply {
+                savedLocations = savedLocations.toBuilder()
+                    .clearLocations()
                     .build()
             }
                 .build()
@@ -74,6 +92,17 @@ class AppDataRepository(private val context: Context) {
         }
     }
 
+    suspend fun clearSavedRoutes() {
+        context.appData.updateData { appData ->
+            appData.toBuilder().apply {
+                savedRoutes = savedRoutes.toBuilder()
+                    .clearRoutes()
+                    .build()
+            }
+                .build()
+        }
+    }
+
     suspend fun addProduct(product: Product) {
         context.appData.updateData { appData ->
             appData.toBuilder().apply {
@@ -93,6 +122,17 @@ class AppDataRepository(private val context: Context) {
                 savedRouteConfig = savedRouteConfig.toBuilder()
                     .clearProducts()
                     .addAllProducts(products)
+                    .build()
+            }
+                .build()
+        }
+    }
+
+    suspend fun setTransportNetwork(networkId: NetworkId) {
+        context.appData.updateData { appData ->
+            appData.toBuilder().apply {
+                savedSettings = savedSettings.toBuilder()
+                    .setNetworkId(networkId.name)
                     .build()
             }
                 .build()

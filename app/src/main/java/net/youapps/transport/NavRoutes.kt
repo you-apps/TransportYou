@@ -39,4 +39,7 @@ object NavRoutes {
             } else null, place, name, products?.map { Product.valueOf(it) }?.toSet()
         )
     }
+
+    @Serializable
+    object Settings
 }

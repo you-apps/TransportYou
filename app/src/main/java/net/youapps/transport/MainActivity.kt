@@ -13,9 +13,11 @@ import net.youapps.transport.models.DeparturesModel
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel
 import net.youapps.transport.models.LocationsModel
+import net.youapps.transport.models.SettingsModel
 import net.youapps.transport.screens.DeparturesScreen
 import net.youapps.transport.screens.DirectionsScreen
 import net.youapps.transport.screens.HomeScreen
+import net.youapps.transport.screens.SettingsScreen
 import net.youapps.transport.ui.theme.TransportYouTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,6 +25,7 @@ class MainActivity : ComponentActivity() {
     val locationsModel: LocationsModel by viewModels { LocationsModel.Factory }
     val directionsModel: DirectionsModel by viewModels { DirectionsModel.Factory }
     val homeModel: HomeModel by viewModels { HomeModel.Factory }
+    val settingsModel: SettingsModel by viewModels { SettingsModel.Factory }
 
     // TODO: use https://github.com/maplibre/maplibre-compose
 
@@ -52,6 +55,10 @@ class MainActivity : ComponentActivity() {
 
                     composable<NavRoutes.Home> {
                         HomeScreen(navController, homeModel, locationsModel, directionsModel)
+                    }
+
+                    composable<NavRoutes.Settings> {
+                        SettingsScreen(navController, settingsModel)
                     }
                 }
             }
