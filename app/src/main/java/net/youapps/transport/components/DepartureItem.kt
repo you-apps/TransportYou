@@ -39,11 +39,12 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
             Column {
                 Text(TextUtils.displayDepartureTimeWithDelay(departure.plannedTime, departure.predictedTime))
 
-                Text(
-                    text = DateUtils.getRelativeTimeSpanString(departure.time.time)
-                        .toString(),
+                AutoRefreshingText(
                     style = MaterialTheme.typography.bodySmall
-                )
+                ) {
+                    DateUtils.getRelativeTimeSpanString(departure.time.time)
+                        .toString()
+                }
             }
 
             Column(

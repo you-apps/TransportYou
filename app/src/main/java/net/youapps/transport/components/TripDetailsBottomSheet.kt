@@ -57,9 +57,9 @@ fun TripSummary(trip: Trip) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Text(
-            text = DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
-        )
+        AutoRefreshingText {
+            DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
+        }
 
         Card {
             Text(

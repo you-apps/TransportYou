@@ -39,10 +39,11 @@ fun TripItem(trip: Trip, onLocationClick: (Location) -> Unit) {
             .padding(horizontal = 6.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Text(
-            text = DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString(),
+        AutoRefreshingText(
             style = MaterialTheme.typography.labelSmallEmphasized
-        )
+        ) {
+            DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
+        }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
