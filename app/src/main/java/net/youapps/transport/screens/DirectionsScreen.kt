@@ -216,7 +216,7 @@ fun DirectionsScreen(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(trips) { trip ->
+                items(trips, key = { it.id }) { trip ->
                     HorizontalDivider()
 
                     TripItem(trip) { location ->
