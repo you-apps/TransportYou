@@ -69,7 +69,7 @@ fun TripItem(trip: Trip, onLocationClick: (Location) -> Unit) {
                 )
             }
 
-            items(trip.legs) { leg ->
+            items(trip.legs.filterNot { it.shouldSkip() }) { leg ->
                 when (leg) {
                     is Trip.Public -> {
                         TransportLineCard(leg.line)

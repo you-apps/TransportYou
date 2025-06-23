@@ -38,7 +38,7 @@ fun TripDetailsBottomSheet(
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
-            items(trip.legs) { leg ->
+            items(trip.legs.filterNot { it.shouldSkip() }) { leg ->
                 HorizontalDivider()
 
                 when (leg) {

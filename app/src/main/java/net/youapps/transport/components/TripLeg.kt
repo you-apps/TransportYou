@@ -33,6 +33,14 @@ enum class StopType {
     Arrival
 }
 
+fun Trip.Leg.shouldSkip(): Boolean {
+    return when (this) {
+        is Trip.Public -> false
+        is Trip.Individual -> arrival.displayName() == departure.displayName()
+        else -> throw IllegalArgumentException("Unknown leg type")
+    }
+}
+
 @Composable
 fun TripLegPublic(leg: Trip.Public, onLocationClick: (Location) -> Unit) {
     var showIntermediateStops by remember {
