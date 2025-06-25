@@ -59,7 +59,7 @@ class DirectionsModel(
     private var tripsLastPageContext: QueryTripsContext? = null
 
     val enabledProducts = appDataRepository.savedProductsFlow
-        .stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(), emptySet())
+        .stateIn(viewModelScope, started = SharingStarted.Eagerly, emptySet())
 
     private val tripOptions get() = TripOptions(
         enabledProducts.value, // products

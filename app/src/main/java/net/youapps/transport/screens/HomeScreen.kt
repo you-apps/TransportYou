@@ -43,7 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import net.youapps.transport.EditLocationsSheet
+import net.youapps.transport.components.directions.EditLocationsSheet
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.components.directions.DepartureItem

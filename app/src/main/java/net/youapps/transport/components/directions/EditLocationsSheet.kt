@@ -1,4 +1,4 @@
-package net.youapps.transport
+package net.youapps.transport.components.directions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.schildbach.pte.dto.Location
+import net.youapps.transport.R
 import net.youapps.transport.components.generic.DismissBackground
 import net.youapps.transport.extensions.displayName
 import sh.calvin.reorderable.ReorderableItem
