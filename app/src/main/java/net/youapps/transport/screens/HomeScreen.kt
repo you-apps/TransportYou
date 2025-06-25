@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -29,7 +31,11 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,12 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import net.youapps.transport.EditLocationsSheet
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.components.DepartureItem
+import net.youapps.transport.components.DismissBackground
 import net.youapps.transport.components.LocationSearchBar
 import net.youapps.transport.components.RouteRow
 import net.youapps.transport.components.TooltipExtendedFAB
+import net.youapps.transport.components.TooltipIconButton
 import net.youapps.transport.data.toLocation
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel
@@ -123,7 +132,7 @@ fun HomeScreen(
                         }
                     }
 
-                    // TODO: manage/reorder locations
+                    var showEditLocationsBottomSheet by rememberSaveable { mutableStateOf(false) }
                     HorizontalPager(
                         modifier = Modifier
                             .fillMaxSize()
@@ -135,13 +144,29 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            Text(
-                                modifier = Modifier.padding(horizontal = 10.dp),
-                                text = listOfNotNull(selectedLocation.name, selectedLocation.place)
-                                    .filterNot { it.isEmpty() }
-                                    .joinToString(", "),
-                                style = MaterialTheme.typography.headlineSmall
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 10.dp),
+                                    text = listOfNotNull(
+                                        selectedLocation.name,
+                                        selectedLocation.place
+                                    )
+                                        .filterNot { it.isEmpty() }
+                                        .joinToString(", "),
+                                    style = MaterialTheme.typography.headlineSmall
+                                )
+
+                                TooltipIconButton(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.edit_locations)
+                                ) {
+                                    showEditLocationsBottomSheet = true
+                                }
+                            }
 
                             LazyColumn(
                                 modifier = Modifier
@@ -158,6 +183,17 @@ fun HomeScreen(
                                     }
                                 }
                             }
+                        }
+                    }
+
+                    if (showEditLocationsBottomSheet) {
+                        EditLocationsSheet(
+                            locations = savedLocations.map { it.toLocation() },
+                            onLocationsUpdated = { newLocations ->
+                                homeModel.updateSavedLocations(newLocations)
+                            }
+                        ) {
+                            showEditLocationsBottomSheet = false
                         }
                     }
                 }
@@ -191,19 +227,7 @@ fun HomeScreen(
                             dismissBoxState,
                             enableDismissFromEndToStart = false,
                             backgroundContent = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(MaterialTheme.colorScheme.errorContainer)
-                                ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterStart)
-                                            .padding(start = 30.dp),
-                                        imageVector = Icons.Default.DeleteForever,
-                                        contentDescription = null
-                                    )
-                                }
+                                DismissBackground()
                             },
                             onDismiss = { direction ->
                                 if (direction == SwipeToDismissBoxValue.StartToEnd) {
@@ -212,7 +236,10 @@ fun HomeScreen(
                             }
                         ) {
                             Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-                                RouteRow(route.origin.toLocation(), route.destination.toLocation()) {
+                                RouteRow(
+                                    route.origin.toLocation(),
+                                    route.destination.toLocation()
+                                ) {
                                     scope.launch {
                                         directionsModel.origin.emit(route.origin.toLocation())
                                         directionsModel.destination.emit(route.destination.toLocation())

@@ -66,6 +66,18 @@ class AppDataRepository(private val context: Context) {
         }
     }
 
+    suspend fun setSavedLocations(locations: List<ProtobufLocation>) {
+        context.appData.updateData { appData ->
+            appData.toBuilder().apply {
+                savedLocations = savedLocations.toBuilder()
+                    .clearLocations()
+                    .addAllLocations(locations)
+                    .build()
+            }
+                .build()
+        }
+    }
+
     suspend fun addSavedRoute(route: ProtobufRoute) {
         context.appData.updateData { appData ->
             appData.toBuilder().apply {

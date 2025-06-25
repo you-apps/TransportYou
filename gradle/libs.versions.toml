@@ -15,6 +15,7 @@ okhttp = "4.12.0"
 protobufJavalite = "3.18.0"
 publicTransportEnabler = "54b213b1"
 material3 = "1.4.0-alpha16"
+reorderable = "2.5.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,7 @@ material-icons-extended = { module = "androidx.compose.material:material-icons-e
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
 public-transport-enabler = { module = "com.gitlab.opentransitmap:public-transport-enabler", version.ref = "publicTransportEnabler" }
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

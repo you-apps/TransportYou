@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import de.schildbach.pte.dto.Departure
+import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,7 @@ import net.youapps.transport.ProtobufRoute
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.toProtobufLocation
 import java.util.Date
 
 class HomeModel(
@@ -49,6 +51,10 @@ class HomeModel(
 
     fun removeSavedRoute(route: ProtobufRoute) = viewModelScope.launch(Dispatchers.IO) {
         appDataRepository.removeSavedRoute(route)
+    }
+
+    fun updateSavedLocations(locations: List<Location>) = viewModelScope.launch(Dispatchers.IO) {
+        appDataRepository.setSavedLocations(locations.map { it.toProtobufLocation() })
     }
 
     companion object {
