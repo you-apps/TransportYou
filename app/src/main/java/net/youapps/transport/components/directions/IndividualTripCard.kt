@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsBike
@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.NoTransfer
 import androidx.compose.runtime.Composable
 import de.schildbach.pte.dto.Trip
 import net.youapps.transport.TextUtils
+import net.youapps.transport.components.generic.CardWithIcon
 
 val individualIcons = mapOf(
     Trip.Individual.Type.TRANSFER to Icons.Default.NoTransfer,

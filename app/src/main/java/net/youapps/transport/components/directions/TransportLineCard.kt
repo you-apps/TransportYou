@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cable
@@ -14,6 +14,8 @@ import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.runtime.Composable
 import de.schildbach.pte.dto.Line
 import de.schildbach.pte.dto.Product
+import net.youapps.transport.components.generic.CardWithIcon
+import kotlin.collections.get
 
 val transportIcons = mapOf(
     Product.HIGH_SPEED_TRAIN to Icons.Default.DirectionsRailway,

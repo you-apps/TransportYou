@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.generic
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons

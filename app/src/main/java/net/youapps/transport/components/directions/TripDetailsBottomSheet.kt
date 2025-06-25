@@ -1,8 +1,7 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +25,9 @@ import de.schildbach.pte.dto.Location
 import de.schildbach.pte.dto.Trip
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
+import net.youapps.transport.components.generic.AutoRefreshingText
+import net.youapps.transport.components.generic.RefreshLoadingBox
+import net.youapps.transport.components.generic.RefreshLoadingState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

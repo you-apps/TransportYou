@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

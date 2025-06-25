@@ -1,8 +1,6 @@
 package net.youapps.transport.models
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -18,12 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
-import net.youapps.transport.components.RefreshLoadingState
+import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
 import net.youapps.transport.data.newProtobufRoute

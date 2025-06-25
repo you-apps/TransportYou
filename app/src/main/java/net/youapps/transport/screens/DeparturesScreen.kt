@@ -30,8 +30,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
-import net.youapps.transport.components.DepartureItem
-import net.youapps.transport.components.TooltipIconButton
+import net.youapps.transport.components.directions.DepartureItem
+import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.extensions.displayName
 import net.youapps.transport.models.DeparturesModel
 import net.youapps.transport.models.DirectionsModel

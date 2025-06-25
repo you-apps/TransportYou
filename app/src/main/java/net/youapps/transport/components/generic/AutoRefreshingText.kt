@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.generic
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

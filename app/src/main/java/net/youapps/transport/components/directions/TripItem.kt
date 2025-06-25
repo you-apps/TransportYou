@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.clickable
@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import de.schildbach.pte.dto.Location
 import de.schildbach.pte.dto.Trip
 import net.youapps.transport.TextUtils
+import net.youapps.transport.components.generic.AutoRefreshingText
+import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.extensions.displayName
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

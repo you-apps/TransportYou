@@ -1,4 +1,4 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.clickable
@@ -21,6 +21,7 @@ import de.schildbach.pte.dto.LocationType
 import de.schildbach.pte.dto.Position
 import de.schildbach.pte.dto.Product
 import net.youapps.transport.TextUtils
+import net.youapps.transport.components.generic.AutoRefreshingText
 import net.youapps.transport.extensions.displayName
 import java.util.Date
 

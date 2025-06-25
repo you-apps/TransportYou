@@ -1,6 +1,5 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.directions
 
-import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

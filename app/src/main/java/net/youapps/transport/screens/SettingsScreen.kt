@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.schildbach.pte.NetworkId
 import net.youapps.transport.R
-import net.youapps.transport.components.TooltipIconButton
+import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.components.TransportNetworkRow
 import net.youapps.transport.data.TransportNetworks
 import net.youapps.transport.models.SettingsModel

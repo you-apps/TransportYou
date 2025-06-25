@@ -46,12 +46,12 @@ import kotlinx.coroutines.launch
 import net.youapps.transport.EditLocationsSheet
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
-import net.youapps.transport.components.DepartureItem
-import net.youapps.transport.components.DismissBackground
+import net.youapps.transport.components.directions.DepartureItem
+import net.youapps.transport.components.generic.DismissBackground
 import net.youapps.transport.components.LocationSearchBar
-import net.youapps.transport.components.RouteRow
-import net.youapps.transport.components.TooltipExtendedFAB
-import net.youapps.transport.components.TooltipIconButton
+import net.youapps.transport.components.directions.RouteRow
+import net.youapps.transport.components.generic.TooltipExtendedFAB
+import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.data.toLocation
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel

@@ -7,6 +7,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.ImageVector
 import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.launch
+import net.youapps.transport.components.generic.SearchBarWithSuggestions
+import net.youapps.transport.components.generic.Suggestion
 import net.youapps.transport.extensions.displayName
 import net.youapps.transport.models.LocationsModel
 

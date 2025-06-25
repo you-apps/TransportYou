@@ -1,9 +1,8 @@
-package net.youapps.transport.components
+package net.youapps.transport.components.generic
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
@@ -14,10 +13,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TooltipIconButton(
+fun TooltipExtendedFAB(
     imageVector: ImageVector,
     contentDescription: String,
-    filled: Boolean = false,
     onClick: () -> Unit
 ) {
     val tooltipState = rememberTooltipState()
@@ -27,18 +25,10 @@ fun TooltipIconButton(
         tooltip = { PlainTooltip { Text(contentDescription) } },
         state = tooltipState
     ) {
-        if (filled) {
-            FilledIconButton(
-                onClick = onClick
-            ) {
-                Icon(imageVector, contentDescription)
-            }
-        } else {
-            IconButton(
-                onClick = onClick
-            ) {
-                Icon(imageVector, contentDescription)
-            }
+        ExtendedFloatingActionButton(
+            onClick = onClick
+        ) {
+            Icon(imageVector, contentDescription)
         }
     }
 }
