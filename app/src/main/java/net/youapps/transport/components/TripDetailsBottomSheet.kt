@@ -36,7 +36,6 @@ fun TripDetailsBottomSheet(
     onRefresh: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    // TODO: manual refresh
     ModalBottomSheet(onDismissRequest = onDismissRequest, dragHandle = {
         Row(
             modifier = Modifier.fillMaxWidth(),
