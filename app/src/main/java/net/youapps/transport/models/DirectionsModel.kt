@@ -92,10 +92,10 @@ class DirectionsModel(
             return@launch
         }
 
-        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         tripsFirstPageContext = tripsResp.context
         tripsLastPageContext = tripsResp.context
 
+        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         _trips.emit(tripsResp.trips.orEmpty())
     }
 
@@ -108,12 +108,17 @@ class DirectionsModel(
             Log.e("fetching more trips", e.toString())
             return@launch
         }
+
+        // remove items that would otherwise be duplicated
+        val oldTrips = trips.value
+            .filter { newTrip -> !tripsResp.trips.any { it.id == newTrip.id } }
+
         if (laterTrips) {
             tripsLastPageContext = tripsResp.context
-            _trips.emit(trips.value + tripsResp.trips)
+            _trips.emit(oldTrips + tripsResp.trips)
         } else {
             tripsFirstPageContext = tripsResp.context
-            _trips.emit(tripsResp.trips + trips.value)
+            _trips.emit(tripsResp.trips + oldTrips)
         }
     }
 
