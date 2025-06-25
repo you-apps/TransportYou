@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.schildbach.pte.dto.Location
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
@@ -46,10 +47,15 @@ fun DeparturesScreen(
     val scope = rememberCoroutineScope()
     val isLocationSaved by departuresModel.isLocationSaved.collectAsStateWithLifecycle(false)
 
-    // TODO: periodic refresh
-    LaunchedEffect(Unit) {
+    LaunchedEffect(location) {
         departuresModel.location.emit(location)
         departuresModel.fetchDepartures()
+
+        // periodically refresh the list of departures
+        while (true) {
+            delay(REFRESH_MILLIS_DELAY)
+            departuresModel.fetchDepartures()
+        }
     }
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

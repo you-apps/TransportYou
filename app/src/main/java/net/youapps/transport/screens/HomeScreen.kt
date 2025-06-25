@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
@@ -32,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -43,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.youapps.transport.EditLocationsSheet
 import net.youapps.transport.NavRoutes
@@ -57,6 +56,12 @@ import net.youapps.transport.data.toLocation
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel
 import net.youapps.transport.models.LocationsModel
+import java.util.Date
+
+/**
+ * The delay between automatic, periodic refreshes.
+ */
+const val REFRESH_MILLIS_DELAY = 60 * 1000L
 
 @Composable
 fun HomeScreen(
@@ -111,6 +116,16 @@ fun HomeScreen(
                 if (savedLocations.isNotEmpty()) homeModel.selectedLocation.emit(savedLocations.first())
             }
 
+            // refresh the departures at the selected location each second
+            // the effect is auto-cancelled once a new location is selected, so this case doesn't need
+            // to be handled manually
+            LaunchedEffect(selectedLocation) {
+                while (true) {
+                    delay(REFRESH_MILLIS_DELAY)
+                    homeModel.updateDeparturesForSelectedLocation()
+                }
+            }
+
             selectedLocation?.let { selectedLocation ->
                 OutlinedCard(
                     modifier = Modifier
@@ -126,7 +141,9 @@ fun HomeScreen(
                             val newLocation = savedLocations.getOrNull(page) ?: return@collect
                             homeModel.selectedLocation.emit(newLocation)
 
-                            if (departuresMap[newLocation].isNullOrEmpty()) {
+                            // only refresh if there's no cached entry or the cached entry is outdated
+                            val (cachedDate, _) = departuresMap[newLocation] ?: (null to emptyList())
+                            if (cachedDate == null || Date().time - cachedDate.time > REFRESH_MILLIS_DELAY) {
                                 homeModel.updateDeparturesForSelectedLocation()
                             }
                         }
@@ -173,7 +190,7 @@ fun HomeScreen(
                                     .fillMaxWidth()
                                     .padding(vertical = 6.dp)
                             ) {
-                                items(departuresMap[location].orEmpty()) { departure ->
+                                items(departuresMap[location]?.second.orEmpty()) { departure ->
                                     DepartureItem(departure) { destination ->
                                         scope.launch {
                                             directionsModel.origin.emit(location.toLocation())

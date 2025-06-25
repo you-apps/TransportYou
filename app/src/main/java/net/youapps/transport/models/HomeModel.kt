@@ -28,21 +28,22 @@ class HomeModel(
     val savedRoutes = appDataRepository.savedRoutesFlow
     val selectedLocation = MutableStateFlow<ProtobufLocation?>(null)
 
-    private val _departures = MutableStateFlow<Map<ProtobufLocation, List<Departure>>>(emptyMap())
+    private val _departures = MutableStateFlow<Map<ProtobufLocation, Pair<Date, List<Departure>>>>(emptyMap())
     val departures = _departures.asStateFlow()
 
     fun updateDeparturesForSelectedLocation() = viewModelScope.launch(Dispatchers.IO) {
         val location = selectedLocation.value ?: return@launch
 
         try {
+            val requestDate = Date()
             val departures = networkRepository.provider
-                .queryDepartures(location.id, Date(), 10, true)
+                .queryDepartures(location.id, requestDate, 10, true)
                 .stationDepartures
                 .flatMap { it.departures }
                 .filterNotNull()
 
             val departuresMap = _departures.value.toMutableMap()
-            departuresMap.put(location, departures)
+            departuresMap.put(location, requestDate to departures)
             _departures.emit(departuresMap)
         } catch (e: Exception) {
             Log.e("exc", e.stackTraceToString())
