@@ -1,6 +1,8 @@
 package net.youapps.transport.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -19,7 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -117,6 +123,7 @@ fun HomeScreen(
                         }
                     }
 
+                    // TODO: manage/reorder locations
                     HorizontalPager(
                         modifier = Modifier
                             .fillMaxSize()
@@ -178,11 +185,40 @@ fun HomeScreen(
                     }
 
                     items(savedRoutes) { route ->
-                        RouteRow(route.origin.toLocation(), route.destination.toLocation()) {
-                            scope.launch {
-                                directionsModel.origin.emit(route.origin.toLocation())
-                                directionsModel.destination.emit(route.destination.toLocation())
-                                navController.navigate(NavRoutes.Directions)
+                        val dismissBoxState = rememberSwipeToDismissBoxState()
+
+                        SwipeToDismissBox(
+                            dismissBoxState,
+                            enableDismissFromEndToStart = false,
+                            backgroundContent = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(MaterialTheme.colorScheme.errorContainer)
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .padding(start = 30.dp),
+                                        imageVector = Icons.Default.DeleteForever,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            onDismiss = { direction ->
+                                if (direction == SwipeToDismissBoxValue.StartToEnd) {
+                                    homeModel.removeSavedRoute(route)
+                                }
+                            }
+                        ) {
+                            Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+                                RouteRow(route.origin.toLocation(), route.destination.toLocation()) {
+                                    scope.launch {
+                                        directionsModel.origin.emit(route.origin.toLocation())
+                                        directionsModel.destination.emit(route.destination.toLocation())
+                                        navController.navigate(NavRoutes.Directions)
+                                    }
+                                }
                             }
                         }
 

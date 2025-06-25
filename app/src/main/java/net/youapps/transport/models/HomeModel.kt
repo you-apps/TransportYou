@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import net.youapps.transport.ProtobufLocation
+import net.youapps.transport.ProtobufRoute
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
@@ -44,6 +45,10 @@ class HomeModel(
         } catch (e: Exception) {
             Log.e("exc", e.stackTraceToString())
         }
+    }
+
+    fun removeSavedRoute(route: ProtobufRoute) = viewModelScope.launch(Dispatchers.IO) {
+        appDataRepository.removeSavedRoute(route)
     }
 
     companion object {
