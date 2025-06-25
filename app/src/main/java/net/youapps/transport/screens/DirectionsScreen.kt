@@ -221,7 +221,7 @@ fun DirectionsScreen(
                     HorizontalDivider()
 
                     TripItem(trip = trip, refreshLoadingState = refreshLoadingState, onRefresh = {
-                        directionsModel.queryTrips()
+                        directionsModel.refreshTrip(trip)
                     }) { location ->
                         navController.navigate(NavRoutes.DeparturesFromLocation(location))
                     }

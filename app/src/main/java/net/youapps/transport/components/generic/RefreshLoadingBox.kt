@@ -1,6 +1,7 @@
 package net.youapps.transport.components.generic
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Refresh
@@ -15,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.youapps.transport.R
 
@@ -39,7 +42,7 @@ fun RefreshLoadingBox(state: RefreshLoadingState, onRefresh: () -> Unit) {
         showError = false
     }
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.size(30.dp), contentAlignment = Alignment.Center) {
         when {
             state == RefreshLoadingState.LOADING -> LoadingIndicator()
 

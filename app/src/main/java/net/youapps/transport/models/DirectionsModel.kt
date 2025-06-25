@@ -72,7 +72,6 @@ class DirectionsModel(
     fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
         tripsFirstPageContext = null
         tripsLastPageContext = null
-        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
         val tripsResp = try {
             networkRepository.provider.queryTrips(
@@ -85,14 +84,12 @@ class DirectionsModel(
             )
         } catch (e: Exception) {
             Log.e("fetching trips", e.toString())
-            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
             return@launch
         }
 
         tripsFirstPageContext = tripsResp.context
         tripsLastPageContext = tripsResp.context
 
-        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         _trips.emit(tripsResp.trips.orEmpty())
     }
 
@@ -116,6 +113,37 @@ class DirectionsModel(
         } else {
             tripsFirstPageContext = tripsResp.context
             _trips.emit(tripsResp.trips + oldTrips)
+        }
+    }
+
+    fun refreshTrip(trip: Trip) = viewModelScope.launch(Dispatchers.IO) {
+        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
+
+        val tripsResp = try {
+            networkRepository.provider.queryTrips(
+                origin.value, // start
+                null, // via
+                destination.value, // end
+                // start request 5 minutes earlier if the time has changed
+                Date(trip.firstDepartureTime.time - 5 * 60 * 1000), // date
+                true, // is date departure date?
+                tripOptions // advanced trip options
+            )
+        } catch (e: Exception) {
+            Log.e("fetching trips", e.toString())
+            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+            return@launch
+        }
+
+        val updatedTrip = tripsResp.trips.firstOrNull { it.id == trip.id }
+        if (updatedTrip == null) {
+            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+        } else {
+            val updatedTrips = _trips.value.toMutableList().apply {
+                set(indexOf(trip), updatedTrip)
+            }
+            _trips.emit(updatedTrips)
+            _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         }
     }
 
