@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.schildbach.pte.dto.Location
@@ -99,7 +100,9 @@ fun TripLegPublic(leg: Trip.Public, onLocationClick: (Location) -> Unit) {
         if (leg.message != null) {
             Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                 Icon(
-                    modifier = Modifier.padding(top = 4.dp).size(16.dp),
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .size(16.dp),
                     imageVector = Icons.Default.Error,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.error,
@@ -121,13 +124,29 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column {
-            val timeStyle = if (type == StopType.Intermediate) {
-                MaterialTheme.typography.bodySmall
-            } else {
-                MaterialTheme.typography.bodyMedium
-            }
+        val isCancelled =
+            if (type == StopType.Departure) stop.departureCancelled else stop.arrivalCancelled
 
+        var timeStyle = if (type == StopType.Intermediate) {
+            MaterialTheme.typography.bodySmall
+        } else {
+            MaterialTheme.typography.bodyMedium
+        }
+        if (isCancelled) {
+            timeStyle = timeStyle.copy(
+                textDecoration = TextDecoration.LineThrough,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        var locationStyle = MaterialTheme.typography.bodyLarge
+        if (isCancelled) {
+            locationStyle = locationStyle.copy(
+                textDecoration = TextDecoration.LineThrough,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        Column {
             if (type in arrayOf(StopType.Arrival, StopType.Intermediate)) {
                 Text(
                     text = TextUtils.displayDepartureTimeWithDelay(
@@ -152,7 +171,7 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
         Text(
             modifier = Modifier.weight(1f),
             text = stop.location.displayName(),
-            style = MaterialTheme.typography.bodyLarge,
+            style = locationStyle,
             overflow = TextOverflow.Ellipsis
         )
 

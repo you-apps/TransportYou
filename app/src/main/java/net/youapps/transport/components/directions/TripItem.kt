@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +23,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.schildbach.pte.dto.Location
 import de.schildbach.pte.dto.Trip
+import net.youapps.transport.R
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.generic.AutoRefreshingText
 import net.youapps.transport.components.generic.RefreshLoadingState
@@ -37,6 +43,9 @@ fun TripItem(
 ) {
     var showTripBottomSheet by rememberSaveable {
         mutableStateOf(false)
+    }
+    val isTripCancelled = trip.legs.filterIsInstance<Trip.Public>().any { leg ->
+        leg.departureStop.departureCancelled || leg.arrivalStop.arrivalCancelled
     }
 
     Column(
@@ -103,6 +112,24 @@ fun TripItem(
             )
 
             Text(text = trip.to.displayName())
+        }
+
+        if (isTripCancelled) {
+            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                Icon(
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .size(16.dp),
+                    imageVector = Icons.Default.Error,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error,
+                )
+
+                Text(
+                    text = stringResource(R.string.trip_cancelled),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 
