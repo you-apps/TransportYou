@@ -212,6 +212,7 @@ fun DirectionsScreen(
                 if (isTopReached) directionsModel.getMoreTrips(laterTrips = false)
             }
 
+            val refreshLoadingState by directionsModel.tripsLoadingState.collectAsState()
             LazyColumn(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth()
@@ -219,7 +220,9 @@ fun DirectionsScreen(
                 items(trips, key = { it.id }) { trip ->
                     HorizontalDivider()
 
-                    TripItem(trip) { location ->
+                    TripItem(trip = trip, refreshLoadingState = refreshLoadingState, onRefresh = {
+                        directionsModel.queryTrips()
+                    }) { location ->
                         navController.navigate(NavRoutes.DeparturesFromLocation(location))
                     }
                 }

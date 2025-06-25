@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
+import net.youapps.transport.components.RefreshLoadingState
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
 import net.youapps.transport.data.newProtobufRoute
@@ -55,6 +56,8 @@ class DirectionsModel(
 
     private val _trips = MutableStateFlow<List<Trip>>(emptyList())
     val trips = _trips.asStateFlow()
+    private var _tripsLoadingState = MutableStateFlow<RefreshLoadingState>(RefreshLoadingState.INACTIVE)
+    val tripsLoadingState = _tripsLoadingState.asStateFlow()
     private var tripsFirstPageContext: QueryTripsContext? = null
     private var tripsLastPageContext: QueryTripsContext? = null
 
@@ -72,6 +75,7 @@ class DirectionsModel(
     fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
         tripsFirstPageContext = null
         tripsLastPageContext = null
+        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
         val tripsResp = try {
             networkRepository.provider.queryTrips(
@@ -84,8 +88,11 @@ class DirectionsModel(
             )
         } catch (e: Exception) {
             Log.e("fetching trips", e.toString())
+            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
             return@launch
         }
+
+        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         tripsFirstPageContext = tripsResp.context
         tripsLastPageContext = tripsResp.context
 

@@ -20,6 +20,7 @@
     <string name="saved_routes">Saved routes</string>
     <string name="transport_network">Transport network</string>
     <string name="edit_locations">Edit locations</string>
+    <string name="refresh">Refresh</string>
 
     <string name="product_high_speed_train">High speed train</string>
     <string name="product_regional_train">Regional train</string>

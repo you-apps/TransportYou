@@ -27,7 +27,12 @@ import net.youapps.transport.extensions.displayName
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun TripItem(trip: Trip, onLocationClick: (Location) -> Unit) {
+fun TripItem(
+    trip: Trip,
+    refreshLoadingState: RefreshLoadingState,
+    onRefresh: () -> Unit,
+    onLocationClick: (Location) -> Unit
+) {
     var showTripBottomSheet by rememberSaveable {
         mutableStateOf(false)
     }
@@ -100,7 +105,12 @@ fun TripItem(trip: Trip, onLocationClick: (Location) -> Unit) {
     }
 
     if (showTripBottomSheet) {
-        TripDetailsBottomSheet(trip, onLocationClick) {
+        TripDetailsBottomSheet(
+            trip = trip,
+            onLocationClick = onLocationClick,
+            refreshLoadingState = refreshLoadingState,
+            onRefresh = onRefresh
+        ) {
             showTripBottomSheet = false
         }
     }

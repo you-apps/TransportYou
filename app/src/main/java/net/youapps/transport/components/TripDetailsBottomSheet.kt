@@ -2,12 +2,16 @@ package net.youapps.transport.components
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -28,10 +32,25 @@ import net.youapps.transport.TextUtils
 fun TripDetailsBottomSheet(
     trip: Trip,
     onLocationClick: (Location) -> Unit,
+    refreshLoadingState: RefreshLoadingState,
+    onRefresh: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
     // TODO: manual refresh
-    ModalBottomSheet(onDismissRequest = onDismissRequest) {
+    ModalBottomSheet(onDismissRequest = onDismissRequest, dragHandle = {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // approx size of refresh loading box at other side, to make things symmetric
+            Spacer(modifier = Modifier.width(40.dp))
+
+            BottomSheetDefaults.DragHandle()
+
+            RefreshLoadingBox(refreshLoadingState, onRefresh)
+        }
+    }) {
         LazyColumn {
             item {
                 TripSummary(trip)
