@@ -1,5 +1,6 @@
 package net.youapps.transport.components
 
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ fun LocationSearchBar(
     locationsModel: LocationsModel,
     placeholder: String,
     leadingIcon: ImageVector? = null,
+    trailingIcon: @Composable () -> Unit = {},
     onLocation: (Location?) -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -44,9 +46,9 @@ fun LocationSearchBar(
             }
             onLocation(location ?: return@SearchBarWithSuggestions)
         },
-        leadingIcon = leadingIcon,
+        leadingIcon = { leadingIcon?.let { Icon(imageVector = it, contentDescription = null) } },
         placeholder = placeholder,
+        trailingIcon = trailingIcon,
         onSearch = {}
     )
-
 }

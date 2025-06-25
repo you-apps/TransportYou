@@ -1,8 +1,11 @@
 package net.youapps.transport.components.generic
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.unit.dp
 import net.youapps.transport.R
 
 data class Suggestion(
@@ -43,7 +47,8 @@ fun SearchBarWithSuggestions(
     onSuggestionClicked: (Suggestion) -> Unit,
     searchSuggestions: List<Suggestion>,
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector? = null,
+    leadingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {}
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -69,17 +74,17 @@ fun SearchBarWithSuggestions(
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     placeholder = { Text(placeholder) },
-                    leadingIcon = {
-                        leadingIcon?.let { Icon(it, null) }
-                    },
+                    leadingIcon = leadingIcon,
                     trailingIcon = {
-                        if (query.isNotEmpty()) {
+                        if (query.isNotEmpty() || expanded) {
                             TooltipIconButton(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = stringResource(R.string.clear)
                             ) {
                                 onQueryChange("")
                             }
+                        } else {
+                            trailingIcon.invoke()
                         }
                     }
                 )

@@ -18,11 +18,9 @@ import androidx.compose.material.icons.filled.ForkRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -78,12 +76,6 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                SmallFloatingActionButton(onClick = {
-                    navController.navigate(NavRoutes.Settings)
-                }) {
-                    Icon(imageVector = Icons.Default.Settings, contentDescription = null)
-                }
-
                 TooltipExtendedFAB(
                     imageVector = Icons.Default.ForkRight,
                     contentDescription = stringResource(R.string.directions)
@@ -101,7 +93,15 @@ fun HomeScreen(
             LocationSearchBar(
                 locationsModel = locationsModel,
                 placeholder = stringResource(R.string.search),
-                leadingIcon = Icons.Default.Search
+                leadingIcon = Icons.Default.Search,
+                trailingIcon = {
+                    TooltipIconButton(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(R.string.settings)
+                    ) {
+                        navController.navigate(NavRoutes.Settings)
+                    }
+                }
             ) { location ->
                 if (location == null) return@LocationSearchBar
 
@@ -142,7 +142,8 @@ fun HomeScreen(
                             homeModel.selectedLocation.emit(newLocation)
 
                             // only refresh if there's no cached entry or the cached entry is outdated
-                            val (cachedDate, _) = departuresMap[newLocation] ?: (null to emptyList())
+                            val (cachedDate, _) = departuresMap[newLocation]
+                                ?: (null to emptyList())
                             if (cachedDate == null || Date().time - cachedDate.time > REFRESH_MILLIS_DELAY) {
                                 homeModel.updateDeparturesForSelectedLocation()
                             }
