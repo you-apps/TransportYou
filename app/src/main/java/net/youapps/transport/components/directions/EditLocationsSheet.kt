@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragHandle
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -69,12 +70,17 @@ fun EditLocationsSheet(
 
                     SwipeToDismissBox(
                         state = dismissBoxState,
-                        backgroundContent = { DismissBackground() }
+                        enableDismissFromEndToStart = false,
+                        backgroundContent = { DismissBackground() },
+                        onDismiss = {
+                            dismissBoxState.reset()
+                            onLocationsUpdated(locations - location)
+                        }
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.background),
+                                .background(BottomSheetDefaults.ContainerColor),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {

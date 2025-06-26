@@ -242,15 +242,14 @@ fun HomeScreen(
                         val dismissBoxState = rememberSwipeToDismissBoxState()
 
                         SwipeToDismissBox(
-                            dismissBoxState,
+                            state = dismissBoxState,
                             enableDismissFromEndToStart = false,
                             backgroundContent = {
                                 DismissBackground()
                             },
                             onDismiss = { direction ->
-                                if (direction == SwipeToDismissBoxValue.StartToEnd) {
-                                    homeModel.removeSavedRoute(route)
-                                }
+                                dismissBoxState.reset()
+                                homeModel.removeSavedRoute(route)
                             }
                         ) {
                             Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
