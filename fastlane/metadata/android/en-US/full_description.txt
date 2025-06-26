@@ -1,0 +1,1 @@
+<i>Transport You</i> is a Public Transport Companion App built with <a href='https://m3.material.io/'>Material Design 3 (You)</a>. The data is obtained via the <a href='https://github.com/schildbach/public-transport-enabler'>public-transport-enabler</a> library, we do **not** guarantee for its correctness.
