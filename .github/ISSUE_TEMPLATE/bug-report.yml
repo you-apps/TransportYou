@@ -37,9 +37,9 @@ body:
       required: true
 
   - type: input
-    id: Wall_You-version
+    id: Transport_You-version
     attributes:
-      label: Wall You version
+      label: Transport You version
       description: |
         You can find the app version in the **About** section.
       placeholder: |
