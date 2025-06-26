@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Protobuf and Datastore
+-dontwarn org.xmlpull.v1.**
+-dontwarn org.kxml2.io.**
+-dontwarn android.content.res.**
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+
+-keep class org.xmlpull.** { *; }
+-keepclassmembers class org.xmlpull.** { *; }
+
+-keep class androidx.datastore.*.** {*;}
+-keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
+
+# Public transport enabler
+-keep class de.schildbach.pte.**
