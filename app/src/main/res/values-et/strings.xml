@@ -1,3 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">Otsi</string>
+    <string name="origin">Lähtepunkt</string>
+    <string name="destination">Sihtpunkt</string>
+    <string name="back">Tagasi</string>
+    <string name="clear">Tühjenda</string>
+    <string name="departure">Väljumine</string>
+    <string name="arrival">Saabumine</string>
+    <string name="okay">Sobib</string>
+    <string name="cancel">Katkesta</string>
+    <string name="settings">Seadistused</string>
+    <string name="product_high_speed_train">Kiirrong</string>
+    <string name="product_regional_train">Piirkondlik rong</string>
+    <string name="product_suburban_train">Linnalähirong</string>
+    <string name="product_tram">Tramm</string>
+    <string name="product_subway">Metroo</string>
+    <string name="product_bus">Buss</string>
+    <string name="product_cablecar">Köisraudtee</string>
+    <string name="product_ferry">Praam</string>
+    <string name="product_on_demand">Tellitav auto</string>
+    <string name="save">Salvesta</string>
+    <string name="saved_routes">Salvestatud marsruudid</string>
+    <string name="transport_network">Transpordivõrgustik</string>
+    <string name="edit_locations">Muuda asukohti</string>
+    <string name="refresh">Värskenda andmeid</string>
+    <string name="trip_cancelled">Teekond pole teostatav või on katkestatud.</string>
+    <string name="directions">Suunad</string>
+    <string name="total">Kokku</string>
+    <string name="trip_options">Marsruudi valikud</string>
+    <string name="swap">Vaheta</string>
+    <string name="now">Praegu</string>
+    <string name="trip_time">Reisi kestus</string>
 </resources>
