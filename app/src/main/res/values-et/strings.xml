@@ -27,7 +27,7 @@
     <string name="trip_cancelled">Teekond pole teostatav või on katkestatud.</string>
     <string name="directions">Suunad</string>
     <string name="total">Kokku</string>
-    <string name="trip_options">Marsruudi valikud</string>
+    <string name="trip_options">Reisi valikud</string>
     <string name="swap">Vaheta</string>
     <string name="now">Praegu</string>
     <string name="trip_time">Reisi kestus</string>
