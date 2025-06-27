@@ -1,3 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="edit_locations">Modifica luoghi</string>
+    <string name="product_suburban_train">Treno suburbano</string>
+    <string name="product_tram">Tram</string>
+    <string name="refresh">Aggiorna</string>
+    <string name="directions">Direzioni</string>
+    <string name="clear">Rimuovi</string>
+    <string name="trip_options">Opzioni di viaggio</string>
+    <string name="swap">Scambia</string>
+    <string name="now">Ora</string>
+    <string name="departure">Partenza</string>
+    <string name="arrival">Arrivo</string>
+    <string name="okay">Ok</string>
+    <string name="trip_time">Durata del viaggio</string>
+    <string name="save">Salva</string>
+    <string name="saved_routes">Percorsi salvati</string>
+    <string name="trip_cancelled">Percorso impossibile da compiersi o cancellato.</string>
+    <string name="settings">Impostazioni</string>
+    <string name="product_subway">Metropolitana</string>
+    <string name="product_bus">Autobus</string>
+    <string name="product_cablecar">Funivia</string>
+    <string name="product_ferry">Traghetto</string>
+    <string name="product_on_demand">Car sharing</string>
+    <string name="product_regional_train">Treno regionale</string>
+    <string name="search">Cerca</string>
+    <string name="origin">Origine</string>
+    <string name="destination">Destinazione</string>
+    <string name="total">Totale</string>
+    <string name="back">Indietro</string>
+    <string name="cancel">Annulla</string>
+    <string name="product_high_speed_train">Treno ad alta velocità</string>
+    <string name="transport_network">Rete di trasporto</string>
 </resources>
