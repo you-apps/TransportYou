@@ -37,7 +37,7 @@ class HomeModel(
         try {
             val requestDate = Date()
             val departures = networkRepository.provider
-                .queryDepartures(location.id, requestDate, 10, true)
+                .queryDepartures(location.id, requestDate, 15, true)
                 .stationDepartures
                 .flatMap { it.departures }
                 .filterNotNull()
