@@ -1,3 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">Axtarış</string>
+    <string name="origin">Mənşə</string>
+    <string name="destination">Təyinat</string>
+    <string name="back">Geri</string>
+    <string name="clear">Təmizlə</string>
+    <string name="directions">İstiqamətlər</string>
+    <string name="total">Cəmi</string>
+    <string name="trip_options">Səyahət Seçimləri</string>
+    <string name="swap">Mübadilə</string>
+    <string name="now">İndi</string>
+    <string name="departure">Gediş</string>
+    <string name="arrival">Gəliş</string>
+    <string name="okay">Oldu</string>
+    <string name="cancel">Ləğv et</string>
+    <string name="trip_time">Səyahət vaxtı</string>
+    <string name="save">Saxla</string>
+    <string name="saved_routes">Saxlanan marşrutlar</string>
+    <string name="transport_network">Nəqliyyat şəbəkəsi</string>
+    <string name="edit_locations">Məkanları redaktə et</string>
+    <string name="refresh">Yenilə</string>
+    <string name="trip_cancelled">Səfər qeyri-mümkündür və ya ləğv edilir.</string>
+    <string name="settings">Tənzimləmələr</string>
+    <string name="product_high_speed_train">Yüksək sürətli qatar</string>
+    <string name="product_regional_train">Regional qatar</string>
+    <string name="product_suburban_train">Şəhərətrafı qatar</string>
+    <string name="product_tram">Tramvay</string>
+    <string name="product_subway">Metro</string>
+    <string name="product_bus">Avtobus</string>
+    <string name="product_cablecar">Kabel avtomobili</string>
+    <string name="product_ferry">Bərə</string>
+    <string name="product_on_demand">Tələb olunan avtomobil</string>
 </resources>
