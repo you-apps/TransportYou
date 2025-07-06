@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Пошук</string>
+    <string name="origin">Початок</string>
+    <string name="destination">Призначення</string>
+    <string name="back">Назад</string>
+    <string name="clear">Очистити</string>
+    <string name="directions">Вказівки</string>
+    <string name="total">Усього</string>
+    <string name="trip_options">Варіанти поїздок</string>
+    <string name="swap">Поміняти</string>
+    <string name="now">Зараз</string>
+    <string name="departure">Відправлення</string>
+    <string name="arrival">Прибуття</string>
+    <string name="okay">Гаразд</string>
+    <string name="cancel">Скасувати</string>
+    <string name="trip_time">Час поїздки</string>
+    <string name="save">Зберегти</string>
+    <string name="saved_routes">Збережені маршрути</string>
+    <string name="transport_network">Транспортна мережа</string>
+    <string name="edit_locations">Змінити розташування</string>
+    <string name="refresh">Оновити</string>
+    <string name="trip_cancelled">Поїздка неможлива або скасована.</string>
+    <string name="settings">Налаштування</string>
+    <string name="product_high_speed_train">Швидкісний поїзд</string>
+    <string name="product_regional_train">Регіональний поїзд</string>
+    <string name="product_suburban_train">Приміський поїзд</string>
+    <string name="product_tram">Трамвай</string>
+    <string name="product_subway">Метро</string>
+    <string name="product_bus">Автобус</string>
+    <string name="product_cablecar">Канатна дорога</string>
+    <string name="product_ferry">Пором</string>
+    <string name="product_on_demand">Каршерінг</string>
+</resources>
