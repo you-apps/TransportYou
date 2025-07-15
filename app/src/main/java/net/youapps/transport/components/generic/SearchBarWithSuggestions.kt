@@ -81,7 +81,8 @@ fun SearchBarWithSuggestions(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = stringResource(R.string.clear)
                             ) {
-                                onQueryChange("")
+                                if (query.isNotEmpty()) onQueryChange("")
+                                else expanded = false
                             }
                         } else {
                             trailingIcon.invoke()
