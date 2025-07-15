@@ -140,7 +140,7 @@ fun DirectionsScreen(
 
                 if (showDateTimePicker) {
                     DateTimePickerDialog(
-                        initialValue = (selectedDate ?: Date()).toZonedDateTime(),
+                        initialValue = selectedDate?.toZonedDateTime(),
                         onDismissRequest = { showDateTimePicker = false },
                         extraDialogContent = {
                             Row(
@@ -164,7 +164,7 @@ fun DirectionsScreen(
                             }
                         }
                     ) { newDate ->
-                        scope.launch { directionsModel.date.emit(newDate.toJavaDate()) }
+                        scope.launch { directionsModel.date.emit(newDate?.toJavaDate()) }
                     }
                 }
 
