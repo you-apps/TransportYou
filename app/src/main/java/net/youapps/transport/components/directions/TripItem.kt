@@ -17,33 +17,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.dto.Location
 import de.schildbach.pte.dto.Trip
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.generic.AutoRefreshingText
-import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.extensions.displayName
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TripItem(
     trip: Trip,
-    refreshLoadingState: RefreshLoadingState,
-    onRefresh: () -> Unit,
-    onLocationClick: (Location) -> Unit
+    onTripClick: () -> Unit,
 ) {
-    var showTripBottomSheet by rememberSaveable {
-        mutableStateOf(false)
-    }
     val isTripCancelled = trip.legs.filterIsInstance<Trip.Public>().any { leg ->
         leg.departureStop.departureCancelled || leg.arrivalStop.arrivalCancelled
     }
@@ -51,7 +40,7 @@ fun TripItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { showTripBottomSheet = true }
+            .clickable { onTripClick() }
             .padding(horizontal = 6.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
@@ -102,7 +91,7 @@ fun TripItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            var arrival = trip.lastPublicLeg?.arrivalStop
+            val arrival = trip.lastPublicLeg?.arrivalStop
 
             Text(
                 text = TextUtils.displayDepartureTimeWithDelay(
@@ -130,17 +119,6 @@ fun TripItem(
                     color = MaterialTheme.colorScheme.error
                 )
             }
-        }
-    }
-
-    if (showTripBottomSheet) {
-        TripDetailsBottomSheet(
-            trip = trip,
-            onLocationClick = onLocationClick,
-            refreshLoadingState = refreshLoadingState,
-            onRefresh = onRefresh
-        ) {
-            showTripBottomSheet = false
         }
     }
 }

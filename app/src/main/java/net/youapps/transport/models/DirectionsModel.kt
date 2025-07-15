@@ -21,8 +21,9 @@ import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.components.generic.RefreshLoadingState
-import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.NetworkRepository
+import net.youapps.transport.data.TripWrapper
 import net.youapps.transport.data.newProtobufRoute
 import java.util.Date
 
@@ -49,11 +50,11 @@ class DirectionsModel(
     }
 
     val date = MutableStateFlow<Date?>(null)
-    val isDepartureDate = MutableStateFlow<Boolean>(true)
+    val isDepartureDate = MutableStateFlow(true)
 
-    private val _trips = MutableStateFlow<List<Trip>>(emptyList())
+    private val _trips = MutableStateFlow<List<TripWrapper>>(emptyList())
     val trips = _trips.asStateFlow()
-    private var _tripsLoadingState = MutableStateFlow<RefreshLoadingState>(RefreshLoadingState.INACTIVE)
+    private var _tripsLoadingState = MutableStateFlow(RefreshLoadingState.INACTIVE)
     val tripsLoadingState = _tripsLoadingState.asStateFlow()
     private var tripsFirstPageContext: QueryTripsContext? = null
     private var tripsLastPageContext: QueryTripsContext? = null
@@ -90,7 +91,7 @@ class DirectionsModel(
         tripsFirstPageContext = tripsResp.context
         tripsLastPageContext = tripsResp.context
 
-        _trips.emit(tripsResp.trips.orEmpty())
+        _trips.emit(tripsResp.trips.orEmpty().map { TripWrapper(it) })
     }
 
     fun getMoreTrips(laterTrips: Boolean) = viewModelScope.launch(Dispatchers.IO) {
@@ -107,12 +108,13 @@ class DirectionsModel(
         val oldTrips = trips.value
             .filter { newTrip -> !tripsResp.trips.any { it.id == newTrip.id } }
 
+        val fetchedTripsWrapped = tripsResp.trips.map { TripWrapper(it) }
         if (laterTrips) {
             tripsLastPageContext = tripsResp.context
-            _trips.emit(oldTrips + tripsResp.trips)
+            _trips.emit(oldTrips + fetchedTripsWrapped)
         } else {
             tripsFirstPageContext = tripsResp.context
-            _trips.emit(tripsResp.trips + oldTrips)
+            _trips.emit(fetchedTripsWrapped + oldTrips)
         }
     }
 
@@ -135,13 +137,12 @@ class DirectionsModel(
             return@launch
         }
 
-        val updatedTrip = tripsResp.trips.firstOrNull { it.id == trip.id }
-        if (updatedTrip == null) {
+        if (tripsResp.trips.none { it.id == trip.id }) {
             _tripsLoadingState.emit(RefreshLoadingState.ERROR)
         } else {
-            val updatedTrips = _trips.value.toMutableList().apply {
-                set(indexOf(trip), updatedTrip)
-            }
+            val updatedTrips = _trips.value.map { oldTrip ->
+                tripsResp.trips.find { it.id == oldTrip.id } ?: oldTrip.trip
+            }.map { TripWrapper(it) }
             _trips.emit(updatedTrips)
             _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         }

@@ -39,17 +39,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import de.schildbach.pte.dto.Trip
 import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
-import net.youapps.transport.components.generic.DateTimePickerDialog
-import net.youapps.transport.components.generic.FilterChipWithIcon
 import net.youapps.transport.components.LocationSearchBar
-import net.youapps.transport.components.generic.TooltipExtendedFAB
-import net.youapps.transport.components.generic.TooltipIconButton
+import net.youapps.transport.components.directions.TripDetailsBottomSheet
 import net.youapps.transport.components.directions.TripItem
 import net.youapps.transport.components.directions.TripOptionsSheet
+import net.youapps.transport.components.generic.DateTimePickerDialog
+import net.youapps.transport.components.generic.FilterChipWithIcon
+import net.youapps.transport.components.generic.TooltipExtendedFAB
+import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.extensions.displayName
 import net.youapps.transport.extensions.reachedBottom
 import net.youapps.transport.extensions.reachedTop
@@ -212,19 +214,38 @@ fun DirectionsScreen(
                 if (isTopReached) directionsModel.getMoreTrips(laterTrips = false)
             }
 
+            var selectedBottomSheetTripId by remember {
+                mutableStateOf<String?>(null)
+            }
             val refreshLoadingState by directionsModel.tripsLoadingState.collectAsState()
             LazyColumn(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(trips, key = { it.id }) { trip ->
+                items(trips, key = { arrayOf(it.id) }) { tripWrapper ->
                     HorizontalDivider()
 
-                    TripItem(trip = trip, refreshLoadingState = refreshLoadingState, onRefresh = {
-                        directionsModel.refreshTrip(trip)
-                    }) { location ->
+                    TripItem(
+                        trip = tripWrapper.trip,
+                        onTripClick = {
+                            selectedBottomSheetTripId = tripWrapper.id
+                        },
+                    )
+                }
+            }
+
+            trips.find { it.id != null && it.id == selectedBottomSheetTripId }?.let { tripWrapper ->
+                TripDetailsBottomSheet(
+                    trip = tripWrapper.trip,
+                    onLocationClick = { location ->
                         navController.navigate(NavRoutes.DeparturesFromLocation(location))
+                    },
+                    refreshLoadingState = refreshLoadingState,
+                    onRefresh = {
+                        directionsModel.refreshTrip(tripWrapper.trip)
                     }
+                ) {
+                    selectedBottomSheetTripId = null
                 }
             }
         }
