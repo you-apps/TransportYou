@@ -1,0 +1,1 @@
+<i>Transport You</i> — это приложение для поиска общественного транспорта, созданное с использованием <a href='https://m3.material.io/'>Material Design 3 (You)</a>. Данные получаются из библиотеки <a href='https://github.com/schildbach/public-transport-enabler'>public-transport-enabler</a>, поэтому мы **не** гарантируем их правильность.
