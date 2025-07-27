@@ -1,3 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    </resources>
+    <string name="search">Поиск</string>
+    <string name="origin">Начало</string>
+    <string name="destination">Конец</string>
+    <string name="back">Назад</string>
+    <string name="clear">Очистить</string>
+    <string name="directions">Направления</string>
+    <string name="total">Всего</string>
+    <string name="trip_options">Возможности поездки</string>
+    <string name="swap">Переменить</string>
+    <string name="now">Сейчас</string>
+    <string name="departure">Отправление</string>
+    <string name="arrival">Прибытие</string>
+    <string name="okay">Ладно</string>
+    <string name="cancel">Отмена</string>
+    <string name="trip_time">Время пути</string>
+    <string name="save">Сохранить</string>
+    <string name="saved_routes">Сохранённые маршруты</string>
+    <string name="transport_network">Транспортная сеть</string>
+    <string name="edit_locations">Изменить места</string>
+    <string name="refresh">Обновить</string>
+    <string name="trip_cancelled">Поездка невозможна или отменена.</string>
+    <string name="settings">Настройки</string>
+    <string name="product_high_speed_train">Скоростной поезд</string>
+    <string name="product_regional_train">Местный поезд</string>
+    <string name="product_suburban_train">Пригородный поезд</string>
+    <string name="product_tram">Трамвай</string>
+    <string name="product_subway">Метро</string>
+    <string name="product_bus">Автобус</string>
+    <string name="product_cablecar">Канатная дорога</string>
+    <string name="product_ferry">Паром</string>
+    <string name="product_on_demand">Аренда машин</string>
+</resources>
