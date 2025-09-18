@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import net.youapps.transport.components.directions.TripItem
 import net.youapps.transport.components.directions.TripOptionsSheet
 import net.youapps.transport.components.generic.DateTimePickerDialog
 import net.youapps.transport.components.generic.FilterChipWithIcon
+import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.components.generic.TooltipExtendedFAB
 import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.extensions.displayName
@@ -203,6 +205,13 @@ fun DirectionsScreen(
                 }
             }
 
+            val refreshLoadingState by directionsModel.tripsLoadingState.collectAsState()
+            AnimatedVisibility(refreshLoadingState == RefreshLoadingState.LOADING) {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             val trips by directionsModel.trips.collectAsState()
             val routesState = rememberLazyListState()
             val isBottomReached by remember { derivedStateOf { routesState.reachedBottom() } }
@@ -217,7 +226,6 @@ fun DirectionsScreen(
             var selectedBottomSheetTripId by remember {
                 mutableStateOf<String?>(null)
             }
-            val refreshLoadingState by directionsModel.tripsLoadingState.collectAsState()
             LazyColumn(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth()

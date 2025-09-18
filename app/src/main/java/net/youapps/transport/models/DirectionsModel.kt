@@ -73,6 +73,7 @@ class DirectionsModel(
     fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
         tripsFirstPageContext = null
         tripsLastPageContext = null
+        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
         val tripsResp = try {
             networkRepository.provider.queryTrips(
@@ -85,24 +86,30 @@ class DirectionsModel(
             )
         } catch (e: Exception) {
             Log.e("fetching trips", e.toString())
+            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
             return@launch
         }
 
         tripsFirstPageContext = tripsResp.context
         tripsLastPageContext = tripsResp.context
 
+        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
         _trips.emit(tripsResp.trips.orEmpty().map { TripWrapper(it) })
     }
 
     fun getMoreTrips(laterTrips: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         val context = if (laterTrips) tripsLastPageContext else tripsFirstPageContext
+        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
         val tripsResp = try {
             networkRepository.provider.queryMoreTrips(context, laterTrips)
         } catch (e: Exception) {
+            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
             Log.e("fetching more trips", e.toString())
             return@launch
         }
+
+        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
 
         // remove items that would otherwise be duplicated
         val oldTrips = trips.value
