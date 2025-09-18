@@ -63,6 +63,10 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.reorderable)
 
+    // Widgets
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
