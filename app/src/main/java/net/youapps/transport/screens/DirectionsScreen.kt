@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import de.schildbach.pte.dto.Trip
 import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
@@ -55,13 +54,11 @@ import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.components.generic.TooltipExtendedFAB
 import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.extensions.displayName
-import net.youapps.transport.extensions.reachedBottom
-import net.youapps.transport.extensions.reachedTop
+import net.youapps.transport.extensions.loadPrevItems
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.LocationsModel
 import net.youapps.transport.toJavaDate
 import net.youapps.transport.toZonedDateTime
-import java.util.Date
 
 @Composable
 fun DirectionsScreen(
@@ -214,10 +211,9 @@ fun DirectionsScreen(
 
             val trips by directionsModel.trips.collectAsState()
             val routesState = rememberLazyListState()
-            val isBottomReached by remember { derivedStateOf { routesState.reachedBottom() } }
-            val isTopReached by remember { derivedStateOf { routesState.reachedTop() } }
-            LaunchedEffect(isBottomReached) {
-                if (isBottomReached) directionsModel.getMoreTrips(laterTrips = true)
+            val isTopReached by routesState.loadPrevItems()
+            LaunchedEffect(routesState.canScrollForward) {
+                if (!routesState.canScrollForward) directionsModel.getMoreTrips(laterTrips = true)
             }
             LaunchedEffect(isTopReached) {
                 if (isTopReached) directionsModel.getMoreTrips(laterTrips = false)
@@ -228,7 +224,7 @@ fun DirectionsScreen(
             }
             LazyColumn(
                 state = routesState,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 items(trips, key = { arrayOf(it.id) }) { tripWrapper ->
                     HorizontalDivider()
