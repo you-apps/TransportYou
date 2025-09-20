@@ -1,29 +1,41 @@
 package net.youapps.transport.widget
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
-import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.padding
+import androidx.glance.layout.height
+import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import de.schildbach.pte.dto.Departure
@@ -32,47 +44,82 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
+import net.youapps.transport.components.directions.DEMO_DEPARTURE
 import java.util.Date
 
-class DeparturesWidget: GlanceAppWidget() {
+class DeparturesWidget : GlanceAppWidget() {
     override suspend fun provideGlance(
         context: Context,
         id: GlanceId
     ) {
+        val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+
         provideContent {
-            MyContent()
+            val scope = rememberCoroutineScope()
+
+            val departures = remember {
+                mutableStateListOf<Departure>()
+            }
+            var isError by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            val locationId = currentState(LOCATION_ID_KEY)
+            val locationName = currentState(LOCATION_NAME_KEY)
+
+            suspend fun loadDepartures() = withContext(Dispatchers.IO) {
+                val app = context.applicationContext as TransportYouApp
+
+                try {
+                    val response = app.networkRepository.provider
+                        .queryDepartures(locationId, Date(), 20, true)
+                        .stationDepartures.flatMap { it.departures }
+                    departures.clear()
+
+                    departures.addAll(response)
+
+                    isError = false
+                } catch (e: Exception) {
+                    isError = true
+                }
+            }
+
+            LaunchedEffect(locationId) {
+                scope.launch {
+                    loadDepartures()
+                }
+            }
+
+            WidgetContent(
+                locationName = locationName.orEmpty(),
+                locationId = locationId!!,
+                departures = departures,
+                isError = isError,
+                onRefresh = {
+                    scope.launch { loadDepartures() }
+                },
+                onConfigureClicked = {
+                    val intent =
+                        Intent(context, DeparturesWidgetConfigureActivity::class.java)
+                            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                }
+            )
         }
     }
 
     @Composable
-    private fun MyContent() {
+    private fun WidgetContent(
+        locationName: String,
+        locationId: String,
+        departures: List<Departure>,
+        isError: Boolean,
+        onRefresh: () -> Unit,
+        onConfigureClicked: () -> Unit
+    ) {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-
-        val departures = remember {
-            mutableStateListOf<Departure>()
-        }
-
-        suspend fun loadDepartures() = withContext(Dispatchers.IO) {
-            val app = context.applicationContext as TransportYouApp
-
-            try {
-                val response = app.networkRepository.provider
-                    .queryDepartures("8000068", Date(), 20, true)
-                    .stationDepartures.flatMap { it.departures }
-                departures.clear()
-
-                departures.addAll(response)
-            } catch (e: Exception) {
-                TODO("display errors")
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            scope.launch {
-                loadDepartures()
-            }
-        }
 
         Scaffold {
             Column(
@@ -83,16 +130,14 @@ class DeparturesWidget: GlanceAppWidget() {
             ) {
                 TitleBar(
                     startIcon = ImageProvider(R.drawable.ic_app_full_size),
-                    title = "Train station name"
+                    title = locationName
                 ) {
                     // refresh action
                     CircleIconButton(
                         imageProvider = ImageProvider(R.drawable.outline_refresh_24),
                         backgroundColor = null,
                         contentDescription = null,
-                        onClick = {
-                            scope.launch { loadDepartures() }
-                        }
+                        onClick = onRefresh,
                     )
 
                     // configuration action
@@ -100,28 +145,43 @@ class DeparturesWidget: GlanceAppWidget() {
                         imageProvider = ImageProvider(R.drawable.outline_settings_24),
                         backgroundColor = null,
                         contentDescription = null,
-                        onClick = {
-                            scope.launch {
-                                TODO("open configuration")
-                            }
-                        }
+                        onClick = onConfigureClicked
                     )
                 }
 
-                LazyColumn {
-                    items(departures) { departure ->
+                if (isError) {
+                    Box(
+                        modifier = GlanceModifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
-                            modifier = GlanceModifier.padding(12.dp).clickable {
-                                TODO("open departure")
-                            },
-                            text = departure.destination?.name.toString(),
+                            text = context.getString(R.string.error_fetching_departures),
                             style = TextStyle(
-                                color = GlanceTheme.colors.onBackground
-                            ),
+                                color = GlanceTheme.colors.error,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
+                    }
+                } else {
+                    LazyColumn {
+                        items(departures) { departure ->
+                            GlanceDepartureItem(departure) {
+                                // TODO("open directions in app")
+                            }
+                        }
+
+                        item {
+                            Spacer(modifier = GlanceModifier.height(6.dp))
+                        }
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        val LOCATION_NAME_KEY = stringPreferencesKey("LOCATION_NAME")
+        val LOCATION_ID_KEY = stringPreferencesKey("LOCATION_ID")
     }
 }

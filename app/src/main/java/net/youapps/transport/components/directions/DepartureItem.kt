@@ -38,7 +38,12 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Column {
-                Text(TextUtils.displayDepartureTimeWithDelay(departure.plannedTime, departure.predictedTime))
+                Text(
+                    TextUtils.displayDepartureTimeWithDelay(
+                        departure.plannedTime,
+                        departure.predictedTime
+                    )
+                )
 
                 AutoRefreshingText(
                     style = MaterialTheme.typography.bodySmall
