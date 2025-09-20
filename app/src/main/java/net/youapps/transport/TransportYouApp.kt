@@ -24,5 +24,12 @@ class TransportYouApp: Application() {
                 networkRepository.updateProvider(networkId)
             }
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val widgetManager = GlanceAppWidgetManager(this@TransportYouApp)
+                widgetManager.setWidgetPreviews<DeparturesWidgetReceiver>()
+            }
+        }
     }
 }

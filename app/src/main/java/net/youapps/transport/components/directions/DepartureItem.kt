@@ -80,14 +80,19 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
     }
 }
 
+val DEMO_DEPARTURE = Departure(
+    Date(),
+    Date(),
+    Line("12345", NetworkId.DB.name, Product.REGIONAL_TRAIN, "RB68"),
+    Position("Pos. 3"),
+    Location(LocationType.STATION, "endid", "Berlin", "Main station"),
+    intArrayOf(),
+    "No message."
+)
+
 @Preview
 @Composable
 fun DeparturesListPreview() {
-    val line = Line("12345", NetworkId.DB.name, Product.REGIONAL_TRAIN, "RB68")
-    val start = Position("Pos. 3")
-    val end = Location(LocationType.STATION, "endid", "Place", "This is the goal.")
 
-    DepartureItem(
-        Departure(Date(), Date(), line, start, end, intArrayOf(), "No message.")
-    ) {}
+    DepartureItem(DEMO_DEPARTURE) {}
 }

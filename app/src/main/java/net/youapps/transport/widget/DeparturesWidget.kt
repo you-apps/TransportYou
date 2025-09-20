@@ -180,6 +180,19 @@ class DeparturesWidget : GlanceAppWidget() {
         }
     }
 
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        provideContent {
+            WidgetContent(
+                locationName = "Frankfurt",
+                locationId = "",
+                departures = listOf(DEMO_DEPARTURE, DEMO_DEPARTURE, DEMO_DEPARTURE),
+                isError = false,
+                onRefresh = {},
+                onConfigureClicked = {}
+            )
+        }
+    }
+
     companion object {
         val LOCATION_NAME_KEY = stringPreferencesKey("LOCATION_NAME")
         val LOCATION_ID_KEY = stringPreferencesKey("LOCATION_ID")
