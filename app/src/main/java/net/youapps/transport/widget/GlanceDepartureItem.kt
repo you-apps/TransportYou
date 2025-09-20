@@ -53,7 +53,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
 
             Text(
                 modifier = GlanceModifier.defaultWeight(),
-                text = departure.destination?.displayName().orEmpty(),
+                text = "${departure.line.label}, ${departure.destination?.displayName().orEmpty()}",
                 style = defaultTextStyle
             )
 
