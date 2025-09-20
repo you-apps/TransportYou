@@ -27,6 +27,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".widget.DeparturesWidgetConfigureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.TransportYou">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+
+        </activity>
+
         <receiver android:name=".widget.DeparturesWidgetReceiver"
             android:exported="true">
             <intent-filter>
