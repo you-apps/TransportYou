@@ -20,11 +20,11 @@
 <!-- ---------- Description ---------- -->
 ## Features
 
-- [x] Querying trips
-- [x] Querying locations
-- [x] Dashboard of current departures
-- [x] Saving locations and trips
+- [x] Querying trips and train stations
+- [x] Dashboard and widget of current departures at a train station
+- [x] Bookmarking locations and trips
 - [x] Support for many public transport providers
+- [x] Viewing trips on a map via [MapLibre](https://maplibre.org/) and [OpenFreeMap](https://openfreemap.org/)
 
 <!-- ---------- Download ---------- -->
 ## Download
