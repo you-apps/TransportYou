@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.okhttp)
     implementation(libs.reorderable)
+    implementation(libs.maplibre.compose)
 
     // Widgets
     implementation(libs.androidx.glance.appwidget)

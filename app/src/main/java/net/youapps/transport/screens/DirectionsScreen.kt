@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +44,6 @@ import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.LocationSearchBar
-import net.youapps.transport.components.directions.TripDetailsBottomSheet
 import net.youapps.transport.components.directions.TripItem
 import net.youapps.transport.components.directions.TripOptionsSheet
 import net.youapps.transport.components.generic.DateTimePickerDialog
@@ -239,18 +237,7 @@ fun DirectionsScreen(
             }
 
             trips.find { it.id != null && it.id == selectedBottomSheetTripId }?.let { tripWrapper ->
-                TripDetailsBottomSheet(
-                    trip = tripWrapper.trip,
-                    onLocationClick = { location ->
-                        navController.navigate(NavRoutes.DeparturesFromLocation(location))
-                    },
-                    refreshLoadingState = refreshLoadingState,
-                    onRefresh = {
-                        directionsModel.refreshTrip(tripWrapper.trip)
-                    }
-                ) {
-                    selectedBottomSheetTripId = null
-                }
+                navController.navigate(NavRoutes.TripDetails(tripWrapper.trip.id))
             }
         }
     }

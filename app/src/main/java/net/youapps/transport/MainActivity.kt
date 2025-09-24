@@ -18,6 +18,7 @@ import net.youapps.transport.screens.DeparturesScreen
 import net.youapps.transport.screens.DirectionsScreen
 import net.youapps.transport.screens.HomeScreen
 import net.youapps.transport.screens.SettingsScreen
+import net.youapps.transport.screens.TripDetailsScreen
 import net.youapps.transport.ui.theme.TransportYouTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,8 +27,6 @@ class MainActivity : ComponentActivity() {
     val directionsModel: DirectionsModel by viewModels { DirectionsModel.Factory }
     val homeModel: HomeModel by viewModels { HomeModel.Factory }
     val settingsModel: SettingsModel by viewModels { SettingsModel.Factory }
-
-    // TODO: use https://github.com/maplibre/maplibre-compose
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +50,13 @@ class MainActivity : ComponentActivity() {
 
                     composable<NavRoutes.Directions> {
                         DirectionsScreen(navController, directionsModel)
+                    }
+
+                    composable<NavRoutes.TripDetails> { backStackEntry ->
+                        val tripDetails: NavRoutes.TripDetails = backStackEntry.toRoute()
+
+                        val tripWrapper = directionsModel.trips.value.find { it.id == tripDetails.tripId }!!
+                        TripDetailsScreen(navController, directionsModel, tripWrapper.trip)
                     }
 
                     composable<NavRoutes.Home> {

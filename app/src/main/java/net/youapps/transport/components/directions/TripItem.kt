@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -119,6 +120,26 @@ fun TripItem(
                     color = MaterialTheme.colorScheme.error
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun TripSummary(trip: Trip) {
+    Row(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        AutoRefreshingText {
+            DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
+        }
+
+        Card {
+            Text(
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                text = "${stringResource(R.string.total)}: ${TextUtils.prettifyDuration(trip.duration)}"
+            )
         }
     }
 }

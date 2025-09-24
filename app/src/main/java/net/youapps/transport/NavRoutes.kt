@@ -41,5 +41,8 @@ object NavRoutes {
     }
 
     @Serializable
+    data class TripDetails(val tripId: String)
+
+    @Serializable
     object Settings
 }
