@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,24 +22,28 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.schildbach.pte.dto.Location
+import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.components.generic.DismissBackground
 import net.youapps.transport.extensions.displayName
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditLocationsSheet(
     locations: List<Location>,
     onLocationsUpdated: (List<Location>) -> Unit,
     onDismissRequest: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
     ModalBottomSheet(onDismissRequest = onDismissRequest) {
         Text(
             modifier = Modifier.padding(start = 6.dp),
@@ -73,7 +76,7 @@ fun EditLocationsSheet(
                         enableDismissFromEndToStart = false,
                         backgroundContent = { DismissBackground() },
                         onDismiss = {
-                            dismissBoxState.reset()
+                            scope.launch { dismissBoxState.reset() }
                             onLocationsUpdated(locations - location)
                         }
                     ) {

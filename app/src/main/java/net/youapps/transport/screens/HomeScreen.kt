@@ -257,7 +257,7 @@ fun HomeScreen(
                                 DismissBackground()
                             },
                             onDismiss = { direction ->
-                                dismissBoxState.reset()
+                                scope.launch { dismissBoxState.reset() }
                                 homeModel.removeSavedRoute(route)
                             }
                         ) {

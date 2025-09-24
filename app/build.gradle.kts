@@ -3,12 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.21"
-    id("com.google.protobuf") version "0.9.4"
+    id("com.google.protobuf") version "0.9.5"
 }
 
 android {
     namespace = "net.youapps.transport"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "net.youapps.transport"
