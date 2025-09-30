@@ -132,21 +132,51 @@ fun TripDetailsScreen(
             val trainStations = remember {
                 trip.legs.flatMap { listOf(it.departure, it.arrival) }.distinct()
             }
-            val trainStationsSource = rememberGeoJsonSource(
-                data = GeoJsonData.Features(featureCollection {
-                    trainStations.forEach { station ->
-                        feature(Point(station.geoPosition())) {
-                            put("name", station.uniqueShortName())
-                        }
-                    }
-                })
-            )
 
-            SymbolLayer(
-                id = "stations",
-                source = trainStationsSource,
-                iconImage = image(painterResource(R.drawable.ic_geo_marker))
-            )
+            if (trainStations.size >= 2) {
+                val firstStationSource = rememberGeoJsonSource(
+                    data = GeoJsonData.Features(featureCollection {
+                        feature(Point(trainStations.first().geoPosition())) {
+                            put("name", trainStations.first().uniqueShortName())
+                        }
+                    })
+                )
+                SymbolLayer(
+                    id = "start_station",
+                    source = firstStationSource,
+                    iconImage = image(painterResource(R.drawable.ic_geo_marker))
+                )
+
+                val intermediateStationsSource = rememberGeoJsonSource(
+                    data = GeoJsonData.Features(featureCollection {
+                        trainStations.subList(1, trainStations.size - 1).forEach { station ->
+                            feature(Point(station.geoPosition())) {
+                                put("name", station.uniqueShortName())
+                            }
+                        }
+                    })
+                )
+
+                SymbolLayer(
+                    id = "intermediate_stations",
+                    source = intermediateStationsSource,
+                    iconImage = image(painterResource(R.drawable.ic_swap)),
+                    minZoom = 7f
+                )
+
+                val lastStationSource = rememberGeoJsonSource(
+                    data = GeoJsonData.Features(featureCollection {
+                        feature(Point(trainStations.last().geoPosition())) {
+                            put("name", trainStations.last().uniqueShortName())
+                        }
+                    })
+                )
+                SymbolLayer(
+                    id = "end_station",
+                    source = lastStationSource,
+                    iconImage = image(painterResource(R.drawable.ic_destination))
+                )
+            }
 
             val tripSectionsSource = rememberGeoJsonSource(
                 data = GeoJsonData.Features(featureCollection {
