@@ -23,10 +23,18 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            ndk {
+                // maplibre native increases the app size by a lot, hence we limit
+                // the architectures that we're building for
+                // see https://github.com/maplibre/maplibre-compose/discussions/615
+                abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
+            }
         }
         debug {
             isDebuggable = true
