@@ -33,7 +33,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
             .clickable {
                 departure.destination?.let { onDestinationClicked(it) }
             }
-            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
         Row(
             modifier = GlanceModifier.fillMaxWidth(),
@@ -51,9 +51,26 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
                 modifier = GlanceModifier.width(4.dp)
             )
 
+            departure.line?.label?.let {
+                Text(
+                    modifier = GlanceModifier
+                        .cornerRadius(6.dp)
+                        .background(GlanceTheme.colors.primaryContainer)
+                        .padding(horizontal = 6.dp, vertical = 4.dp),
+                    text = it,
+                    style = defaultTextStyle.copy(
+                        color = GlanceTheme.colors.onPrimaryContainer
+                    )
+                )
+
+                Spacer(
+                    modifier = GlanceModifier.width(4.dp)
+                )
+            }
+
             Text(
                 modifier = GlanceModifier.defaultWeight(),
-                text = "${departure.line.label}, ${departure.destination?.displayName().orEmpty()}",
+                text = departure.destination?.displayName().orEmpty(),
                 style = defaultTextStyle
             )
 
