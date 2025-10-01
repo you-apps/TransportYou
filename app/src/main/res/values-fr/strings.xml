@@ -1,3 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">Rechercher</string>
+    <string name="origin">Origine</string>
+    <string name="destination">Destination</string>
+    <string name="back">Retour</string>
+    <string name="clear">Effacer</string>
+    <string name="directions">Directions</string>
+    <string name="total">Total</string>
+    <string name="trip_options">Options pour l\'itinéraire</string>
+    <string name="swap">Échanger</string>
+    <string name="now">Maintenant</string>
+    <string name="departure">Départ</string>
+    <string name="arrival">Arrivée</string>
+    <string name="okay">Valider</string>
+    <string name="cancel">Annuler</string>
+    <string name="trip_time">Heure du voyage</string>
+    <string name="save">Sauvegarder</string>
+    <string name="saved_routes">Itinéraires sauvegardés</string>
+    <string name="transport_network">Réseau de transport</string>
+    <string name="edit_locations">Changer les emplacements</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="trip_cancelled">Voyage impossible ou annulé.</string>
+    <string name="settings">Paramètres</string>
+    <string name="error_fetching_departures">Impossible de récupérer les départs.</string>
+    <string name="product_high_speed_train">Train à grande vitesse</string>
+    <string name="product_regional_train">Train régional</string>
+    <string name="product_suburban_train">Train de banlieue</string>
+    <string name="product_tram">Tramway</string>
+    <string name="product_subway">Métro</string>
+    <string name="product_bus">Bus</string>
+    <string name="product_cablecar">Funiculaire</string>
+    <string name="product_ferry">Ferry</string>
+    <string name="product_on_demand">Voiture à la demande</string>
 </resources>
