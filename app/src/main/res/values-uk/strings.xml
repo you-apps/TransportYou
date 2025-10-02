@@ -31,4 +31,5 @@
     <string name="product_cablecar">Канатна дорога</string>
     <string name="product_ferry">Пором</string>
     <string name="product_on_demand">Каршерінг</string>
+    <string name="error_fetching_departures">Не вдалося завантажити відправлення.</string>
 </resources>
