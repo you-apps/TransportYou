@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TransportYou"
-        tools:targetApi="31"
-        android:name=".TransportYouApp">
+        tools:targetApi="33"
+        android:name=".TransportYouApp"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
