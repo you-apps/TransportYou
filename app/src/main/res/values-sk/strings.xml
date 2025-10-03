@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Vyhľadávanie</string>
+    <string name="back">Naspäť</string>
+    <string name="clear">Vymazať</string>
+    <string name="total">Všetky</string>
+    <string name="origin">Začiatok</string>
+    <string name="destination">Cieľ</string>
+    <string name="directions">Inštrukcie</string>
+    <string name="trip_options">Voľby cesty</string>
+    <string name="swap">Vymeniť</string>
+    <string name="now">Teraz</string>
+    <string name="departure">Odchod</string>
+    <string name="arrival">Príchod</string>
+    <string name="okay">OK</string>
+    <string name="cancel">Zrušiť</string>
+    <string name="trip_time">Čas cesty</string>
+    <string name="save">Uložiť</string>
+    <string name="saved_routes">Uložené trasy</string>
+    <string name="transport_network">Dopravná sieť</string>
+    <string name="edit_locations">Upraviť miesta</string>
+    <string name="refresh">Obnoviť</string>
+    <string name="trip_cancelled">Cesta nemožná alebo zrušená.</string>
+    <string name="settings">Nastavenia</string>
+    <string name="error_fetching_departures">Odchody sa nepodarilo načítať.</string>
+    <string name="product_high_speed_train">Vysokorýchlostný vlak</string>
+    <string name="product_regional_train">Regionálny vlak</string>
+    <string name="product_suburban_train">Prímestský vlak</string>
+    <string name="product_tram">Električka</string>
+    <string name="product_subway">Metro</string>
+    <string name="product_bus">Autobus</string>
+    <string name="product_cablecar">Lanovka</string>
+    <string name="product_ferry">Trajekt</string>
+    <string name="product_on_demand">Zdieľané auto</string>
+</resources>

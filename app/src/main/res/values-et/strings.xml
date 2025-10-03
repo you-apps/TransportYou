@@ -31,4 +31,5 @@
     <string name="swap">Vaheta</string>
     <string name="now">Praegu</string>
     <string name="trip_time">Reisi kestus</string>
+    <string name="error_fetching_departures">Ei õnnestunud laadida väljumisi.</string>
 </resources>
