@@ -1,3 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">搜索</string>
+    <string name="origin">出发地</string>
+    <string name="destination">目的地</string>
+    <string name="back">返回</string>
+    <string name="clear">清除</string>
+    <string name="directions">路线</string>
+    <string name="total">总计</string>
+    <string name="trip_options">行程选项</string>
+    <string name="swap">交换</string>
+    <string name="now">现在</string>
+    <string name="departure">出发</string>
+    <string name="arrival">到达</string>
+    <string name="okay">确定</string>
+    <string name="cancel">取消</string>
+    <string name="trip_time">行程时间</string>
+    <string name="save">保存</string>
+    <string name="saved_routes">已保存路线</string>
+    <string name="transport_network">交通网络</string>
+    <string name="edit_locations">编辑地点</string>
+    <string name="refresh">刷新</string>
+    <string name="trip_cancelled">行程无法规划或已取消。</string>
+    <string name="settings">设置</string>
+    <string name="error_fetching_departures">无法获取出发信息。</string>
+    <string name="product_high_speed_train">高速列车</string>
+    <string name="product_regional_train">区域列车</string>
+    <string name="product_suburban_train">市郊列车</string>
+    <string name="product_tram">有轨电车</string>
+    <string name="product_subway">地铁</string>
+    <string name="product_bus">公交</string>
+    <string name="product_cablecar">缆车</string>
+    <string name="product_ferry">渡轮</string>
+    <string name="product_on_demand">网约车</string>
 </resources>
