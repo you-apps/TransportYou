@@ -20,11 +20,14 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -39,9 +42,12 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import de.schildbach.pte.dto.Departure
+import de.schildbach.pte.dto.LocationType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.youapps.transport.MainActivity
+import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.components.directions.DEMO_DEPARTURE
@@ -118,8 +124,15 @@ class DeparturesWidget : GlanceAppWidget() {
         onRefresh: () -> Unit,
         onConfigureClicked: () -> Unit
     ) {
-        val scope = rememberCoroutineScope()
         val context = LocalContext.current
+
+        val startLocation = remember {
+            NavRoutes.DeparturesFromLocation(
+                type = LocationType.STATION,
+                id = locationId,
+                name = locationName,
+            )
+        }
 
         Scaffold {
             Column(
@@ -129,6 +142,18 @@ class DeparturesWidget : GlanceAppWidget() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TitleBar(
+                    modifier = GlanceModifier
+                        .cornerRadius(12.dp)
+                        .clickable(
+                            actionStartActivity(
+                                Intent(context, MainActivity::class.java)
+                                    .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                                    .putExtra(
+                                        MainActivity.DEPARTURES_FROM_INTENT_KEY,
+                                        startLocation
+                                    )
+                            )
+                        ),
                     startIcon = ImageProvider(R.drawable.ic_app_full_size),
                     title = locationName
                 ) {
@@ -167,7 +192,18 @@ class DeparturesWidget : GlanceAppWidget() {
                     LazyColumn {
                         items(departures) { departure ->
                             GlanceDepartureItem(departure) {
-                                // TODO("open directions in app")
+                                val intent = Intent(context, MainActivity::class.java)
+                                    .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                                    .putExtra(MainActivity.DIRECTIONS_FROM_KEY, startLocation)
+                                    .putExtra(
+                                        MainActivity.DIRECTIONS_TO_KEY,
+                                        NavRoutes.DeparturesFromLocation(
+                                            type = LocationType.STATION,
+                                            id = departure.destination?.id,
+                                            name = departure.destination?.uniqueShortName(),
+                                        )
+                                    )
+                                context.startActivity(intent)
                             }
                         }
 

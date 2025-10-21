@@ -1,9 +1,11 @@
 package net.youapps.transport
 
+import android.os.Parcelable
 import de.schildbach.pte.dto.Location
 import de.schildbach.pte.dto.LocationType
 import de.schildbach.pte.dto.Point
 import de.schildbach.pte.dto.Product
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object NavRoutes {
@@ -14,6 +16,7 @@ object NavRoutes {
     object Directions
 
     @Serializable
+    @Parcelize
     data class DeparturesFromLocation(
         val type: LocationType? = null,
         val id: String? = null,
@@ -22,7 +25,7 @@ object NavRoutes {
         val place: String? = null,
         val name: String? = null,
         val products: List<String>? = null
-    ) {
+    ): Parcelable {
         constructor(location: Location) : this(
             location.type,
             location.id,

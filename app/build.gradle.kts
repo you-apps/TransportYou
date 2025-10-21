@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.21"
     id("com.google.protobuf") version "0.9.5"
+    id("kotlin-parcelize")
 }
 
 android {
