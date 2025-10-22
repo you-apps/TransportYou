@@ -16,10 +16,9 @@ import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import de.schildbach.pte.dto.Departure
-import de.schildbach.pte.dto.Location
 import net.youapps.transport.TextUtils
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.Location
 
 @Composable
 fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit) {
@@ -31,7 +30,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
         modifier = GlanceModifier
             .cornerRadius(6.dp)
             .clickable {
-                departure.destination?.let { onDestinationClicked(it) }
+                onDestinationClicked(departure.destination)
             }
             .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
@@ -41,8 +40,8 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
         ) {
             Text(
                 TextUtils.displayDepartureTimeWithDelay(
-                    departure.plannedTime,
-                    departure.predictedTime
+                    departure.departure.planned,
+                    departure.departure.predicted
                 ),
                 style = defaultTextStyle
             )
@@ -51,7 +50,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
                 modifier = GlanceModifier.width(4.dp)
             )
 
-            departure.line?.label?.let {
+            departure.line.label?.let {
                 Text(
                     modifier = GlanceModifier
                         .cornerRadius(6.dp)
@@ -70,11 +69,11 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
 
             Text(
                 modifier = GlanceModifier.defaultWeight(),
-                text = departure.destination?.displayName().orEmpty(),
+                text = departure.destination.name,
                 style = defaultTextStyle
             )
 
-            if (departure.position != null) {
+            if (departure.platform != null) {
                 Spacer(
                     modifier = GlanceModifier.width(4.dp)
                 )
@@ -84,7 +83,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
                         .cornerRadius(6.dp)
                         .background(GlanceTheme.colors.primaryContainer)
                         .padding(horizontal = 6.dp, vertical = 4.dp),
-                    text = departure.position?.name.orEmpty(),
+                    text = departure.platform,
                     style = defaultTextStyle.copy(
                         color = GlanceTheme.colors.onPrimaryContainer
                     )
@@ -94,7 +93,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
 
         if (departure.message != null) {
             Text(
-                text = departure.message!!,
+                text = departure.message,
                 style = defaultTextStyle.copy(
                     color = GlanceTheme.colors.error
                 ),

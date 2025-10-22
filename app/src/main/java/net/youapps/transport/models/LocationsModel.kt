@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
-import de.schildbach.pte.dto.LocationType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -23,10 +22,9 @@ class LocationsModel(
 
         withContext(Dispatchers.IO) {
             try {
-                networkRepository.provider.suggestLocations(query, setOf(LocationType.ANY), 10)
-                    ?.suggestedLocations?.mapNotNull { it.location }.orEmpty()
+                networkRepository.provider.queryStations(query)
             } catch (e: Exception) {
-                Log.e("location suggestions", e.toString())
+                Log.e("location suggestions", e.stackTraceToString())
                 emptyList()
             }
         }

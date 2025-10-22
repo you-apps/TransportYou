@@ -5,18 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import de.schildbach.pte.dto.Departure
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import net.youapps.transport.TransportYouApp
-import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.toProtobufLocation
-import java.util.Date
+import net.youapps.transport.data.transport.TransportProvider
+import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.Location
 
 class DeparturesModel(
     private val networkRepository: NetworkRepository,
@@ -37,9 +37,8 @@ class DeparturesModel(
 
         try {
             val departures = networkRepository.provider
-                .queryDepartures(location.id, Date(), 30, true)
-            _departuresFlow.emit(departures.stationDepartures.flatMap { it.departures }
-                .filterNotNull())
+                .queryDepartures(location, 30)
+            _departuresFlow.emit(departures)
         } catch (e: Exception) {
             Log.e("exc", e.stackTraceToString())
         }

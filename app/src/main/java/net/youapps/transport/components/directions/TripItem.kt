@@ -22,11 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.dto.Trip
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.generic.AutoRefreshingText
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Trip
+import net.youapps.transport.data.transport.model.TripLeg
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -34,9 +34,8 @@ fun TripItem(
     trip: Trip,
     onTripClick: () -> Unit,
 ) {
-    val isTripCancelled = trip.legs.filterIsInstance<Trip.Public>().any { leg ->
-        leg.departureStop.departureCancelled || leg.arrivalStop.arrivalCancelled
-    }
+    val isTripCancelled = trip.legs.filterIsInstance<TripLeg.Public>()
+        .any { leg -> leg.departure.cancelled }
 
     Column(
         modifier = Modifier
@@ -48,21 +47,23 @@ fun TripItem(
         AutoRefreshingText(
             style = MaterialTheme.typography.labelSmallEmphasized
         ) {
-            DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
+            trip.firstDepartureTime?.toInstant()?.toEpochMilli()
+                ?.let { DateUtils.getRelativeTimeSpanString(it) }
+                .toString()
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            val departure = trip.firstPublicLeg?.departureStop
+            val departure = trip.legs.firstOrNull()?.departure
             Text(
                 text = TextUtils.displayDepartureTimeWithDelay(
-                    departure?.plannedDepartureTime,
-                    departure?.predictedDepartureTime
+                    departure?.departureTime?.planned,
+                    departure?.departureTime?.predicted
                 )
             )
 
-            Text(text = trip.from.displayName())
+            Text(text = trip.from.name)
         }
 
         LazyRow(
@@ -78,11 +79,11 @@ fun TripItem(
 
             items(trip.legs.filterNot { it.shouldSkip() }) { leg ->
                 when (leg) {
-                    is Trip.Public -> {
-                        TransportLineCard(leg.line)
+                    is TripLeg.Public -> {
+                        leg.line?.let { TransportLineCard(it) }
                     }
 
-                    is Trip.Individual -> {
+                    is TripLeg.Individual -> {
                         IndividualTripCard(leg)
                     }
                 }
@@ -92,16 +93,16 @@ fun TripItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            val arrival = trip.lastPublicLeg?.arrivalStop
+            val arrival = trip.lastPublicLeg?.arrival
 
             Text(
                 text = TextUtils.displayDepartureTimeWithDelay(
-                    arrival?.plannedArrivalTime,
-                    arrival?.predictedArrivalTime
+                    arrival?.arrivalTime?.planned,
+                    arrival?.arrivalTime?.predicted
                 )
             )
 
-            Text(text = trip.to.displayName())
+            Text(text = trip.to.name)
         }
 
         if (isTripCancelled) {
@@ -132,7 +133,8 @@ fun TripSummary(trip: Trip) {
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         AutoRefreshingText {
-            DateUtils.getRelativeTimeSpanString(trip.firstDepartureTime.time).toString()
+            trip.firstDepartureTime?.toInstant()?.toEpochMilli()
+                ?.let { DateUtils.getRelativeTimeSpanString(it) }.toString()
         }
 
         Card {

@@ -2,7 +2,6 @@ package net.youapps.transport.components.directions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cable
-import androidx.compose.material.icons.filled.CarRental
 import androidx.compose.material.icons.filled.DirectionsBoat
 import androidx.compose.material.icons.filled.DirectionsBus
 import androidx.compose.material.icons.filled.DirectionsCar
@@ -12,10 +11,9 @@ import androidx.compose.material.icons.filled.Train
 import androidx.compose.material.icons.filled.Tram
 import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.runtime.Composable
-import de.schildbach.pte.dto.Line
-import de.schildbach.pte.dto.Product
 import net.youapps.transport.components.generic.CardWithIcon
-import kotlin.collections.get
+import net.youapps.transport.data.transport.model.Product
+import net.youapps.transport.data.transport.model.TransportLine
 
 val transportIcons = mapOf(
     Product.HIGH_SPEED_TRAIN to Icons.Default.DirectionsRailway,
@@ -26,11 +24,10 @@ val transportIcons = mapOf(
     Product.BUS to Icons.Default.DirectionsBus,
     Product.CABLECAR to Icons.Default.Cable,
     Product.FERRY to Icons.Default.DirectionsBoat,
-    Product.CABLECAR to Icons.Default.CarRental,
     Product.ON_DEMAND to Icons.Default.DirectionsCar
 )
 
 @Composable
-fun TransportLineCard(line: Line) {
-    CardWithIcon(transportIcons[line.product], line.label)
+fun TransportLineCard(line: TransportLine) {
+    CardWithIcon(transportIcons[line.type], line.label)
 }

@@ -27,11 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.components.generic.DismissBackground
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Location
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
@@ -89,7 +88,7 @@ fun EditLocationsSheet(
                         ) {
                             Text(
                                 modifier = Modifier.padding(horizontal = 8.dp),
-                                text = location.displayName()
+                                text = location.name
                             )
 
                             IconButton(

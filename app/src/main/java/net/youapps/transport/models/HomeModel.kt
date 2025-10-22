@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import de.schildbach.pte.dto.Departure
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +15,10 @@ import net.youapps.transport.ProtobufRoute
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.AppDataRepository
+import net.youapps.transport.data.toLocation
 import net.youapps.transport.data.toProtobufLocation
+import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.Location
 import java.util.Date
 
 class HomeModel(
@@ -37,10 +38,7 @@ class HomeModel(
         try {
             val requestDate = Date()
             val departures = networkRepository.provider
-                .queryDepartures(location.id, requestDate, 15, true)
-                .stationDepartures
-                .flatMap { it.departures }
-                .filterNotNull()
+                .queryDepartures(location.toLocation(), 15)
 
             val departuresMap = _departures.value.toMutableMap()
             departuresMap.put(location, requestDate to departures)

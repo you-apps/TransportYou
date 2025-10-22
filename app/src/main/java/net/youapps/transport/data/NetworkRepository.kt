@@ -1,13 +1,15 @@
 package net.youapps.transport.data
 
 import de.schildbach.pte.NetworkId
-import de.schildbach.pte.NetworkProvider
+import net.youapps.transport.data.transport.PTETransportProvider
+import net.youapps.transport.data.transport.TransportProvider
 
 class NetworkRepository {
-    private var _provider: NetworkProvider? = null
-    val provider get() = _provider!!
+    lateinit var provider: TransportProvider
+        private set
 
     fun updateProvider(networkId: NetworkId) {
-        _provider = TransportNetworks.networks.first { it.id == networkId }.factory()
+        val network = TransportNetworks.networks.first { it.id == networkId }
+        provider = PTETransportProvider(network.factory())
     }
 }

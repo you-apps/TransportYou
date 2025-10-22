@@ -16,9 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.dto.Location
 import net.youapps.transport.R
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Location
 
 @Composable
 fun RouteRow(origin: Location, destination: Location, onRouteClicked: () -> Unit) {
@@ -34,7 +33,7 @@ fun RouteRow(origin: Location, destination: Location, onRouteClicked: () -> Unit
         ) {
             Icon(imageVector = Icons.Default.LocationOn, contentDescription = stringResource(R.string.origin))
 
-            Text(text = origin.displayName())
+            Text(text = origin.name)
         }
 
         Row(
@@ -43,7 +42,7 @@ fun RouteRow(origin: Location, destination: Location, onRouteClicked: () -> Unit
         ) {
             Icon(imageVector = Icons.Default.Flag, contentDescription = stringResource(R.string.destination))
 
-            Text(text = destination.displayName())
+            Text(text = destination.name)
         }
     }
 }

@@ -1,23 +1,22 @@
 package net.youapps.transport.data
 
-import de.schildbach.pte.dto.Location
-import de.schildbach.pte.dto.LocationType
 import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.ProtobufRoute
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.LocationType
 
 fun ProtobufLocation.toLocation(): Location = Location(
-    LocationType.valueOf(type),
-    id,
-    place.takeIf { it.isNotEmpty() },
-    name.takeIf { it.isNotEmpty() }
+    id =    id,
+    name = listOf(name, place).filter { it.isNotEmpty() }.joinToString(", "),
+    type = LocationType.valueOf(type),
+    position = null
 )
 
 fun Location.toProtobufLocation(): ProtobufLocation =
     ProtobufLocation.getDefaultInstance().toBuilder()
         .setType(type.name)
         .setId(id)
-        .setName(name.orEmpty())
-        .setPlace(place.orEmpty())
+        .setName(name)
         .build()
 
 fun newProtobufRoute(origin: Location, destination: Location): ProtobufRoute =

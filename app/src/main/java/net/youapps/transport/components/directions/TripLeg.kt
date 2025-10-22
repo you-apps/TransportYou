@@ -1,5 +1,6 @@
 package net.youapps.transport.components.directions
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,12 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.dto.Location
-import de.schildbach.pte.dto.Stop
-import de.schildbach.pte.dto.Trip
 import net.youapps.transport.TextUtils
-import net.youapps.transport.extensions.displayName
-import net.youapps.transport.toZonedDateTime
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.Stop
+import net.youapps.transport.data.transport.model.TripLeg
+import java.time.temporal.ChronoUnit
 
 enum class StopType {
     Departure,
@@ -38,16 +38,15 @@ enum class StopType {
     Arrival
 }
 
-fun Trip.Leg.shouldSkip(): Boolean {
+fun TripLeg.shouldSkip(): Boolean {
     return when (this) {
-        is Trip.Public -> false
-        is Trip.Individual -> arrival.displayName() == departure.displayName()
-        else -> throw IllegalArgumentException("Unknown leg type")
+        is TripLeg.Public -> false
+        is TripLeg.Individual -> arrival.location.name == departure.location.name
     }
 }
 
 @Composable
-fun TripLegPublic(leg: Trip.Public, onLocationClick: (Location) -> Unit) {
+fun TripLegPublic(leg: TripLeg.Public, onLocationClick: (Location) -> Unit) {
     var showIntermediateStops by remember {
         mutableStateOf(false)
     }
@@ -66,36 +65,36 @@ fun TripLegPublic(leg: Trip.Public, onLocationClick: (Location) -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TransportLineCard(leg.line)
+            leg.line?.let { TransportLineCard(it) }
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = leg.destination?.displayName().orEmpty()
+                text = leg.arrival.location.name
             )
 
             Card {
-                Text(
-                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                    text = TextUtils.prettifyDuration(
-                        leg.arrivalTime.time - leg.departureTime.time
+                leg.durationMillis?.let {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                        text = TextUtils.prettifyDuration(it)
                     )
-                )
+                }
             }
         }
 
-        StopRow(leg.departureStop, StopType.Departure, onLocationClick)
+        StopRow(leg.departure, StopType.Departure, onLocationClick)
 
-        AnimatedVisibility(showIntermediateStops && !leg.intermediateStops.isNullOrEmpty()) {
+        AnimatedVisibility(showIntermediateStops && leg.intermediateStops.isNotEmpty()) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(3.dp)
             ) {
-                for (stop in leg.intermediateStops.orEmpty()) {
+                for (stop in leg.intermediateStops) {
                     StopRow(stop, StopType.Intermediate, onLocationClick)
                 }
             }
         }
 
-        StopRow(leg.arrivalStop, StopType.Arrival, onLocationClick)
+        StopRow(leg.arrival, StopType.Arrival, onLocationClick)
 
         if (leg.message != null) {
             Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -109,7 +108,7 @@ fun TripLegPublic(leg: Trip.Public, onLocationClick: (Location) -> Unit) {
                 )
 
                 Text(
-                    text = leg.message!!,
+                    text = leg.message,
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -124,22 +123,19 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        val isCancelled =
-            if (type == StopType.Departure) stop.departureCancelled else stop.arrivalCancelled
-
         var timeStyle = if (type == StopType.Intermediate) {
             MaterialTheme.typography.bodySmall
         } else {
             MaterialTheme.typography.bodyMedium
         }
-        if (isCancelled) {
+        if (stop.cancelled) {
             timeStyle = timeStyle.copy(
                 textDecoration = TextDecoration.LineThrough,
                 color = MaterialTheme.colorScheme.error
             )
         }
         var locationStyle = MaterialTheme.typography.bodyLarge
-        if (isCancelled) {
+        if (stop.cancelled) {
             locationStyle = locationStyle.copy(
                 textDecoration = TextDecoration.LineThrough,
                 color = MaterialTheme.colorScheme.error
@@ -150,8 +146,8 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
             if (type in arrayOf(StopType.Arrival, StopType.Intermediate)) {
                 Text(
                     text = TextUtils.displayDepartureTimeWithDelay(
-                        stop.plannedArrivalTime,
-                        stop.predictedArrivalTime
+                        stop.arrivalTime.planned,
+                        stop.arrivalTime.predicted
                     ),
                     style = timeStyle
                 )
@@ -160,8 +156,8 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
             if (type in arrayOf(StopType.Departure, StopType.Intermediate)) {
                 Text(
                     text = TextUtils.displayDepartureTimeWithDelay(
-                        stop.plannedDepartureTime,
-                        stop.predictedDepartureTime
+                        stop.departureTime.planned,
+                        stop.departureTime.predicted
                     ),
                     style = timeStyle
                 )
@@ -170,20 +166,15 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
 
         Text(
             modifier = Modifier.weight(1f),
-            text = stop.location.displayName(),
+            text = stop.location.name,
             style = locationStyle,
             overflow = TextOverflow.Ellipsis
         )
 
-        val position =
-            if (type == StopType.Departure) stop.departurePosition ?: stop.arrivalPosition
-            else stop.arrivalPosition ?: stop.departurePosition
-
         val isPositionChanged =
-            if (type == StopType.Departure) stop.predictedArrivalPosition != null && stop.predictedDeparturePosition != stop.plannedDeparturePosition
-            else stop.predictedArrivalPosition != null && stop.plannedArrivalPosition != stop.predictedArrivalPosition
+            stop.predictedPlatform != null && stop.predictedPlatform != stop.plannedPlatform
 
-        if (position != null) {
+        (stop.predictedPlatform ?: stop.plannedPlatform)?.let { platform ->
             Card(
                 colors = if (!isPositionChanged) CardDefaults.cardColors()
                 else CardDefaults.cardColors(
@@ -193,7 +184,7 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                    text = position.name.orEmpty()
+                    text = platform
                 )
             }
         }
@@ -201,7 +192,7 @@ fun StopRow(stop: Stop, type: StopType, onLocationClick: (Location) -> Unit) {
 }
 
 @Composable
-fun TripLegIndividual(leg: Trip.Individual, onLocationClick: (Location) -> Unit) {
+fun TripLegIndividual(leg: TripLeg.Individual, onLocationClick: (Location) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -216,29 +207,33 @@ fun TripLegIndividual(leg: Trip.Individual, onLocationClick: (Location) -> Unit)
             IndividualTripCard(leg)
 
             Card {
-                Text(
-                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                    text = TextUtils.prettifyDuration(
-                        leg.arrivalTime.time - leg.departureTime.time
+                leg.durationMillis?.let {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                        text = TextUtils.prettifyDuration(it)
                     )
-                )
+                }
             }
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Text(TextUtils.formatTime(leg.departureTime.toZonedDateTime()))
+            leg.departure.departureTime.predictedOrPlanned?.let {
+                Text(TextUtils.formatTime(it))
+            }
 
-            Text(leg.departure.displayName())
+            Text(leg.departure.location.name)
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Text(TextUtils.formatTime(leg.arrivalTime.toZonedDateTime()))
+            leg.arrival.arrivalTime.predictedOrPlanned?.let {
+                Text(TextUtils.formatTime(it))
+            }
 
-            Text(leg.arrival.displayName())
+            Text(leg.arrival.location.name)
         }
     }
 }

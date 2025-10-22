@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
 import net.youapps.transport.components.LocationSearchBar
+import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.models.LocationsModel
 import net.youapps.transport.ui.theme.TransportYouTheme
 
@@ -101,7 +101,7 @@ class DeparturesWidgetConfigureActivity : ComponentActivity() {
         val glanceId = GlanceAppWidgetManager(context).getGlanceIdBy(widgetId)
 
         updateAppWidgetState(context, glanceId) { prefs ->
-            prefs[DeparturesWidget.LOCATION_NAME_KEY] = location.uniqueShortName()
+            prefs[DeparturesWidget.LOCATION_NAME_KEY] = location.name
             prefs[DeparturesWidget.LOCATION_ID_KEY] = location.id!!
         }
 

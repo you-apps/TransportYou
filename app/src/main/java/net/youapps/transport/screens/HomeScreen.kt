@@ -54,7 +54,6 @@ import net.youapps.transport.components.directions.RouteRow
 import net.youapps.transport.components.generic.TooltipExtendedFAB
 import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.data.toLocation
-import net.youapps.transport.extensions.displayName
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.HomeModel
 import net.youapps.transport.models.LocationsModel
@@ -183,7 +182,7 @@ fun HomeScreen(
                                             )
                                         }
                                         .padding(horizontal = 10.dp),
-                                    text = selectedLocation.toLocation().displayName(),
+                                    text = selectedLocation.toLocation().name,
                                     style = MaterialTheme.typography.headlineSmall
                                 )
 

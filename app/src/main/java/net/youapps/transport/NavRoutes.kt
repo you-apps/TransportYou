@@ -1,12 +1,11 @@
 package net.youapps.transport
 
 import android.os.Parcelable
-import de.schildbach.pte.dto.Location
-import de.schildbach.pte.dto.LocationType
-import de.schildbach.pte.dto.Point
-import de.schildbach.pte.dto.Product
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import net.youapps.transport.data.transport.model.GeoCoordinate
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.LocationType
 
 object NavRoutes {
     @Serializable
@@ -18,28 +17,25 @@ object NavRoutes {
     @Serializable
     @Parcelize
     data class DeparturesFromLocation(
-        val type: LocationType? = null,
-        val id: String? = null,
+        val id: String?,
+        val name: String,
+        val type: LocationType,
         val coordLat: Double? = null,
         val coordLon: Double? = null,
-        val place: String? = null,
-        val name: String? = null,
-        val products: List<String>? = null
     ): Parcelable {
         constructor(location: Location) : this(
-            location.type,
-            location.id,
-            location.coord?.latAsDouble,
-            location.coord?.lonAsDouble,
-            location.place,
-            location.name,
-            location.products?.map { it.name }
+            id = location.id,
+            name = location.name,
+            type = location.type,
+            coordLat = location.position?.latitude,
+            coordLon = location.position?.longitude,
         )
 
         fun toLocation() = Location(
-            type, id, if (coordLon != null && coordLat != null) {
-                Point.fromDouble(coordLat, coordLon)
-            } else null, place, name, products?.map { Product.valueOf(it) }?.toSet()
+            id = id,
+            name = name,
+            type = type,
+            position = if (coordLon != null && coordLat != null) GeoCoordinate(coordLon, coordLat) else null
         )
     }
 

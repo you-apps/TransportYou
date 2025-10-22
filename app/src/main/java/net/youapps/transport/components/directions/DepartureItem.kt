@@ -13,24 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.schildbach.pte.NetworkId
-import de.schildbach.pte.dto.Departure
-import de.schildbach.pte.dto.Line
-import de.schildbach.pte.dto.Location
-import de.schildbach.pte.dto.LocationType
-import de.schildbach.pte.dto.Position
-import de.schildbach.pte.dto.Product
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.generic.AutoRefreshingText
-import net.youapps.transport.extensions.displayName
-import java.util.Date
+import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.EstimatedDateTime
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.LocationType
+import net.youapps.transport.data.transport.model.Product
+import net.youapps.transport.data.transport.model.TransportLine
+import java.time.ZonedDateTime
 
 @Composable
 fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit) {
     Column(
         modifier = Modifier
             .clickable {
-                departure.destination?.let { onDestinationClicked(it) }
+                onDestinationClicked(departure.destination)
             }
             .padding(horizontal = 10.dp, vertical = 4.dp)
     ) {
@@ -40,15 +38,16 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
             Column {
                 Text(
                     TextUtils.displayDepartureTimeWithDelay(
-                        departure.plannedTime,
-                        departure.predictedTime
+                        departure.departure.planned,
+                        departure.departure.predicted
                     )
                 )
 
                 AutoRefreshingText(
                     style = MaterialTheme.typography.bodySmall
                 ) {
-                    DateUtils.getRelativeTimeSpanString(departure.time.time)
+                    departure.departure.predictedOrPlanned?.toInstant()?.toEpochMilli()
+                        ?.let { DateUtils.getRelativeTimeSpanString(it) }
                         .toString()
                 }
             }
@@ -58,14 +57,14 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
             ) {
                 TransportLineCard(departure.line)
 
-                Text(departure.destination?.displayName().orEmpty())
+                Text(departure.destination.name)
             }
 
-            if (departure.position != null) {
+            if (departure.platform != null) {
                 Card {
                     Text(
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                        text = departure.position?.name.orEmpty()
+                        text = departure.platform
                     )
                 }
             }
@@ -73,7 +72,7 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
 
         if (departure.message != null) {
             Text(
-                text = departure.message!!,
+                text = departure.message,
                 color = MaterialTheme.colorScheme.error
             )
         }
@@ -81,12 +80,13 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
 }
 
 val DEMO_DEPARTURE = Departure(
-    Date(),
-    Date(),
-    Line("12345", NetworkId.DB.name, Product.REGIONAL_TRAIN, "RB68"),
-    Position("Pos. 3"),
-    Location(LocationType.STATION, "endid", "Berlin", "Main station"),
-    intArrayOf(),
+    TransportLine("12345", "",  "RB68", Product.REGIONAL_TRAIN, null),
+    departure = EstimatedDateTime(
+        ZonedDateTime.now(),
+        ZonedDateTime.now().plusMinutes(5)
+    ),
+    Location( "endid", "Berlin", LocationType.STATION,null),
+    "Pos. 3",
     "No message."
 )
 

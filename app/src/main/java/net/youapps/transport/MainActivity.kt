@@ -87,9 +87,9 @@ class MainActivity : ComponentActivity() {
                     composable<NavRoutes.TripDetails> { backStackEntry ->
                         val tripDetails: NavRoutes.TripDetails = backStackEntry.toRoute()
 
-                        val tripWrapper = directionsModel.trips.collectAsState().value
+                        val trip = directionsModel.trips.collectAsState().value
                             .find { it.id == tripDetails.tripId }!!
-                        TripDetailsScreen(navController, directionsModel, tripWrapper.trip)
+                        TripDetailsScreen(navController, directionsModel, trip)
                     }
 
                     composable<NavRoutes.Home> {

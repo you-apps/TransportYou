@@ -41,8 +41,6 @@ import androidx.glance.layout.height
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import de.schildbach.pte.dto.Departure
-import de.schildbach.pte.dto.LocationType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,7 +49,9 @@ import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TransportYouApp
 import net.youapps.transport.components.directions.DEMO_DEPARTURE
-import java.util.Date
+import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.LocationType
 
 class DeparturesWidget : GlanceAppWidget() {
     override suspend fun provideGlance(
@@ -70,7 +70,7 @@ class DeparturesWidget : GlanceAppWidget() {
                 mutableStateOf(false)
             }
 
-            val locationId = currentState(LOCATION_ID_KEY)
+            val locationId = currentState(LOCATION_ID_KEY) ?: return@provideContent
             val locationName = currentState(LOCATION_NAME_KEY)
 
             suspend fun loadDepartures() = withContext(Dispatchers.IO) {
@@ -78,8 +78,7 @@ class DeparturesWidget : GlanceAppWidget() {
 
                 try {
                     val response = app.networkRepository.provider
-                        .queryDepartures(locationId, Date(), 20, true)
-                        .stationDepartures.flatMap { it.departures }
+                        .queryDepartures(Location(locationId, "", LocationType.STATION, null), 20)
                     departures.clear()
 
                     departures.addAll(response)
@@ -98,7 +97,7 @@ class DeparturesWidget : GlanceAppWidget() {
 
             WidgetContent(
                 locationName = locationName.orEmpty(),
-                locationId = locationId!!,
+                locationId = locationId,
                 departures = departures,
                 isError = isError,
                 onRefresh = {
@@ -199,8 +198,8 @@ class DeparturesWidget : GlanceAppWidget() {
                                         MainActivity.DIRECTIONS_TO_KEY,
                                         NavRoutes.DeparturesFromLocation(
                                             type = LocationType.STATION,
-                                            id = departure.destination?.id,
-                                            name = departure.destination?.uniqueShortName(),
+                                            id = departure.destination.id,
+                                            name = departure.destination.name,
                                         )
                                     )
                                 context.startActivity(intent)

@@ -2,11 +2,11 @@ package net.youapps.transport.data
 
 import android.content.Context
 import de.schildbach.pte.NetworkId
-import de.schildbach.pte.dto.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.ProtobufRoute
+import net.youapps.transport.data.transport.model.Product
 
 class AppDataRepository(private val context: Context) {
     val savedLocationsFlow: Flow<List<ProtobufLocation>> = context.appData.data

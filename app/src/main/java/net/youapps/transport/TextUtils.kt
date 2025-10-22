@@ -8,6 +8,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
 
@@ -67,20 +68,20 @@ object TextUtils {
         return "%.1f".format(distance.toFloat() / 1000) + " km"
     }
 
-    private fun formatTimeDiff(planned: Date, actual: Date): String {
-        val diffMillis = actual.time - planned.time
+    private fun formatTimeDiff(planned: ZonedDateTime, actual: ZonedDateTime): String {
+        val diffMillis = ChronoUnit.MILLIS.between(planned, actual)
         var diffMinutes = (diffMillis / 1000 / 60).toString()
 
         if (!diffMinutes.startsWith("-")) diffMinutes = "+$diffMinutes"
         return diffMinutes
     }
 
-    fun displayDepartureTimeWithDelay(planned: Date?, predicted: Date?): String {
+    fun displayDepartureTimeWithDelay(planned: ZonedDateTime?, predicted: ZonedDateTime?): String {
         if (planned != null && predicted != null) {
             val timeDiff = formatTimeDiff(planned, predicted)
-            return formatTime(planned.toZonedDateTime()) + " ($timeDiff)"
+            return formatTime(planned) + " ($timeDiff)"
         }
 
-        return (planned ?: predicted)?.let { formatTime(it.toZonedDateTime()) }.orEmpty()
+        return (planned ?: predicted)?.let { formatTime(it) }.orEmpty()
     }
 }

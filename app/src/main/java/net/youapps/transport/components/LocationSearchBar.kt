@@ -6,11 +6,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.ImageVector
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.launch
 import net.youapps.transport.components.generic.SearchBarWithSuggestions
 import net.youapps.transport.components.generic.Suggestion
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.models.LocationsModel
 
 @Composable
@@ -34,15 +33,14 @@ fun LocationSearchBar(
         },
         searchSuggestions = suggestions.map { location ->
             Suggestion(
-                key = location.id.toString(),
-                displayName = location.displayName()
+                key = location.id!!,
+                displayName = location.name
             )
         },
         onSuggestionClicked = { suggestion ->
             val location = suggestions.find { it.id == suggestion.key }
             scope.launch {
-                val locationName = location?.displayName()
-                locationsModel.query.emit(locationName)
+                locationsModel.query.emit(location?.name)
             }
             onLocation(location ?: return@SearchBarWithSuggestions)
         },

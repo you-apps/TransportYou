@@ -25,14 +25,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import de.schildbach.pte.dto.Location
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.components.directions.DepartureItem
 import net.youapps.transport.components.generic.TooltipIconButton
-import net.youapps.transport.extensions.displayName
+import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.models.DeparturesModel
 import net.youapps.transport.models.DirectionsModel
 
@@ -65,7 +64,7 @@ fun DeparturesScreen(
             .fillMaxSize(),
         topBar = {
             MediumTopAppBar(
-                title = { Text(location.displayName()) },
+                title = { Text(location.name) },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
                     TooltipIconButton(
@@ -98,7 +97,7 @@ fun DeparturesScreen(
                 .collectAsStateWithLifecycle()
 
             LazyColumn {
-                items(departures.sortedBy { it.plannedTime }) { departure ->
+                items(departures.sortedBy { it.departure.planned }) { departure ->
                     DepartureItem(departure) { destination ->
                         scope.launch {
                             directionsModel.origin.emit(location)

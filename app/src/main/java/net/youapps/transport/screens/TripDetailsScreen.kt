@@ -27,8 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.schildbach.pte.dto.Location
-import de.schildbach.pte.dto.Trip
 import io.github.dellisd.spatialk.geojson.LineString
 import io.github.dellisd.spatialk.geojson.Point
 import io.github.dellisd.spatialk.geojson.Position
@@ -40,6 +38,9 @@ import net.youapps.transport.components.directions.TripLegPublic
 import net.youapps.transport.components.directions.TripSummary
 import net.youapps.transport.components.directions.shouldSkip
 import net.youapps.transport.components.generic.RefreshLoadingBox
+import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.Trip
+import net.youapps.transport.data.transport.model.TripLeg
 import net.youapps.transport.models.DirectionsModel
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
@@ -79,11 +80,11 @@ fun TripDetailsScreen(
                     HorizontalDivider()
 
                     when (leg) {
-                        is Trip.Public -> TripLegPublic(leg) { location ->
+                        is TripLeg.Public -> TripLegPublic(leg) { location ->
                             navController.navigate(NavRoutes.DeparturesFromLocation(location))
                         }
 
-                        is Trip.Individual -> TripLegIndividual(leg) { location ->
+                        is TripLeg.Individual -> TripLegIndividual(leg) { location ->
                             navController.navigate(NavRoutes.DeparturesFromLocation(location))
                         }
                     }
@@ -113,11 +114,11 @@ fun TripDetailsScreen(
             }
         }
     ) { pV ->
-        val startCoordinates = trip.legs[0].departure.coord
+        val startCoordinates = trip.legs.first().departure.location.position
         val cameraState = rememberCameraState(
             firstPosition = CameraPosition(
                 target = startCoordinates?.let { startCoordinates ->
-                    Position(startCoordinates.lonAsDouble, startCoordinates.latAsDouble)
+                    Position(startCoordinates.longitude, startCoordinates.latitude)
                 } ?: Position(0.0, 0.0),
                 zoom = 10.0
             )
@@ -130,14 +131,14 @@ fun TripDetailsScreen(
             cameraState = cameraState
         ) {
             val trainStations = remember {
-                trip.legs.flatMap { listOf(it.departure, it.arrival) }.distinct()
+                trip.legs.flatMap { listOf(it.departure.location, it.arrival.location) }.distinct()
             }
 
             if (trainStations.size >= 2) {
                 val firstStationSource = rememberGeoJsonSource(
                     data = GeoJsonData.Features(featureCollection {
-                        feature(Point(trainStations.first().geoPosition())) {
-                            put("name", trainStations.first().uniqueShortName())
+                        feature(trainStations.first().geoPosition()?.let { Point(it) }) {
+                            put("name", trainStations.first().name)
                         }
                     })
                 )
@@ -150,8 +151,8 @@ fun TripDetailsScreen(
                 val intermediateStationsSource = rememberGeoJsonSource(
                     data = GeoJsonData.Features(featureCollection {
                         trainStations.subList(1, trainStations.size - 1).forEach { station ->
-                            feature(Point(station.geoPosition())) {
-                                put("name", station.uniqueShortName())
+                            feature(station.geoPosition()?.let { Point(it) }) {
+                                put("name", station.name)
                             }
                         }
                     })
@@ -166,8 +167,8 @@ fun TripDetailsScreen(
 
                 val lastStationSource = rememberGeoJsonSource(
                     data = GeoJsonData.Features(featureCollection {
-                        feature(Point(trainStations.last().geoPosition())) {
-                            put("name", trainStations.last().uniqueShortName())
+                        feature(trainStations.last().geoPosition()?.let { Point(it) }) {
+                            put("name", trainStations.last().name)
                         }
                     })
                 )
@@ -182,7 +183,9 @@ fun TripDetailsScreen(
                 data = GeoJsonData.Features(featureCollection {
                     feature(
                         LineString(
-                            trip.legs.flatMap { it.toCoordinateList() }.distinct()
+                            trip.legs.flatMap { it.path.orEmpty() }.distinct().map {
+                                Position(it.longitude, it.latitude)
+                            }
                         )
                     )
                 })
@@ -198,18 +201,5 @@ fun TripDetailsScreen(
     }
 }
 
-private fun Location.geoPosition() = Position(lonAsDouble, latAsDouble)
+private fun Location.geoPosition() = position?.let { Position(it.longitude, it.latitude) }
 private fun de.schildbach.pte.dto.Point.geoPosition() = Position(lonAsDouble, latAsDouble)
-private fun Trip.Leg.toCoordinateList(): List<Position> {
-    return if (!this.path.isNullOrEmpty()) {
-        path.map { it.geoPosition() }
-    } else if (this is Trip.Public) {
-        (listOf(departure) + intermediateStops.orEmpty().map { it.location } + listOf(arrival))
-            .filterNotNull()
-            .map { it.geoPosition() }
-    } else if (departure != null && arrival != null) {
-        listOf(departure.geoPosition(), arrival.geoPosition())
-    } else {
-        emptyList()
-    }
-}

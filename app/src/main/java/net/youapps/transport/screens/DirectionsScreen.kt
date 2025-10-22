@@ -51,12 +51,9 @@ import net.youapps.transport.components.generic.FilterChipWithIcon
 import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.components.generic.TooltipExtendedFAB
 import net.youapps.transport.components.generic.TooltipIconButton
-import net.youapps.transport.extensions.displayName
 import net.youapps.transport.extensions.loadPrevItems
 import net.youapps.transport.models.DirectionsModel
 import net.youapps.transport.models.LocationsModel
-import net.youapps.transport.toJavaDate
-import net.youapps.transport.toZonedDateTime
 
 @Composable
 fun DirectionsScreen(
@@ -71,8 +68,8 @@ fun DirectionsScreen(
         viewModel<LocationsModel>(key = "destination", factory = LocationsModel.Factory)
 
     fun syncLocationsFromDirectionsModel() = scope.launch {
-        originLocationsModel.query.emit(directionsModel.origin.value?.displayName())
-        destinationLocationsModel.query.emit(directionsModel.destination.value?.displayName())
+        originLocationsModel.query.emit(directionsModel.origin.value?.name)
+        destinationLocationsModel.query.emit(directionsModel.destination.value?.name)
     }
     LaunchedEffect(Unit) {
         // set the initial input values if navigated here with already set locations
@@ -130,14 +127,14 @@ fun DirectionsScreen(
                 ) {
                     Text(
                         text = (stringResource(if (isDepartureDate) R.string.departure else R.string.arrival))
-                                + ": " + (selectedDate?.let { TextUtils.formatDateTime(it.toZonedDateTime()) }
+                                + ": " + (selectedDate?.let { TextUtils.formatDateTime(it) }
                             ?: stringResource(R.string.now))
                     )
                 }
 
                 if (showDateTimePicker) {
                     DateTimePickerDialog(
-                        initialValue = selectedDate?.toZonedDateTime(),
+                        initialValue = selectedDate,
                         onDismissRequest = { showDateTimePicker = false },
                         extraDialogContent = {
                             Row(
@@ -161,7 +158,7 @@ fun DirectionsScreen(
                             }
                         }
                     ) { newDate ->
-                        scope.launch { directionsModel.date.emit(newDate?.toJavaDate()) }
+                        scope.launch { directionsModel.date.emit(newDate) }
                     }
                 }
 
@@ -224,20 +221,20 @@ fun DirectionsScreen(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                items(trips, key = { arrayOf(it.id) }) { tripWrapper ->
+                items(trips, key = { arrayOf(it.id) }) { trip ->
                     HorizontalDivider()
 
                     TripItem(
-                        trip = tripWrapper.trip,
+                        trip = trip,
                         onTripClick = {
-                            selectedBottomSheetTripId = tripWrapper.id
+                            selectedBottomSheetTripId = trip.id
                         },
                     )
                 }
             }
 
-            trips.find { it.id != null && it.id == selectedBottomSheetTripId }?.let { tripWrapper ->
-                navController.navigate(NavRoutes.TripDetails(tripWrapper.trip.id))
+            trips.find { it.id == selectedBottomSheetTripId }?.let { trip->
+                navController.navigate(NavRoutes.TripDetails(trip.id))
             }
         }
     }
