@@ -34,3 +34,6 @@
 
 # Public transport enabler
 -keep class de.schildbach.pte.**
+
+# Data models for transport logic
+-keep class net.youapps.transport.data.transport.model.** { *; }
