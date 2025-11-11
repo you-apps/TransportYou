@@ -179,27 +179,30 @@ fun TripDetailsScreen(
                 )
             }
 
-            val tripSectionsSource = rememberGeoJsonSource(
-                data = GeoJsonData.Features(featureCollection {
-                    feature(
-                        LineString(
-                            trip.legs.flatMap { it.path.orEmpty() }.distinct().map {
-                                Position(it.longitude, it.latitude)
-                            }
-                        )
-                    )
-                })
-            )
+            trip.legs.forEachIndexed { index, leg ->
+                val isPublic = leg is TripLeg.Public
 
-            LineLayer(
-                id = "tripSections",
-                source = tripSectionsSource,
-                color = const(Color.Red),
-                width = const(2.dp)
-            )
+                val tripSectionsPublicSource = rememberGeoJsonSource(
+                    data = GeoJsonData.Features(featureCollection {
+                        feature(
+                            LineString(
+                                leg.path.orEmpty().map {
+                                    Position(it.longitude, it.latitude)
+                                }
+                            )
+                        )
+                    })
+                )
+                LineLayer(
+                    // ids must be unique
+                    id = "tripSections_$index",
+                    source = tripSectionsPublicSource,
+                    color = const(if (isPublic) Color.Red else Color.Yellow),
+                    width = const(2.dp)
+                )
+            }
         }
     }
 }
 
 private fun Location.geoPosition() = position?.let { Position(it.longitude, it.latitude) }
-private fun de.schildbach.pte.dto.Point.geoPosition() = Position(lonAsDouble, latAsDouble)
