@@ -216,9 +216,6 @@ fun DirectionsScreen(
                 if (isTopReached) directionsModel.getMoreTrips(laterTrips = false)
             }
 
-            var selectedBottomSheetTripId by remember {
-                mutableStateOf<String?>(null)
-            }
             LazyColumn(
                 state = routesState,
                 modifier = Modifier.fillMaxWidth(),
@@ -229,14 +226,10 @@ fun DirectionsScreen(
                     TripItem(
                         trip = trip,
                         onTripClick = {
-                            selectedBottomSheetTripId = trip.id
+                            navController.navigate(NavRoutes.TripDetails(trip.id))
                         },
                     )
                 }
-            }
-
-            trips.find { it.id == selectedBottomSheetTripId }?.let { trip->
-                navController.navigate(NavRoutes.TripDetails(trip.id))
             }
         }
     }
