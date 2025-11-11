@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Suchen</string>
+    <string name="destination">Richtung</string>
+    <string name="back">Zurück</string>
+    <string name="clear">Leeren</string>
+    <string name="directions">Richtungen</string>
+    <string name="total">Total</string>
+    <string name="trip_options">Fahrtoptionen</string>
+    <string name="swap">Wechseln</string>
+    <string name="now">Jetzt</string>
+    <string name="departure">Abfahrt</string>
+    <string name="arrival">Ankunft</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="trip_time">Fahrtzeit</string>
+    <string name="save">Speichern</string>
+    <string name="saved_routes">Gespeicherte Routen</string>
+    <string name="transport_network">Verkehrsnetz</string>
+    <string name="edit_locations">Orte bearbeiten</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="trip_cancelled">Fahrt unmöglich oder fällt aus.</string>
+    <string name="settings">Einstellungen</string>
+    <string name="error_fetching_departures">Abfahrten konnten nicht abgerufen werden.</string>
+    <string name="product_high_speed_train">Hochgeschwindigkeitszug</string>
+    <string name="product_regional_train">Regionalzug</string>
+    <string name="product_suburban_train">S-Bahn</string>
+    <string name="product_tram">Tram</string>
+    <string name="product_subway">U-Bahn</string>
+    <string name="product_bus">Bus</string>
+    <string name="product_cablecar">Seilbahn</string>
+    <string name="product_ferry">Fähre</string>
+    <string name="product_on_demand">Auto auf Abruf</string>
+    <string name="origin">Bahnhof / Haltestelle</string>
+</resources>

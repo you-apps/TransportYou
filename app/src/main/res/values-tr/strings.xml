@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Ara</string>
+    <string name="origin">Köken</string>
+    <string name="destination">Varış noktası</string>
+    <string name="back">Geri</string>
+    <string name="clear">Temizle</string>
+    <string name="directions">Yol tarifi</string>
+    <string name="total">Toplam</string>
+    <string name="trip_options">Gezi Seçenekleri</string>
+    <string name="swap">Takas</string>
+    <string name="now">Şimdi</string>
+    <string name="departure">Kalkış</string>
+    <string name="arrival">Varış</string>
+    <string name="okay">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="trip_time">Seyahat süresi</string>
+    <string name="save">Kaydet</string>
+    <string name="saved_routes">Kaydedilen rotalar</string>
+    <string name="transport_network">Ulaşım ağı</string>
+    <string name="edit_locations">Konumları düzenle</string>
+    <string name="refresh">Yenile</string>
+    <string name="trip_cancelled">Seyahat imkansız veya iptal edildi.</string>
+    <string name="settings">Ayarlar</string>
+    <string name="error_fetching_departures">Kalkış bilgisi alınamadı.</string>
+    <string name="product_high_speed_train">Yüksek hızlı tren</string>
+    <string name="product_regional_train">Bölgesel tren</string>
+    <string name="product_suburban_train">Banliyö treni</string>
+    <string name="product_tram">Tramvay</string>
+    <string name="product_subway">Metro</string>
+    <string name="product_bus">Otobüs</string>
+    <string name="product_cablecar">Teleferik</string>
+    <string name="product_ferry">Feribot</string>
+    <string name="product_on_demand">İsteğe bağlı araba</string>
+</resources>
