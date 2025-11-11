@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.SwapVert
@@ -77,13 +78,15 @@ fun DirectionsScreen(
     }
 
     val hasValidLocations by directionsModel.hasValidLocations.collectAsState(false)
+    val trips by directionsModel.trips.collectAsState()
+
     var showTripOptions by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
             if (hasValidLocations) {
                 TooltipExtendedFAB(
-                    imageVector = Icons.Default.Directions,
+                    imageVector = if (trips.isNotEmpty()) Icons.Default.Refresh else Icons.Default.Directions,
                     contentDescription = stringResource(R.string.directions)
                 ) {
                     directionsModel.queryTrips()
@@ -204,7 +207,6 @@ fun DirectionsScreen(
                 )
             }
 
-            val trips by directionsModel.trips.collectAsState()
             val routesState = rememberLazyListState()
             val isTopReached by routesState.loadPrevItems()
             LaunchedEffect(routesState.canScrollForward) {

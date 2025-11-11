@@ -10,7 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.youapps.transport.R
@@ -19,7 +21,6 @@ import net.youapps.transport.components.generic.RefreshLoadingState
 import net.youapps.transport.data.AppDataRepository
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.newProtobufRoute
-import net.youapps.transport.data.transport.TransportProvider
 import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.data.transport.model.Product
 import net.youapps.transport.data.transport.model.Trip
@@ -33,12 +34,23 @@ class DirectionsModel(
     val destination = MutableStateFlow<Location?>(null)
     val savedRoutes = appDataRepository.savedRoutesFlow
 
-    val hasAnyLocation = combine(origin, destination) { (origin, destination) ->
-        origin != null || destination != null
-    }
+    val hasAnyLocation = MutableStateFlow(false)
+    val hasValidLocations = MutableStateFlow(false)
 
-    val hasValidLocations = combine(origin, destination) { (origin, destination) ->
-        origin != null && destination != null
+    init {
+        viewModelScope.launch {
+            combine(origin, destination) { it }
+                .distinctUntilChanged()
+                .collectLatest { (origin, destination) ->
+                    val hasOriginAndDestination = origin != null && destination != null
+                    hasValidLocations.emit(hasOriginAndDestination)
+
+                    // automatically query trips when origin or destination changed
+                    if (hasOriginAndDestination) queryTrips()
+
+                    hasAnyLocation.emit(origin != null || destination != null)
+                }
+        }
     }
 
     val isRouteSaved =
