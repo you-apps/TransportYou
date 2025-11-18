@@ -31,4 +31,5 @@
     <string name="cancel">Annulla</string>
     <string name="product_high_speed_train">Treno ad alta velocità</string>
     <string name="transport_network">Rete di trasporto</string>
+    <string name="error_fetching_departures">Impossibile scaricare le partenze.</string>
 </resources>
