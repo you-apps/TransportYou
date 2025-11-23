@@ -11,15 +11,17 @@ import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
+import kotlin.math.absoluteValue
 
 fun Date.toZonedDateTime() = this.toInstant().atZone(ZoneId.systemDefault())
 fun ZonedDateTime.toJavaDate() = Date(this.toInstant().toEpochMilli())
 
 object TextUtils {
-    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+    val dateTimeFormatter: DateTimeFormatter =
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-    
+
     private val durationUnits = arrayOf(
         MeasureUnit.SECOND,
         MeasureUnit.MINUTE,
@@ -33,34 +35,72 @@ object TextUtils {
 
     fun formatTime(time: ZonedDateTime): String = timeFormatter.format(time)
 
-    fun prettifyDuration(durationMillis: Long): String {
-        val duration = DateUtils.formatElapsedTime(durationMillis / 1000)
+    /**
+     * Prettify a given [durationMillis].
+     *
+     * If [shortUnitName] is set, the format is like "15 mins", otherwise it's like "10 minutes"-
+     */
+    private fun prettifyDuration(
+        durationMillis: Long,
+        shortUnitName: Boolean = true,
+        valueUnitSeparator: String = "",
+        componentSeparator: String = " ",
+        maxNumOfComponents: Int = 2,
+        includeSeconds: Boolean = false
+    ): String {
+        val duration = DateUtils.formatElapsedTime(durationMillis.absoluteValue / 1000)
+
         return duration
             .split(":")
             .reversed()
             .mapIndexed { index, part ->
-                val unitName = unitDisplayName(durationUnits[index])
-                if (part != "00") "${part}${unitName}" else null
+                if (!includeSeconds && index == 0) return@mapIndexed null
+
+                val unitName = unitDisplayName(durationUnits[index], shortVersion = shortUnitName)
+                if (part != "00") "${part}${valueUnitSeparator}${unitName}" else null
             }
             .reversed()
-            .take(2)
+            .dropWhile { it == null }
+            .take(maxNumOfComponents)
             .filterNotNull()
-            .joinToString(" ") { it.removePrefix("0") }
+            .joinToString(componentSeparator) { it.removePrefix("0") }
     }
 
-    private fun unitDisplayName(unit: MeasureUnit) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        val measureFormat = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.NARROW)
-        measureFormat.getUnitDisplayName(unit)
-    } else {
-        when (unit) {
-            MeasureUnit.DAY -> "day"
-            MeasureUnit.HOUR -> "hour"
-            MeasureUnit.MINUTE -> "min"
-            MeasureUnit.SECOND -> "sec"
-            MeasureUnit.MILLISECOND -> "msec"
-            else -> throw IllegalArgumentException()
-        }
+    fun prettifyDurationShortText(durationMillis: Long): String {
+        return prettifyDuration(
+            durationMillis = durationMillis,
+            shortUnitName = true,
+            valueUnitSeparator = "",
+            componentSeparator = " "
+        )
     }
+
+    fun prettifyDurationLongText(durationMillis: Long): String {
+        return prettifyDuration(
+            durationMillis = durationMillis,
+            shortUnitName = false,
+            valueUnitSeparator = " ",
+            componentSeparator = ", "
+        )
+    }
+
+    private fun unitDisplayName(unit: MeasureUnit, shortVersion: Boolean = false) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val measureFormat = MeasureFormat.getInstance(
+                Locale.getDefault(),
+                if (shortVersion) MeasureFormat.FormatWidth.NARROW else MeasureFormat.FormatWidth.WIDE
+            )
+            measureFormat.getUnitDisplayName(unit)
+        } else {
+            when (unit) {
+                MeasureUnit.DAY -> "day"
+                MeasureUnit.HOUR -> "hour"
+                MeasureUnit.MINUTE -> "min"
+                MeasureUnit.SECOND -> "sec"
+                MeasureUnit.MILLISECOND -> "msec"
+                else -> throw IllegalArgumentException()
+            }
+        }
 
     fun formatDistance(distance: Int): String {
         if (distance < 1000) return "${distance}m"
@@ -69,11 +109,15 @@ object TextUtils {
     }
 
     private fun formatTimeDiff(planned: ZonedDateTime, actual: ZonedDateTime): String {
-        val diffMillis = ChronoUnit.MILLIS.between(planned, actual)
+        val diffMillis = dateDifferenceMillis(planned, actual)
         var diffMinutes = (diffMillis / 1000 / 60).toString()
 
         if (!diffMinutes.startsWith("-")) diffMinutes = "+$diffMinutes"
         return diffMinutes
+    }
+
+    fun dateDifferenceMillis(start: ZonedDateTime, end: ZonedDateTime): Long {
+        return ChronoUnit.MILLIS.between(start, end)
     }
 
     fun displayDepartureTimeWithDelay(planned: ZonedDateTime?, predicted: ZonedDateTime?): String {

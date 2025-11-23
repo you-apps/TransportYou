@@ -76,7 +76,7 @@ fun TripLegPublic(leg: TripLeg.Public, onLocationClick: (Location) -> Unit) {
                 leg.durationMillis?.let {
                     Text(
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                        text = TextUtils.prettifyDuration(it)
+                        text = TextUtils.prettifyDurationShortText(it)
                     )
                 }
             }
@@ -210,7 +210,7 @@ fun TripLegIndividual(leg: TripLeg.Individual, onLocationClick: (Location) -> Un
                 leg.durationMillis?.let {
                     Text(
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                        text = TextUtils.prettifyDuration(it)
+                        text = TextUtils.prettifyDurationShortText(it)
                     )
                 }
             }

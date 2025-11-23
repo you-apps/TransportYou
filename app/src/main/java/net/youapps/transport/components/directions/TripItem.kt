@@ -72,7 +72,7 @@ fun TripItem(
         ) {
             item {
                 Text(
-                    text = "(${TextUtils.prettifyDuration(trip.duration)})",
+                    text = "(${TextUtils.prettifyDurationShortText(trip.duration)})",
                     style = MaterialTheme.typography.labelSmallEmphasized
                 )
             }
@@ -140,7 +140,7 @@ fun TripSummary(trip: Trip) {
         Card {
             Text(
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                text = "${stringResource(R.string.total)}: ${TextUtils.prettifyDuration(trip.duration)}"
+                text = "${stringResource(R.string.total)}: ${TextUtils.prettifyDurationShortText(trip.duration)}"
             )
         }
     }
