@@ -77,7 +77,7 @@ fun TripItem(
                 )
             }
 
-            items(trip.legs.filterNot { it.shouldSkip() }) { leg ->
+            items(trip.legs.filterNot { it.isPlatformSwitchOnly() }) { leg ->
                 when (leg) {
                     is TripLeg.Public -> {
                         leg.line?.let { TransportLineCard(it) }

@@ -1,6 +1,5 @@
 package net.youapps.transport.components.directions
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +29,6 @@ import net.youapps.transport.TextUtils
 import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.data.transport.model.Stop
 import net.youapps.transport.data.transport.model.TripLeg
-import java.time.temporal.ChronoUnit
 
 enum class StopType {
     Departure,
@@ -38,7 +36,7 @@ enum class StopType {
     Arrival
 }
 
-fun TripLeg.shouldSkip(): Boolean {
+fun TripLeg.isPlatformSwitchOnly(): Boolean {
     return when (this) {
         is TripLeg.Public -> false
         is TripLeg.Individual -> arrival.location.name == departure.location.name

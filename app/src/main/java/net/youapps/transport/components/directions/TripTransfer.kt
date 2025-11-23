@@ -66,13 +66,11 @@ fun TripTransfer(
                 color = changeColor
             )
 
-            distanceMeters?.let { distanceMeters ->
+            distanceMeters?.takeIf { it != 0 }?.let { distanceMeters ->
                 Text(
                     text = TextUtils.formatDistance(distanceMeters) + walkDurationApproxMillis?.let {
                         ", ${stringResource(R.string.approximately_abbr)} ${
-                            TextUtils.prettifyDurationShortText(
-                                it
-                            )
+                            TextUtils.prettifyDurationShortText(it)
                         }"
                     },
                     color = changeColor

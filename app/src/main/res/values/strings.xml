@@ -27,6 +27,10 @@
     <string name="transfer">Transfer</string>
     <string name="transfer_impossible">Transfer impossible</string>
     <string name="approximately_abbr">approx. </string>
+    <string name="view_departures">View departures</string>
+    <string name="length_of_stay">Length of stay</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
 
     <string name="product_high_speed_train">High speed train</string>
     <string name="product_regional_train">Regional train</string>
