@@ -40,6 +40,7 @@ android {
         debug {
             isDebuggable = true
             applicationIdSuffix = ".debug"
+            resValue("string", "app_name", "Transport You Debug")
         }
     }
     compileOptions {
