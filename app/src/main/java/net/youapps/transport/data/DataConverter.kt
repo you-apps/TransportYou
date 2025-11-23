@@ -2,6 +2,7 @@ package net.youapps.transport.data
 
 import net.youapps.transport.ProtobufLocation
 import net.youapps.transport.ProtobufRoute
+import net.youapps.transport.data.transport.model.GeoCoordinate
 import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.data.transport.model.LocationType
 
@@ -9,7 +10,7 @@ fun ProtobufLocation.toLocation(): Location = Location(
     id =    id,
     name = listOf(name, place).filter { it.isNotEmpty() }.joinToString(", "),
     type = LocationType.valueOf(type),
-    position = null
+    position = GeoCoordinate(longitude = longitude, latitude = latitude)
 )
 
 fun Location.toProtobufLocation(): ProtobufLocation =
@@ -17,6 +18,12 @@ fun Location.toProtobufLocation(): ProtobufLocation =
         .setType(type.name)
         .setId(id)
         .setName(name)
+        .apply {
+            position?.let { position ->
+                setLongitude(position.longitude)
+                setLatitude(position.latitude)
+            }
+        }
         .build()
 
 fun newProtobufRoute(origin: Location, destination: Location): ProtobufRoute =

@@ -8,6 +8,8 @@ message ProtobufLocation {
   string id = 2;
   string name = 3;
   string place = 4;
+  double longitude = 5;
+  double latitude = 6;
 }
 
 message ProtobufSavedLocations {
