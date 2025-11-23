@@ -37,11 +37,11 @@ class HomeModel(
 
         try {
             val requestDate = Date()
-            val departures = networkRepository.provider
+            val response = networkRepository.provider
                 .queryDepartures(location.toLocation(), 15)
 
             val departuresMap = _departures.value.toMutableMap()
-            departuresMap.put(location, requestDate to departures)
+            departuresMap[location] = requestDate to response.departures
             _departures.emit(departuresMap)
         } catch (e: Exception) {
             Log.e("exc", e.stackTraceToString())

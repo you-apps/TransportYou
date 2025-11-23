@@ -7,6 +7,7 @@ import de.schildbach.pte.dto.Position
 import de.schildbach.pte.dto.QueryTripsContext
 import de.schildbach.pte.dto.TripOptions
 import net.youapps.transport.data.transport.model.Departure
+import net.youapps.transport.data.transport.model.DeparturesResponse
 import net.youapps.transport.data.transport.model.EstimatedDateTime
 import net.youapps.transport.data.transport.model.GeoCoordinate
 import net.youapps.transport.data.transport.model.IndividualType
@@ -28,10 +29,21 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
             .map { it.toLocation() }
     }
 
-    override suspend fun queryDepartures(location: Location, maxAmount: Int): List<Departure> {
-        return network
+    override suspend fun queryDepartures(location: Location, maxAmount: Int): DeparturesResponse {
+        val stationDepartures = network
             .queryDepartures(location.id, Date(), maxAmount, true)
             .stationDepartures
+
+        val lines = stationDepartures
+            .flatMap { it.lines.orEmpty() }
+            .map { it.line }
+            .ifEmpty {
+                stationDepartures.flatMap { it.departures }.map { it.line }
+            }
+            .filterNotNull()
+            .map { it.toTransportLine() }
+
+        val departures = stationDepartures
             .orEmpty()
             .flatMap { it.departures }
             .map { dep ->
@@ -46,6 +58,8 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
                     message = dep.message
                 )
             }
+
+        return DeparturesResponse(departures, lines)
     }
 
     override suspend fun queryTrips(

@@ -81,7 +81,7 @@ class DeparturesWidget : GlanceAppWidget() {
                         .queryDepartures(Location(locationId, "", LocationType.STATION, null), 20)
                     departures.clear()
 
-                    departures.addAll(response)
+                    departures.addAll(response.departures)
 
                     isError = false
                 } catch (e: Exception) {

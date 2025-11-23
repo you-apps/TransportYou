@@ -14,9 +14,9 @@ import net.youapps.transport.TransportYouApp
 import net.youapps.transport.data.AppDataRepository
 import net.youapps.transport.data.NetworkRepository
 import net.youapps.transport.data.toProtobufLocation
-import net.youapps.transport.data.transport.TransportProvider
 import net.youapps.transport.data.transport.model.Departure
 import net.youapps.transport.data.transport.model.Location
+import net.youapps.transport.data.transport.model.TransportLine
 
 class DeparturesModel(
     private val networkRepository: NetworkRepository,
@@ -32,13 +32,17 @@ class DeparturesModel(
     private val _departuresFlow = MutableStateFlow<List<Departure>>(emptyList())
     val departuresFlow get() = _departuresFlow.asStateFlow()
 
+    private val _linesFlow = MutableStateFlow<List<TransportLine>>(emptyList())
+    val linesFlow get() = _linesFlow.asStateFlow()
+
     fun fetchDepartures() = viewModelScope.launch(Dispatchers.IO) {
         val location = location.value ?: return@launch
 
         try {
-            val departures = networkRepository.provider
+            val response = networkRepository.provider
                 .queryDepartures(location, 30)
-            _departuresFlow.emit(departures)
+            _departuresFlow.emit(response.departures)
+            _linesFlow.emit(response.lines)
         } catch (e: Exception) {
             Log.e("exc", e.stackTraceToString())
         }

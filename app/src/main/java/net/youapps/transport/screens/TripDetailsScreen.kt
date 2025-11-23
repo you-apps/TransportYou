@@ -10,16 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,13 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.github.dellisd.spatialk.geojson.LineString
 import io.github.dellisd.spatialk.geojson.Point
 import io.github.dellisd.spatialk.geojson.Position
 import io.github.dellisd.spatialk.geojson.dsl.featureCollection
+import net.youapps.transport.MapLibreUtils
+import net.youapps.transport.MapLibreUtils.geoPosition
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
@@ -47,7 +43,6 @@ import net.youapps.transport.components.directions.TripTransfer
 import net.youapps.transport.components.directions.shouldSkip
 import net.youapps.transport.components.generic.RefreshLoadingBox
 import net.youapps.transport.data.transport.model.IndividualType
-import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.data.transport.model.Trip
 import net.youapps.transport.data.transport.model.TripLeg
 import net.youapps.transport.models.DirectionsModel
@@ -180,10 +175,9 @@ fun TripDetailsScreen(
             )
         )
 
-        val mapStyle = if (isSystemInDarkTheme()) "dark" else "liberty"
         MaplibreMap(
             modifier = Modifier.padding(pV),
-            baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/$mapStyle"),
+            baseStyle = BaseStyle.Uri(MapLibreUtils.getMapLibreStyleUrl(isSystemInDarkTheme())),
             cameraState = cameraState
         ) {
             val trainStations = remember {
@@ -260,5 +254,3 @@ fun TripDetailsScreen(
         }
     }
 }
-
-private fun Location.geoPosition() = position?.let { Position(it.longitude, it.latitude) }
