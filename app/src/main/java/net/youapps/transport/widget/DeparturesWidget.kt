@@ -198,8 +198,8 @@ class DeparturesWidget : GlanceAppWidget() {
                                         MainActivity.DIRECTIONS_TO_KEY,
                                         NavRoutes.DeparturesFromLocation(
                                             type = LocationType.STATION,
-                                            id = departure.destination.id,
-                                            name = departure.destination.name,
+                                            id = departure.line.destination?.id,
+                                            name = departure.line.destination?.name.orEmpty(),
                                         )
                                     )
                                 context.startActivity(intent)

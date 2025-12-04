@@ -120,7 +120,7 @@ fun DeparturesScreen(
                     contentPadding = PaddingValues(horizontal = 4.dp)
                 ) {
                     items(lines.sortedBy { it.type }) {
-                        TransportLineCard(it)
+                        TransportLineCard(it, detailed = true)
                     }
                 }
 

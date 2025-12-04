@@ -36,24 +36,24 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
 
         val lines = stationDepartures
             .flatMap { it.lines.orEmpty() }
-            .map { it.line }
+            .map { it.line.toTransportLine(it.destination) }
             .ifEmpty {
-                stationDepartures.flatMap { it.departures }.map { it.line }
+                stationDepartures.flatMap { it.departures }
+                    .filter { it.line != null }
+                    .map { it.line.toTransportLine(it.destination) }
             }
-            .filterNotNull()
-            .map { it.toTransportLine() }
+            .distinctBy { it.id }
 
         val departures = stationDepartures
             .orEmpty()
             .flatMap { it.departures }
             .map { dep ->
                 Departure(
-                    line = dep.line.toTransportLine(),
+                    line = dep.line.toTransportLine(dep.destination),
                     departure = EstimatedDateTime(
                         planned = dep.plannedTime?.toZonedDateTime(),
                         predicted = dep.predictedTime?.toZonedDateTime()
                     ),
-                    destination = dep.destination!!.toLocation(),
                     platform = dep.position?.format(),
                     message = dep.message
                 )
@@ -106,7 +106,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
                     return@map when (leg) {
                         is de.schildbach.pte.dto.Trip.Public -> {
                             TripLeg.Public(
-                                line = leg.line.toTransportLine(),
+                                line = leg.line.toTransportLine(leg.destination),
                                 arrival = leg.arrivalStop.toStop(),
                                 departure = leg.departureStop.toStop(),
                                 intermediateStops = leg.intermediateStops?.map { it.toStop() }
@@ -161,11 +161,11 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
         cancelled = arrivalCancelled || departureCancelled
     )
 
-    fun Line.toTransportLine() = TransportLine(
+    fun Line.toTransportLine(destination: de.schildbach.pte.dto.Location?) = TransportLine(
         id = id,
         label = label.orEmpty(),
-        name = name.orEmpty(),
         type = product?.name?.let { Product.valueOf(it) },
+        destination = destination?.toLocation(),
         message = message
     )
 

@@ -15,7 +15,7 @@ enum class Product {
 data class TransportLine(
     val id: String?,
     val label: String?,
-    val name: String?,
+    val destination: Location?,
     val type: Product?,
     val message: String?
 )

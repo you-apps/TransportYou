@@ -30,7 +30,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
         modifier = GlanceModifier
             .cornerRadius(6.dp)
             .clickable {
-                onDestinationClicked(departure.destination)
+                departure.line.destination?.let { onDestinationClicked(it) }
             }
             .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
@@ -69,7 +69,7 @@ fun GlanceDepartureItem(departure: Departure, onDestinationClicked: (Location) -
 
             Text(
                 modifier = GlanceModifier.defaultWeight(),
-                text = departure.destination.name,
+                text = departure.line.destination?.name.orEmpty(),
                 style = defaultTextStyle
             )
 

@@ -28,7 +28,7 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
     Column(
         modifier = Modifier
             .clickable {
-                onDestinationClicked(departure.destination)
+                departure.line.destination?.let { onDestinationClicked(it) }
             }
             .padding(horizontal = 10.dp, vertical = 4.dp)
     ) {
@@ -57,7 +57,7 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
             ) {
                 TransportLineCard(departure.line)
 
-                Text(departure.destination.name)
+                departure.line.destination?.name?.let { Text(it) }
             }
 
             if (departure.platform != null) {
@@ -79,13 +79,13 @@ fun DepartureItem(departure: Departure, onDestinationClicked: (Location) -> Unit
     }
 }
 
+val DEMO_LOCATION = Location( "endid", "Berlin", LocationType.STATION,null)
 val DEMO_DEPARTURE = Departure(
-    TransportLine("12345", "",  "RB68", Product.REGIONAL_TRAIN, null),
+    TransportLine("12345",  "RB68", DEMO_LOCATION, Product.REGIONAL_TRAIN, null),
     departure = EstimatedDateTime(
         ZonedDateTime.now(),
         ZonedDateTime.now().plusMinutes(5)
     ),
-    Location( "endid", "Berlin", LocationType.STATION,null),
     "Pos. 3",
     "No message."
 )

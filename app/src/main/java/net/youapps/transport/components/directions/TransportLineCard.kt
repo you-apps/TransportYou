@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Train
 import androidx.compose.material.icons.filled.Tram
 import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import net.youapps.transport.components.generic.CardWithIcon
 import net.youapps.transport.data.transport.model.Product
 import net.youapps.transport.data.transport.model.TransportLine
@@ -28,6 +29,14 @@ val transportIcons = mapOf(
 )
 
 @Composable
-fun TransportLineCard(line: TransportLine) {
-    CardWithIcon(transportIcons[line.type], line.label)
+fun TransportLineCard(line: TransportLine, detailed: Boolean = false) {
+    val lineDescription =
+        if (detailed) listOfNotNull(line.label, line.destination?.name)
+            .joinToString(" ")
+        else line.label
+
+    CardWithIcon(
+        imageVector = transportIcons[line.type],
+        text = lineDescription
+    )
 }

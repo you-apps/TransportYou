@@ -65,10 +65,9 @@ fun TripLegPublic(leg: TripLeg.Public, onLocationClick: (Location) -> Unit) {
         ) {
             leg.line?.let { TransportLineCard(it) }
 
-            Text(
-                modifier = Modifier.weight(1f),
-                text = leg.arrival.location.name
-            )
+            leg.line?.destination?.name?.let {
+                Text(modifier = Modifier.weight(1f), text = it)
+            }
 
             Card {
                 leg.durationMillis?.let {
