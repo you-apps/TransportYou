@@ -13,8 +13,8 @@ data class Trip(
     val firstPublicLeg get() = legs.firstOrNull { it is TripLeg.Public }
     val lastPublicLeg get() = legs.lastOrNull { it is TripLeg.Public }
 
-    val firstDepartureTime get() = firstPublicLeg?.departure?.departureTime?.let { it.planned ?: it.predicted }
-    val lastArrivalTime get() = lastPublicLeg?.arrival?.arrivalTime?.let { it.planned ?: it.predicted }
+    val firstDepartureTime get() = firstPublicLeg?.departure?.departureTime?.predictedOrPlanned
+    val lastArrivalTime get() = lastPublicLeg?.arrival?.arrivalTime?.predictedOrPlanned
 
     val numChanges get() = legs.filter { it is TripLeg.Public }.size - 1
 }
@@ -53,7 +53,7 @@ sealed class TripLeg {
     val firstPredictedDepartureTime: ZonedDateTime?
         get() = departure.departureTime.predicted
 
-    val durationMillis: Long? get() = ChronoUnit.MILLIS.between(
+    val durationMillis: Long get() = ChronoUnit.MILLIS.between(
         departure.departureTime.predictedOrPlanned,
         arrival.arrivalTime.predictedOrPlanned,
     )
