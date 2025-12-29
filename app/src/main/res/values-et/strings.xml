@@ -32,4 +32,11 @@
     <string name="now">Praegu</string>
     <string name="trip_time">Reisi kestus</string>
     <string name="error_fetching_departures">Ei õnnestunud laadida väljumisi.</string>
+    <string name="transfer">Ümberistumine</string>
+    <string name="transfer_impossible">Ümberistumine pole võimalik</string>
+    <string name="approximately_abbr">umbes</string>
+    <string name="view_departures">Vaata väljumisi</string>
+    <string name="length_of_stay">Viibimise kestus</string>
+    <string name="longitude">Pikkuskraad</string>
+    <string name="latitude">Laiuskraad</string>
 </resources>
