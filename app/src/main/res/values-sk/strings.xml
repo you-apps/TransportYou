@@ -32,4 +32,11 @@
     <string name="product_cablecar">Lanovka</string>
     <string name="product_ferry">Trajekt</string>
     <string name="product_on_demand">Zdieľané auto</string>
+    <string name="transfer">Presun</string>
+    <string name="transfer_impossible">Presun nemožný</string>
+    <string name="approximately_abbr">pribl.</string>
+    <string name="view_departures">Zobraziť odchody</string>
+    <string name="length_of_stay">Trvanie meškania</string>
+    <string name="longitude">Zemepisná dĺžka</string>
+    <string name="latitude">Zemepisná šírka</string>
 </resources>
