@@ -32,4 +32,11 @@
     <string name="product_ferry">Fähre</string>
     <string name="product_on_demand">Auto auf Abruf</string>
     <string name="origin">Bahnhof / Haltestelle</string>
+    <string name="transfer">Transfer</string>
+    <string name="transfer_impossible">Transfer unmöglich</string>
+    <string name="approximately_abbr">ungefähr</string>
+    <string name="view_departures">Abfahrten anzeigen</string>
+    <string name="length_of_stay">Aufenthaltsdauer</string>
+    <string name="longitude">Längengrad</string>
+    <string name="latitude">Breitengrad</string>
 </resources>
