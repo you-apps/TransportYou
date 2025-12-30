@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">தேடல்</string>
+    <string name="origin">தோற்றம்</string>
+    <string name="destination">இலக்கு</string>
+    <string name="back">பின்</string>
+    <string name="clear">தெளிவு</string>
+    <string name="directions">திசைகள்</string>
+    <string name="total">மொத்தம்</string>
+    <string name="trip_options">பயண விருப்பங்கள்</string>
+    <string name="swap">இடமாற்று</string>
+    <string name="now">இப்போது</string>
+    <string name="departure">புறப்பாடு</string>
+    <string name="arrival">வருகை</string>
+    <string name="okay">சரி</string>
+    <string name="cancel">ரத்துசெய்</string>
+    <string name="trip_time">பயண நேரம்</string>
+    <string name="save">சேமி</string>
+    <string name="saved_routes">சேமிக்கப்பட்ட வழிகள்</string>
+    <string name="transport_network">போக்குவரத்து பிணையம்</string>
+    <string name="edit_locations">இருப்பிடங்களைத் திருத்தவும்</string>
+    <string name="refresh">புதுப்பிப்பு</string>
+    <string name="trip_cancelled">பயணம் சாத்தியமற்றது அல்லது ரத்து செய்யப்பட்டது.</string>
+    <string name="settings">அமைப்புகள்</string>
+    <string name="error_fetching_departures">புறப்பாடுகளைப் பெற முடியவில்லை.</string>
+    <string name="transfer">இடமாற்றம்</string>
+    <string name="transfer_impossible">இடமாற்றம் சாத்தியமற்றது</string>
+    <string name="approximately_abbr">தோராயமாக.</string>
+    <string name="view_departures">புறப்பாடுகளைக் காண்க</string>
+    <string name="length_of_stay">தங்கியிருக்கும் காலம்</string>
+    <string name="longitude">நெட்டாங்கு</string>
+    <string name="latitude">அகலாங்கு</string>
+    <string name="product_high_speed_train">அதிவேக ரயில்</string>
+    <string name="product_regional_train">பிராந்திய ரயில்</string>
+    <string name="product_suburban_train">புறநகர் ரயில்</string>
+    <string name="product_tram">டிராம்</string>
+    <string name="product_subway">சுரங்கப்பாதை</string>
+    <string name="product_bus">பேருந்து</string>
+    <string name="product_cablecar">கேபிள் கார்</string>
+    <string name="product_ferry">படகு</string>
+    <string name="product_on_demand">தேவைக்கேற்ப கார்</string>
+</resources>

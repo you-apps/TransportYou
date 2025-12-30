@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Vyhledat</string>
+    <string name="origin">Start</string>
+    <string name="destination">Cíl</string>
+    <string name="back">Zpět</string>
+    <string name="clear">Vymazat</string>
+    <string name="directions">Trasa</string>
+    <string name="total">Celkem</string>
+    <string name="trip_options">Možnosti cesty</string>
+    <string name="swap">Vyměnit</string>
+    <string name="now">Nyní</string>
+    <string name="departure">Odjezd</string>
+    <string name="arrival">Příjezd</string>
+    <string name="okay">OK</string>
+    <string name="cancel">Zrušit</string>
+    <string name="trip_time">Čas cesty</string>
+    <string name="save">Uložit</string>
+    <string name="saved_routes">Uložené trasy</string>
+    <string name="transport_network">Dopravní síť</string>
+    <string name="edit_locations">Upravit místa</string>
+    <string name="refresh">Obnovit</string>
+    <string name="trip_cancelled">Cesta nemožná nebo zrušena.</string>
+    <string name="settings">Nastavení</string>
+    <string name="error_fetching_departures">Odjezdy se nepodařilo načíst.</string>
+    <string name="transfer">Přestup</string>
+    <string name="transfer_impossible">Přestup není možný</string>
+    <string name="approximately_abbr">přibl.</string>
+    <string name="view_departures">Zobrazit odjezdy</string>
+    <string name="length_of_stay">Délka zpoždění</string>
+    <string name="longitude">Zeměpisná délka</string>
+    <string name="latitude">Zeměpisná šířka</string>
+    <string name="product_high_speed_train">Vysokorychlostní vlak</string>
+    <string name="product_regional_train">Regionální vlak</string>
+    <string name="product_suburban_train">Příměstský vlak</string>
+    <string name="product_tram">Tramvaj</string>
+    <string name="product_subway">Metro</string>
+    <string name="product_bus">Autobus</string>
+    <string name="product_cablecar">Lanovka</string>
+    <string name="product_ferry">Trajekt</string>
+    <string name="product_on_demand">Auto na vyžádání</string>
+</resources>

@@ -6,7 +6,7 @@
     <string name="total">Všetky</string>
     <string name="origin">Začiatok</string>
     <string name="destination">Cieľ</string>
-    <string name="directions">Inštrukcie</string>
+    <string name="directions">Trasa</string>
     <string name="trip_options">Voľby cesty</string>
     <string name="swap">Vymeniť</string>
     <string name="now">Teraz</string>
@@ -32,4 +32,11 @@
     <string name="product_cablecar">Lanovka</string>
     <string name="product_ferry">Trajekt</string>
     <string name="product_on_demand">Zdieľané auto</string>
+    <string name="transfer">Prestup</string>
+    <string name="transfer_impossible">Prestup nie je možný</string>
+    <string name="approximately_abbr">pribl.</string>
+    <string name="view_departures">Zobraziť odchody</string>
+    <string name="length_of_stay">Trvanie meškania</string>
+    <string name="longitude">Zemepisná dĺžka</string>
+    <string name="latitude">Zemepisná šírka</string>
 </resources>
