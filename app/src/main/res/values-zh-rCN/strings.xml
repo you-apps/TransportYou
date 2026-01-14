@@ -32,4 +32,11 @@
     <string name="product_cablecar">缆车</string>
     <string name="product_ferry">渡轮</string>
     <string name="product_on_demand">网约车</string>
+    <string name="transfer">换乘</string>
+    <string name="transfer_impossible">无法换乘</string>
+    <string name="approximately_abbr">约</string>
+    <string name="view_departures">查看出发信息</string>
+    <string name="length_of_stay">停留时长</string>
+    <string name="longitude">经度</string>
+    <string name="latitude">纬度</string>
 </resources>

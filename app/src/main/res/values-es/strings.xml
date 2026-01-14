@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Buscar</string>
+    <string name="origin">Origen</string>
+    <string name="destination">Destino</string>
+    <string name="back">Atrás</string>
+    <string name="clear">Limpiar</string>
+    <string name="directions">Direcciones</string>
+    <string name="now">Ahora</string>
+    <string name="departure">Salida</string>
+    <string name="arrival">Llegada</string>
+    <string name="okay">Ok</string>
+    <string name="cancel">Cancelar</string>
+    <string name="trip_time">Duración del viaje</string>
+    <string name="save">Guardar</string>
+    <string name="saved_routes">Rutas guardadas</string>
+    <string name="transport_network">Red de transporte</string>
+    <string name="edit_locations">Editar ubicaciones</string>
+    <string name="refresh">Refrescar</string>
+    <string name="settings">Ajustes</string>
+    <string name="transfer">Transferir</string>
+    <string name="approximately_abbr">aprox.</string>
+    <string name="view_departures">Ver salidas</string>
+    <string name="longitude">Longitud</string>
+    <string name="latitude">Latitud</string>
+    <string name="product_high_speed_train">Tren de alta velocidad</string>
+    <string name="product_regional_train">Tren regional</string>
+    <string name="product_suburban_train">Tren suburbano</string>
+    <string name="product_subway">Metro</string>
+    <string name="product_bus">Bus</string>
+    <string name="product_on_demand">Carro bajo demanda</string>
+    <string name="length_of_stay">Duración de la estancia</string>
+    <string name="error_fetching_departures">Fallo al obtener las salidas.</string>
+    <string name="trip_cancelled">Viaje imposible o cancelado.</string>
+    <string name="trip_options">Opciones de Viaje</string>
+    <string name="total">Total</string>
+    <string name="swap">Intercambio</string>
+    <string name="transfer_impossible">Transferencia imposible</string>
+    <string name="product_tram">Tranvía</string>
+    <string name="product_cablecar">Carro de cable</string>
+    <string name="product_ferry">Ferry</string>
+</resources>
