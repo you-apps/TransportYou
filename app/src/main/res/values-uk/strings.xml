@@ -32,4 +32,11 @@
     <string name="product_ferry">Пором</string>
     <string name="product_on_demand">Каршерінг</string>
     <string name="error_fetching_departures">Не вдалося завантажити відправлення.</string>
+    <string name="transfer">Переказ</string>
+    <string name="transfer_impossible">Переказ неможливий</string>
+    <string name="approximately_abbr">прибл.</string>
+    <string name="view_departures">Переглянути відправлення</string>
+    <string name="length_of_stay">Тривалість зупинки</string>
+    <string name="longitude">Довгота</string>
+    <string name="latitude">Широта</string>
 </resources>
