@@ -1,3 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">Cari</string>
+    <string name="origin">Asal</string>
+    <string name="destination">Tujuan</string>
+    <string name="back">Kembali</string>
+    <string name="clear">Bersihkan</string>
+    <string name="directions">Petunjuk Arah</string>
+    <string name="total">Total</string>
+    <string name="trip_options">Opsi Perjalanan</string>
+    <string name="swap">Tukar</string>
+    <string name="now">Sekarang</string>
+    <string name="departure">Keberangkatan</string>
+    <string name="arrival">Kedatangan</string>
+    <string name="okay">Oke</string>
+    <string name="cancel">Batal</string>
+    <string name="trip_time">Waktu perjalanan</string>
+    <string name="save">Simpan</string>
+    <string name="saved_routes">Rute tersimpan</string>
+    <string name="transport_network">Jaringan transportasi</string>
+    <string name="edit_locations">Edit lokasi</string>
+    <string name="refresh">Segarkan</string>
+    <string name="trip_cancelled">Perjalanan tidak memungkinkan atau dibatalkan.</string>
+    <string name="settings">Pengaturan</string>
+    <string name="error_fetching_departures">Gagal mengambil jadwal keberangkatan.</string>
+    <string name="transfer">Transfer</string>
+    <string name="transfer_impossible">Transfer tidak memungkinkan</string>
+    <string name="approximately_abbr">sekitar</string>
+    <string name="view_departures">Lihat keberangkatan</string>
+    <string name="length_of_stay">Lama tinggal</string>
+    <string name="longitude">Garis bujur</string>
+    <string name="latitude">Garis lintang</string>
+    <string name="product_high_speed_train">Kereta cepat</string>
+    <string name="product_regional_train">Kereta regional</string>
+    <string name="product_suburban_train">Kereta komuter</string>
+    <string name="product_tram">Trem</string>
+    <string name="product_subway">Kereta bawah tanah</string>
+    <string name="product_bus">Bus</string>
+    <string name="product_cablecar">Kereta gantung</string>
+    <string name="product_ferry">Feri</string>
+    <string name="product_on_demand">Mobil panggilan</string>
 </resources>
