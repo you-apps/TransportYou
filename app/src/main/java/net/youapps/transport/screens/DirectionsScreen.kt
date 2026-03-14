@@ -136,6 +136,10 @@ fun DirectionsScreen(
                 }
 
                 if (showDateTimePicker) {
+                    var isDepartureDateNewValue by remember {
+                        mutableStateOf(directionsModel.isDepartureDate.value)
+                    }
+
                     DateTimePickerDialog(
                         initialValue = selectedDate,
                         onDismissRequest = { showDateTimePicker = false },
@@ -144,24 +148,27 @@ fun DirectionsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
                                 FilterChipWithIcon(
-                                    isSelected = isDepartureDate,
+                                    isSelected = isDepartureDateNewValue,
                                     onSelect = {
-                                        scope.launch { directionsModel.isDepartureDate.emit(true) }
+                                        isDepartureDateNewValue = true
                                     },
                                     label = stringResource(R.string.departure),
                                 )
 
                                 FilterChipWithIcon(
-                                    isSelected = !isDepartureDate,
+                                    isSelected = !isDepartureDateNewValue,
                                     onSelect = {
-                                        scope.launch { directionsModel.isDepartureDate.emit(false) }
+                                        isDepartureDateNewValue = false
                                     },
                                     label = stringResource(R.string.arrival),
                                 )
                             }
                         }
                     ) { newDate ->
-                        scope.launch { directionsModel.date.emit(newDate) }
+                        scope.launch {
+                            directionsModel.date.emit(newDate)
+                            directionsModel.isDepartureDate.emit(isDepartureDateNewValue)
+                        }
                     }
                 }
 
