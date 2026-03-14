@@ -29,7 +29,7 @@ val transportIcons = mapOf(
 )
 
 @Composable
-fun TransportLineCard(line: TransportLine, detailed: Boolean = false) {
+fun TransportLineCard(line: TransportLine, detailed: Boolean = false, onClick: (() -> Unit)? = null) {
     val lineDescription =
         if (detailed) listOfNotNull(line.label, line.destination?.name)
             .joinToString(" ")
@@ -37,6 +37,7 @@ fun TransportLineCard(line: TransportLine, detailed: Boolean = false) {
 
     CardWithIcon(
         imageVector = transportIcons[line.type],
-        text = lineDescription
+        text = lineDescription,
+        onClick = onClick
     )
 }

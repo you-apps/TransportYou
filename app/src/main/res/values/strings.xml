@@ -31,6 +31,7 @@
     <string name="length_of_stay">Length of stay</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
+    <string name="transport_lines">Transport lines</string>
 
     <string name="product_high_speed_train">High speed train</string>
     <string name="product_regional_train">Regional train</string>
