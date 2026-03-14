@@ -32,6 +32,11 @@ class DirectionsModel(
 ) : ViewModel() {
     val origin = MutableStateFlow<Location?>(null)
     val destination = MutableStateFlow<Location?>(null)
+    val date = MutableStateFlow<ZonedDateTime?>(null)
+    val isDepartureDate = MutableStateFlow(true)
+
+    val enabledProducts = appDataRepository.savedProductsFlow
+        .stateIn(viewModelScope, started = SharingStarted.Eagerly, emptySet())
     val savedRoutes = appDataRepository.savedRoutesFlow
 
     val hasAnyLocation = MutableStateFlow(false)
@@ -39,9 +44,9 @@ class DirectionsModel(
 
     init {
         viewModelScope.launch {
-            combine(origin, destination) { it }
+            combine(origin, destination, enabledProducts, isDepartureDate, date) { it }
                 .distinctUntilChanged()
-                .collectLatest { (origin, destination) ->
+                .collectLatest { (origin, destination, _, _, _) ->
                     val hasOriginAndDestination = origin != null && destination != null
                     hasValidLocations.emit(hasOriginAndDestination)
 
@@ -60,18 +65,12 @@ class DirectionsModel(
             savedRoutes.any { it.origin.id == origin.id && it.destination.id == destination.id }
         }
 
-    val date = MutableStateFlow<ZonedDateTime?>(null)
-    val isDepartureDate = MutableStateFlow(true)
-
     private val _trips = MutableStateFlow<List<Trip>>(emptyList())
     val trips = _trips.asStateFlow()
     private var _tripsLoadingState = MutableStateFlow(RefreshLoadingState.INACTIVE)
     val tripsLoadingState = _tripsLoadingState.asStateFlow()
     private var tripsFirstPageContext: Any? = null
     private var tripsLastPageContext: Any? = null
-
-    val enabledProducts = appDataRepository.savedProductsFlow
-        .stateIn(viewModelScope, started = SharingStarted.Eagerly, emptySet())
 
     fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
         val (origin, destination) = (origin.value ?: return@launch) to (destination.value
