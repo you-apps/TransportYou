@@ -39,11 +39,12 @@ sealed class TripLeg {
     ): TripLeg()
 
     data class Individual(
+        val type: IndividualType,
         override val departure: Stop,
         override val arrival: Stop,
-        val distance: Int,
-        override val path: List<GeoCoordinate>?,
-        val type: IndividualType
+        val distance: Int? = null,
+        override val path: List<GeoCoordinate>? = null,
+        val approxDurationMillis: Long? = null
     ): TripLeg()
 
     abstract val departure: Stop

@@ -20,7 +20,9 @@ import net.youapps.transport.data.transport.model.TripLeg
 import net.youapps.transport.toJavaDate
 import net.youapps.transport.toZonedDateTime
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import java.util.Date
+import kotlin.collections.orEmpty
 
 class PTETransportProvider(private val network: NetworkProvider) : TransportProvider {
     override suspend fun queryStations(query: String): List<Location> {
@@ -97,38 +99,15 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
             )
         }
         val trips = response.trips.orEmpty().map { trip ->
+            val legs = trip.legs.map { it.toTripLeg() }.toMutableList()
+            fillWithAndFixTransferLegs(legs)
+
             Trip(
                 id = trip.id,
                 from = trip.from.toLocation(),
                 to = trip.to.toLocation(),
                 duration = trip.duration,
-                legs = trip.legs.map { leg ->
-                    return@map when (leg) {
-                        is de.schildbach.pte.dto.Trip.Public -> {
-                            TripLeg.Public(
-                                line = leg.line.toTransportLine(leg.destination),
-                                arrival = leg.arrivalStop.toStop(),
-                                departure = leg.departureStop.toStop(),
-                                intermediateStops = leg.intermediateStops?.map { it.toStop() }
-                                    .orEmpty(),
-                                path = leg.toCoordinateList(),
-                                message = leg.message
-                            )
-                        }
-
-                        is de.schildbach.pte.dto.Trip.Individual -> {
-                            TripLeg.Individual(
-                                path = leg.toCoordinateList(),
-                                distance = leg.distance,
-                                arrival = leg.arrival.toStop(leg.arrivalTime),
-                                departure = leg.departure.toStop(leg.departureTime),
-                                type = IndividualType.valueOf(leg.type.name)
-                            )
-                        }
-
-                        else -> throw IllegalArgumentException("unsupported trip leg")
-                    }
-                }
+                legs = legs
             )
         }
 
@@ -137,6 +116,79 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
             nextPagePagination = response.context,
             prevPagePagination = response.context
         )
+    }
+
+    private fun de.schildbach.pte.dto.Trip.Leg.toTripLeg() = when (this) {
+        is de.schildbach.pte.dto.Trip.Public -> {
+            TripLeg.Public(
+                line = line.toTransportLine(destination),
+                arrival = arrivalStop.toStop(),
+                departure = departureStop.toStop(),
+                intermediateStops = intermediateStops?.map { it.toStop() }
+                    .orEmpty(),
+                path = toCoordinateList(),
+                message = message
+            )
+        }
+
+        is de.schildbach.pte.dto.Trip.Individual -> {
+            TripLeg.Individual(
+                path = toCoordinateList(),
+                distance = distance,
+                arrival = arrival.toStop(arrivalTime),
+                departure = departure.toStop(departureTime),
+                type = IndividualType.valueOf(type.name)
+            )
+        }
+
+        else -> throw IllegalArgumentException("unsupported trip leg")
+    }
+
+    /**
+     * Add individual trip legs for each platform change.
+     *
+     * E.g., if there's a trip leg that arrives at platform 8 at 18:30, and the next trip leg starts
+     * at platform 3 at 18:52, this inserts a individual trip leg with a duration of 22min.
+     */
+    private fun fillWithAndFixTransferLegs(legs: MutableList<TripLeg>) {
+        var i = 0
+        // we have to move by index here because we modify `legs` inside the loop
+        // i.e., otherwise we would modify the iterator while reading it, which would cause undefined
+        // behavior
+        while (i < legs.size - 1) {
+            val leg = legs[i]
+            val nextLeg = legs[i + 1]
+
+            if (leg is TripLeg.Public && nextLeg is TripLeg.Public) {
+                legs.add(
+                    i + 1, TripLeg.Individual(
+                        departure = leg.arrival,
+                        arrival = nextLeg.departure,
+                        type = IndividualType.TRANSFER
+                    )
+                )
+                i++
+            } else if (leg is TripLeg.Individual) {
+                // calculate approximated duration of this transfer (= end - start)
+                // and set start and end time to the ones of the previous/next trip leg
+                // needed because otherwise durationMillis would always equal approxDurationMillis
+                val approxDuration = ChronoUnit.MILLIS.between(
+                    leg.departure.departureTime.predictedOrPlanned,
+                    leg.arrival.arrivalTime.predictedOrPlanned,
+                )
+                val startTime =
+                    legs.getOrNull(i - 1)?.arrival?.arrivalTime ?: leg.departure.departureTime
+                val endTime = nextLeg.departure.departureTime
+
+                legs[i] = leg.copy(
+                    approxDurationMillis = approxDuration,
+                    departure = leg.departure.copy(departureTime = startTime),
+                    arrival = leg.arrival.copy(arrivalTime = endTime)
+                )
+            }
+
+            i++
+        }
     }
 
     private fun de.schildbach.pte.dto.Location.toLocation() = Location(

@@ -100,48 +100,16 @@ fun TripDetailsScreen(
                             TripLegPublic(leg) { location ->
                                 navController.navigate(NavRoutes.DeparturesFromLocation(location))
                             }
-
-                            // display change time between current and next trip leg
-                            tripLegs.getOrNull(index + 1)?.let { nextLeg ->
-                                if (nextLeg is TripLeg.Public) {
-                                    HorizontalDivider()
-
-                                    val changeTimeMillis = remember {
-                                        TextUtils.dateDifferenceMillis(
-                                            leg.arrival.arrivalTime.predictedOrPlanned
-                                                ?: return@remember null,
-                                            nextLeg.departure.departureTime.predictedOrPlanned
-                                                ?: return@remember null
-                                        )
-                                    }
-
-                                    TripTransfer(changeTimeMillis)
-                                }
-                            }
                         }
 
                         is TripLeg.Individual -> {
                             val isTransferLeg =
                                 leg.type !in arrayOf(IndividualType.BIKE, IndividualType.CAR)
-                            if (!isTransferLeg) {
+                            if (isTransferLeg) {
+                                TripTransfer(leg.durationMillis, leg.distance, leg.approxDurationMillis)
+                            } else {
                                 TripLegIndividual(leg) { location ->
                                     navController.navigate(NavRoutes.DeparturesFromLocation(location))
-                                }
-                            } else {
-                                // display change time between current and next trip leg
-                                tripLegs.getOrNull(index + 1)?.let { nextLeg ->
-                                    HorizontalDivider()
-
-                                    val changeTimeMillis = remember {
-                                        TextUtils.dateDifferenceMillis(
-                                            leg.arrival.arrivalTime.predictedOrPlanned
-                                                ?: return@remember null,
-                                            nextLeg.departure.departureTime.predictedOrPlanned
-                                                ?: return@remember null
-                                        )
-                                    }
-
-                                    TripTransfer(changeTimeMillis, leg.distance, leg.durationMillis)
                                 }
                             }
                         }

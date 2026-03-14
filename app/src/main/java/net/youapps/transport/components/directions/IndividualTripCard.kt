@@ -20,5 +20,5 @@ val individualIcons = mapOf(
 
 @Composable
 fun IndividualTripCard(leg: TripLeg.Individual) {
-    CardWithIcon(individualIcons[leg.type], TextUtils.formatDistance(leg.distance))
+    CardWithIcon(individualIcons[leg.type], leg.distance?.let { TextUtils.formatDistance(it) })
 }
