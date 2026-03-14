@@ -15,8 +15,8 @@ android {
         applicationId = "net.youapps.transport"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8
-        versionName = "3.1"
+        versionCode = 9
+        versionName = "3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
