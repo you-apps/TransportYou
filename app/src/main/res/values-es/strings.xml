@@ -37,6 +37,6 @@
     <string name="swap">Intercambio</string>
     <string name="transfer_impossible">Transferencia imposible</string>
     <string name="product_tram">Tranvía</string>
-    <string name="product_cablecar">Carro de cable</string>
+    <string name="product_cablecar">Teleférico</string>
     <string name="product_ferry">Ferry</string>
 </resources>
