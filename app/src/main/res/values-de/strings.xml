@@ -39,4 +39,5 @@
     <string name="length_of_stay">Aufenthaltsdauer</string>
     <string name="longitude">Längengrad</string>
     <string name="latitude">Breitengrad</string>
+    <string name="transport_lines">Verkehrslinien</string>
 </resources>
