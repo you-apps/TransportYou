@@ -39,4 +39,5 @@
     <string name="product_tram">Tranvía</string>
     <string name="product_cablecar">Teleférico</string>
     <string name="product_ferry">Ferry</string>
+    <string name="transport_lines">Líneas de transporte</string>
 </resources>
