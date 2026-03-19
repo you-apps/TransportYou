@@ -39,4 +39,5 @@
     <string name="length_of_stay">停留时长</string>
     <string name="longitude">经度</string>
     <string name="latitude">纬度</string>
+    <string name="transport_lines">交通线路</string>
 </resources>
