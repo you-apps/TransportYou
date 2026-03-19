@@ -39,4 +39,5 @@
     <string name="length_of_stay">Viibimise kestus</string>
     <string name="longitude">Pikkuskraad</string>
     <string name="latitude">Laiuskraad</string>
+    <string name="transport_lines">Ühistranspordi liinid</string>
 </resources>
