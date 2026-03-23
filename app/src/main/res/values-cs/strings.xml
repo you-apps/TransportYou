@@ -39,4 +39,5 @@
     <string name="product_cablecar">Lanovka</string>
     <string name="product_ferry">Trajekt</string>
     <string name="product_on_demand">Auto na vyžádání</string>
+    <string name="transport_lines">Dopravní trasy</string>
 </resources>
