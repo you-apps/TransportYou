@@ -39,4 +39,5 @@
     <string name="length_of_stay">Тривалість зупинки</string>
     <string name="longitude">Довгота</string>
     <string name="latitude">Широта</string>
+    <string name="transport_lines">Транспортні лінії</string>
 </resources>
