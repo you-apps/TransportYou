@@ -6,6 +6,7 @@ import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.NoTransfer
 import androidx.compose.runtime.Composable
+import net.youapps.transport.R
 import net.youapps.transport.TextUtils
 import net.youapps.transport.components.generic.CardWithIcon
 import net.youapps.transport.data.transport.model.IndividualType
@@ -16,6 +17,15 @@ val individualIcons = mapOf(
     IndividualType.WALK to Icons.AutoMirrored.Filled.DirectionsWalk,
     IndividualType.BIKE to Icons.AutoMirrored.Filled.DirectionsBike,
     IndividualType.CAR to Icons.Filled.DirectionsCar
+)
+
+val individualNames = mapOf(
+    IndividualType.TRANSFER to R.string.transfer,
+    IndividualType.WALK to R.string.walk,
+    IndividualType.BIKE to R.string.bike,
+    IndividualType.CAR to R.string.drive,
+    IndividualType.CHECK_IN to R.string.check_in,
+    IndividualType.CHECK_OUT to R.string.check_out
 )
 
 @Composable

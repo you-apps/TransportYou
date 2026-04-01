@@ -32,6 +32,11 @@
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="transport_lines">Transport lines</string>
+    <string name="walk">Walk</string>
+    <string name="bike">Bike</string>
+    <string name="drive">Drive</string>
+    <string name="check_in">Check in</string>
+    <string name="check_out">Check out</string>
 
     <string name="product_high_speed_train">High speed train</string>
     <string name="product_regional_train">Regional train</string>

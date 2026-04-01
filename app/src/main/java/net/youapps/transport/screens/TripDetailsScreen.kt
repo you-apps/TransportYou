@@ -47,9 +47,7 @@ import net.youapps.transport.TextUtils
 import net.youapps.transport.components.directions.TripLegIndividual
 import net.youapps.transport.components.directions.TripLegPublic
 import net.youapps.transport.components.directions.TripSummary
-import net.youapps.transport.components.directions.TripTransfer
 import net.youapps.transport.components.generic.RefreshLoadingBox
-import net.youapps.transport.data.transport.model.IndividualType
 import net.youapps.transport.data.transport.model.Location
 import net.youapps.transport.data.transport.model.Trip
 import net.youapps.transport.data.transport.model.TripLeg
@@ -84,7 +82,7 @@ fun TripDetailsScreen(
         ),
         sheetContent = {
             val tripLegs = trip.legs
-            
+
             LazyColumn {
                 item {
                     TripSummary(trip)
@@ -103,15 +101,7 @@ fun TripDetailsScreen(
                         }
 
                         is TripLeg.Individual -> {
-                            val isTransferLeg =
-                                leg.type !in arrayOf(IndividualType.BIKE, IndividualType.CAR)
-                            if (isTransferLeg) {
-                                TripTransfer(leg.durationMillis, leg.distance, leg.approxDurationMillis)
-                            } else {
-                                TripLegIndividual(leg) { location ->
-                                    navController.navigate(NavRoutes.DeparturesFromLocation(location))
-                                }
-                            }
+                            TripLegIndividual(leg)
                         }
                     }
                 }
@@ -270,9 +260,21 @@ fun TripDetailsScreen(
                             listOf(
                                 R.string.longitude to it.position?.longitude?.toString(),
                                 R.string.latitude to it.position?.latitude?.toString(),
-                                R.string.arrival to arrivalTime?.let { time -> TextUtils.formatTime(time) },
-                                R.string.departure to departureTime?.let { time -> TextUtils.formatTime(time) },
-                                R.string.length_of_stay to timeDiff?.let { timeDiff -> TextUtils.prettifyDurationLongText(timeDiff) }
+                                R.string.arrival to arrivalTime?.let { time ->
+                                    TextUtils.formatTime(
+                                        time
+                                    )
+                                },
+                                R.string.departure to departureTime?.let { time ->
+                                    TextUtils.formatTime(
+                                        time
+                                    )
+                                },
+                                R.string.length_of_stay to timeDiff?.let { timeDiff ->
+                                    TextUtils.prettifyDurationLongText(
+                                        timeDiff
+                                    )
+                                }
                             ).filter { (_, value) -> value != null }
                         }
 

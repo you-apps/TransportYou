@@ -1,17 +1,12 @@
 package net.youapps.transport.components.directions
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.CompareArrows
-import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,18 +17,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
+import net.youapps.transport.data.transport.model.TripLeg
 
 private const val MINIMUM_CHANGE_INTERVAL_MINUTES = 3
 
 @Composable
-fun TripTransfer(
-    changeTimeMillis: Long?,
-    distanceMeters: Int? = null,
-    walkDurationApproxMillis: Long? = null
+fun TripLegIndividual(
+    leg: TripLeg.Individual,
 ) {
-    val isChangePossible = changeTimeMillis != null && changeTimeMillis > 0
+    val isChangePossible = leg.durationMillis > 0
     val isChangeShort =
-        isChangePossible && (changeTimeMillis < MINIMUM_CHANGE_INTERVAL_MINUTES * 1000 || changeTimeMillis < (walkDurationApproxMillis
+        isChangePossible && (leg.durationMillis < MINIMUM_CHANGE_INTERVAL_MINUTES * 1000 || leg.durationMillis < (leg.approxDurationMillis
             ?: 0))
     val changeColor =
         if (isChangePossible && !isChangeShort) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.error
@@ -45,30 +39,31 @@ fun TripTransfer(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = if (distanceMeters != null) Icons.AutoMirrored.Filled.DirectionsWalk
-            else Icons.AutoMirrored.Filled.CompareArrows,
-            contentDescription = stringResource(R.string.transfer),
-            tint = changeColor
-        )
+        individualIcons[leg.type]?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = null,
+                tint = changeColor
+            )
+        }
 
         Spacer(modifier = Modifier.width(6.dp))
 
         Column {
             val changeText =
-                if (isChangePossible) stringResource(R.string.transfer)
+                if (isChangePossible) stringResource(individualNames[leg.type]!!)
                 else stringResource(R.string.transfer_impossible)
             Text(
-                text = changeText + changeTimeMillis?.takeIf { isChangePossible }?.let {
+                text = changeText + leg.approxDurationMillis?.takeIf { isChangePossible }?.let {
                     " (${TextUtils.prettifyDurationLongText(it)})"
                 }
                     .orEmpty(),
                 color = changeColor
             )
 
-            distanceMeters?.takeIf { it != 0 }?.let { distanceMeters ->
+            leg.distance?.takeIf { it != 0 }?.let { distanceMeters ->
                 Text(
-                    text = TextUtils.formatDistance(distanceMeters) + walkDurationApproxMillis?.let {
+                    text = TextUtils.formatDistance(distanceMeters) + leg.approxDurationMillis?.let {
                         ", ${stringResource(R.string.approximately_abbr)} ${
                             TextUtils.prettifyDurationShortText(it)
                         }"
