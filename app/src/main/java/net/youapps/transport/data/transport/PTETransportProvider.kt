@@ -22,7 +22,6 @@ import net.youapps.transport.toZonedDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Date
-import kotlin.collections.orEmpty
 
 class PTETransportProvider(private val network: NetworkProvider) : TransportProvider {
     override suspend fun queryStations(query: String): List<Location> {
@@ -155,9 +154,9 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
         // we have to move by index here because we modify `legs` inside the loop
         // i.e., otherwise we would modify the iterator while reading it, which would cause undefined
         // behavior
-        while (i < legs.size - 1) {
+        while (i < legs.size) {
             val leg = legs[i]
-            val nextLeg = legs[i + 1]
+            val nextLeg = legs.getOrNull(i+1)
 
             if (leg is TripLeg.Public && nextLeg is TripLeg.Public) {
                 legs.add(
@@ -178,7 +177,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
                 )
                 val startTime =
                     legs.getOrNull(i - 1)?.arrival?.arrivalTime ?: leg.departure.departureTime
-                val endTime = nextLeg.departure.departureTime
+                val endTime = nextLeg?.departure?.departureTime ?: leg.arrival.arrivalTime
 
                 legs[i] = leg.copy(
                     approxDurationMillis = approxDuration,
