@@ -44,7 +44,9 @@ import net.youapps.transport.MapLibreUtils.geoPosition
 import net.youapps.transport.NavRoutes
 import net.youapps.transport.R
 import net.youapps.transport.TextUtils
+import net.youapps.transport.components.directions.StopType
 import net.youapps.transport.components.directions.TripLegIndividual
+import net.youapps.transport.components.directions.TripLegLocation
 import net.youapps.transport.components.directions.TripLegPublic
 import net.youapps.transport.components.directions.TripSummary
 import net.youapps.transport.components.generic.RefreshLoadingBox
@@ -91,6 +93,14 @@ fun TripDetailsScreen(
                 }
 
                 itemsIndexed(tripLegs) { index, leg ->
+                    if (index == 0 && leg is TripLeg.Individual) {
+                        // prepend the start location as a separate row
+                        // because the individual trip legs don't show it
+                        TripLegLocation(leg.departure.location, leg.departure.departureTime, StopType.Departure)
+
+                        HorizontalDivider()
+                    }
+
                     HorizontalDivider()
 
                     when (leg) {
@@ -103,6 +113,14 @@ fun TripDetailsScreen(
                         is TripLeg.Individual -> {
                             TripLegIndividual(leg)
                         }
+                    }
+
+                    if (index == tripLegs.size - 1 /* last leg */ && leg is TripLeg.Individual) {
+                        HorizontalDivider()
+
+                        // append the goal location as a separate row
+                        // because the individual trip legs don't show it
+                        TripLegLocation(leg.arrival.location, leg.arrival.arrivalTime, StopType.Arrival)
                     }
                 }
 
