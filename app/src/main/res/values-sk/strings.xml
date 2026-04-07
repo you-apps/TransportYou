@@ -40,4 +40,9 @@
     <string name="longitude">Zemepisná dĺžka</string>
     <string name="latitude">Zemepisná šírka</string>
     <string name="transport_lines">Dopravné trasy</string>
+    <string name="walk">Pešo</string>
+    <string name="bike">Na bicykli</string>
+    <string name="drive">Autom</string>
+    <string name="check_in">Príchod</string>
+    <string name="check_out">Odchod</string>
 </resources>
