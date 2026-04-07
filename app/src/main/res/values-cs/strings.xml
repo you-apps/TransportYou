@@ -40,4 +40,9 @@
     <string name="product_ferry">Trajekt</string>
     <string name="product_on_demand">Auto na vyžádání</string>
     <string name="transport_lines">Dopravní trasy</string>
+    <string name="walk">Pěšky</string>
+    <string name="bike">Na kole</string>
+    <string name="drive">Autem</string>
+    <string name="check_in">Příjezd</string>
+    <string name="check_out">Odjezd</string>
 </resources>
