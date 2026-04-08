@@ -15,9 +15,10 @@
     <string name="trip_time">Brauciena ilgums</string>
     <string name="save">Saglabāt</string>
     <string name="saved_routes">Saglabātie maršruti</string>
-    <string name="transport_network">Transporta veids</string>
+    <string name="transport_network">Transporta tīkls</string>
     <string name="refresh">Atsvaidzināt</string>
     <string name="trip_cancelled">Brauciens nav iespējams vai ir atcelts.</string>
     <string name="settings">Iestatījumi</string>
     <string name="approximately_abbr">aptuveni</string>
+    <string name="edit_locations">Labot atrašanās vietas</string>
 </resources>
