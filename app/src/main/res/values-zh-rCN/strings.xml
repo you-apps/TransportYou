@@ -40,4 +40,9 @@
     <string name="longitude">经度</string>
     <string name="latitude">纬度</string>
     <string name="transport_lines">交通线路</string>
+    <string name="walk">步行</string>
+    <string name="bike">骑行</string>
+    <string name="drive">驾车</string>
+    <string name="check_in">签到</string>
+    <string name="check_out">签退</string>
 </resources>
