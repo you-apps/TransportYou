@@ -43,5 +43,6 @@
     <string name="walk">Ходьба</string>
     <string name="bike">Велосипед</string>
     <string name="drive">Їзда</string>
-    <string name="check_in">Зареєструватися</string>
+    <string name="check_in">Приїзд</string>
+    <string name="check_out">Від’їзд</string>
 </resources>
