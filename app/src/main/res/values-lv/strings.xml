@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Meklēt</string>
+    <string name="destination">Galapunkts</string>
+    <string name="origin">Sākumpunkts</string>
+    <string name="back">Atpakaļ</string>
+    <string name="clear">Notīrīt</string>
+    <string name="directions">Norādes</string>
+    <string name="trip_options">Brauciena iespējas</string>
+    <string name="now">Tagad</string>
+    <string name="departure">Atiet</string>
+    <string name="arrival">Pienāk</string>
+    <string name="okay">Labi</string>
+    <string name="cancel">Atcelt</string>
+    <string name="trip_time">Brauciena ilgums</string>
+    <string name="save">Saglabāt</string>
+    <string name="saved_routes">Saglabātie maršruti</string>
+    <string name="transport_network">Transporta tīkls</string>
+    <string name="refresh">Atsvaidzināt</string>
+    <string name="trip_cancelled">Brauciens nav iespējams vai ir atcelts.</string>
+    <string name="settings">Iestatījumi</string>
+    <string name="approximately_abbr">aptuveni</string>
+    <string name="edit_locations">Labot atrašanās vietas</string>
+</resources>
