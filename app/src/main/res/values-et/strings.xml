@@ -40,4 +40,9 @@
     <string name="longitude">Pikkuskraad</string>
     <string name="latitude">Laiuskraad</string>
     <string name="transport_lines">Ühistranspordi liinid</string>
+    <string name="walk">Kõndimine</string>
+    <string name="bike">Rattasõit</string>
+    <string name="drive">Autosõit</string>
+    <string name="check_in">Registreerumine</string>
+    <string name="check_out">Väljakirjutamine</string>
 </resources>

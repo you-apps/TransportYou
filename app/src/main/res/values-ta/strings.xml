@@ -39,4 +39,5 @@
     <string name="product_cablecar">கேபிள் கார்</string>
     <string name="product_ferry">படகு</string>
     <string name="product_on_demand">தேவைக்கேற்ப கார்</string>
+    <string name="transport_lines">போக்குவரத்து கோடுகள்</string>
 </resources>

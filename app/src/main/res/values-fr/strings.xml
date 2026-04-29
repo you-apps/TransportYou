@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Rechercher</string>
+    <string name="search">Recherche</string>
     <string name="origin">Origine</string>
     <string name="destination">Destination</string>
     <string name="back">Retour</string>
@@ -32,4 +32,14 @@
     <string name="product_cablecar">Funiculaire</string>
     <string name="product_ferry">Ferry</string>
     <string name="product_on_demand">Voiture à la demande</string>
+    <string name="transfer">Transfert</string>
+    <string name="transfer_impossible">Transfert impossible</string>
+    <string name="view_departures">Voir les départs</string>
+    <string name="length_of_stay">Durée du séjour</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="transport_lines">Lignes de transport</string>
+    <string name="walk">Marche</string>
+    <string name="bike">Vélo</string>
+    <string name="drive">Voiture</string>
 </resources>

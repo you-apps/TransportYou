@@ -40,4 +40,9 @@
     <string name="longitude">Längengrad</string>
     <string name="latitude">Breitengrad</string>
     <string name="transport_lines">Verkehrslinien</string>
+    <string name="walk">Zu Fuß</string>
+    <string name="bike">Fahrrad</string>
+    <string name="drive">Fahren</string>
+    <string name="check_in">Check in</string>
+    <string name="check_out">Check out</string>
 </resources>
