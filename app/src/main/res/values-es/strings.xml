@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Buscar</string>
+    <string name="search">Search</string>
     <string name="origin">Origen</string>
     <string name="destination">Destino</string>
     <string name="back">Atrás</string>
@@ -40,4 +40,9 @@
     <string name="product_cablecar">Teleférico</string>
     <string name="product_ferry">Ferry</string>
     <string name="transport_lines">Líneas de transporte</string>
+    <string name="bike">Bike</string>
+    <string name="check_in">Check in</string>
+    <string name="check_out">Check out</string>
+    <string name="walk">Walk</string>
+    <string name="drive">Drive</string>
 </resources>
