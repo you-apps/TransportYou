@@ -73,16 +73,48 @@ class DirectionsModel(
     private var tripsFirstPageContext: Any? = null
     private var tripsLastPageContext: Any? = null
 
-    private var queryDeparturesJob: Job? = null
+    private fun loadActualDestinationName() {
+        val (origin, destination) = (origin.value ?: return) to (destination.value ?: return)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resolvedDestination =
+                    networkRepository.provider.queryStations(destination.name, 5)
+                        .filter { it.name == destination.name }
+                        // search for the result with the closest distance to the origin location
+                        // that's a very ugly heuristic, but in 99% of cases this avoids that
+                        // the wrong station is selected if multiple stations have the same name
+                        .minByOrNull {
+                            it.position?.let { other -> origin.position?.minus(other) }
+                                ?: Double.MAX_VALUE
+                        }
+                        ?: throw IllegalArgumentException()
+
+                this@DirectionsModel.destination.emit(resolvedDestination)
+            } catch (e: Exception) {
+                Log.e("fetching trips", e.stackTraceToString())
+                _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+                return@launch
+            }
+        }
+    }
+
+    private var queryTripsJob: Job? = null
     fun queryTrips() {
+        val (origin, destination) = (origin.value ?: return) to (destination.value ?: return)
+        if (destination.id == null) {
+            // in some cases, it's possible that the destination has no ID - e.g. if the trips screen
+            // was opened from the departures screen (this is caused by PTE API limitations, it doesn't
+            // expose that information)
+            loadActualDestinationName()
+            return
+        }
+
         // cancel previous query request - otherwise this would be a race condition if one request
         // finishes after another one has started
-        queryDeparturesJob?.cancel()
+        queryTripsJob?.cancel()
 
-        queryDeparturesJob = viewModelScope.launch(Dispatchers.IO) {
-            val (origin, destination) = (origin.value ?: return@launch) to (destination.value
-                ?: return@launch)
-
+        queryTripsJob = viewModelScope.launch(Dispatchers.IO) {
             tripsFirstPageContext = null
             tripsLastPageContext = null
             _tripsLoadingState.emit(RefreshLoadingState.LOADING)
@@ -112,74 +144,82 @@ class DirectionsModel(
         }
     }
 
-    fun getMoreTrips(laterTrips: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        val (origin, destination) = (origin.value ?: return@launch) to (destination.value
-            ?: return@launch)
+    fun getMoreTrips(laterTrips: Boolean) {
+        queryTripsJob?.cancel()
 
-        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
+        queryTripsJob = viewModelScope.launch(Dispatchers.IO) {
+            val (origin, destination) = (origin.value ?: return@launch) to (destination.value
+                ?: return@launch)
 
-        val tripsResp = try {
-            networkRepository.provider.queryTrips(
-                origin = origin, // start
-                destination = destination, // end
-                departureTime = if (isDepartureDate.value) date.value
-                    ?: ZonedDateTime.now() else null, // date
-                arrivalTime = if (!isDepartureDate.value) date.value
-                    ?: ZonedDateTime.now() else null, // is date departure date?
-                products = enabledProducts.value, // advanced trip options
-                prevPagePagination = if (!laterTrips) tripsFirstPageContext else null,
-                nextPagePagination = if (laterTrips) tripsLastPageContext else null
-            )
-        } catch (e: Exception) {
-            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
-            Log.e("fetching more trips", e.stackTraceToString())
-            return@launch
-        }
+            _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
-        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
+            val tripsResp = try {
+                networkRepository.provider.queryTrips(
+                    origin = origin, // start
+                    destination = destination, // end
+                    departureTime = if (isDepartureDate.value) date.value
+                        ?: ZonedDateTime.now() else null, // date
+                    arrivalTime = if (!isDepartureDate.value) date.value
+                        ?: ZonedDateTime.now() else null, // is date departure date?
+                    products = enabledProducts.value, // advanced trip options
+                    prevPagePagination = if (!laterTrips) tripsFirstPageContext else null,
+                    nextPagePagination = if (laterTrips) tripsLastPageContext else null
+                )
+            } catch (e: Exception) {
+                _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+                Log.e("fetching more trips", e.stackTraceToString())
+                return@launch
+            }
 
-        // remove items that would otherwise be duplicated
-        val oldTrips = trips.value
-            .filter { newTrip -> !tripsResp.trips.any { it.id == newTrip.id } }
+            _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
 
-        if (laterTrips) {
-            tripsLastPageContext = tripsResp.nextPagePagination
-            _trips.emit(oldTrips + tripsResp.trips)
-        } else {
-            tripsFirstPageContext = tripsResp.prevPagePagination
-            _trips.emit(tripsResp.trips + oldTrips)
+            // remove items that would otherwise be duplicated
+            val oldTrips = trips.value
+                .filter { newTrip -> !tripsResp.trips.any { it.id == newTrip.id } }
+
+            if (laterTrips) {
+                tripsLastPageContext = tripsResp.nextPagePagination
+                _trips.emit(oldTrips + tripsResp.trips)
+            } else {
+                tripsFirstPageContext = tripsResp.prevPagePagination
+                _trips.emit(tripsResp.trips + oldTrips)
+            }
         }
     }
 
-    fun refreshTrip(trip: Trip) = viewModelScope.launch(Dispatchers.IO) {
-        val (origin, destination) = (origin.value ?: return@launch) to (destination.value
-            ?: return@launch)
+    fun refreshTrip(trip: Trip) {
+        queryTripsJob?.cancel()
 
-        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
+        queryTripsJob = viewModelScope.launch(Dispatchers.IO) {
+            val (origin, destination) = (origin.value ?: return@launch) to (destination.value
+                ?: return@launch)
 
-        val tripsResp = try {
-            networkRepository.provider.queryTrips(
-                origin, // start
-                destination, // end
-                // start request 5 minutes earlier if the time has changed
-                trip.legs.first().firstPredictedDepartureTime?.minusMinutes(5), // date
-                null,
-                enabledProducts.value // advanced trip options
-            )
-        } catch (e: Exception) {
-            Log.e("fetching trips", e.stackTraceToString())
-            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
-            return@launch
-        }
+            _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
-        if (tripsResp.trips.none { it.id == trip.id }) {
-            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
-        } else {
-            val updatedTrips = _trips.value.map { oldTrip ->
-                tripsResp.trips.find { it.id == oldTrip.id } ?: oldTrip
+            val tripsResp = try {
+                networkRepository.provider.queryTrips(
+                    origin, // start
+                    destination, // end
+                    // start request 5 minutes earlier if the time has changed
+                    trip.legs.first().firstPredictedDepartureTime?.minusMinutes(5), // date
+                    null,
+                    enabledProducts.value // advanced trip options
+                )
+            } catch (e: Exception) {
+                Log.e("fetching trips", e.stackTraceToString())
+                _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+                return@launch
             }
-            _trips.emit(updatedTrips)
-            _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
+
+            if (tripsResp.trips.none { it.id == trip.id }) {
+                _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+            } else {
+                val updatedTrips = _trips.value.map { oldTrip ->
+                    tripsResp.trips.find { it.id == oldTrip.id } ?: oldTrip
+                }
+                _trips.emit(updatedTrips)
+                _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
+            }
         }
     }
 

@@ -22,7 +22,7 @@ class LocationsModel(
 
         withContext(Dispatchers.IO) {
             try {
-                networkRepository.provider.queryStations(query)
+                networkRepository.provider.queryStations(query, 10)
             } catch (e: Exception) {
                 Log.e("location suggestions", e.stackTraceToString())
                 emptyList()

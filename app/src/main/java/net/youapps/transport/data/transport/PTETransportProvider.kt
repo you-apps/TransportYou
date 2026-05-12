@@ -24,8 +24,8 @@ import java.time.temporal.ChronoUnit
 import java.util.Date
 
 class PTETransportProvider(private val network: NetworkProvider) : TransportProvider {
-    override suspend fun queryStations(query: String): List<Location> {
-        return network.suggestLocations(query, setOf(LocationType.ANY), 10)
+    override suspend fun queryStations(query: String, maxAmount: Int): List<Location> {
+        return network.suggestLocations(query, setOf(LocationType.ANY), maxAmount)
             ?.suggestedLocations?.mapNotNull { it.location }.orEmpty()
             .map { it.toLocation() }
     }
