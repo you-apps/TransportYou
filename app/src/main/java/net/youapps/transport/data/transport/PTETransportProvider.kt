@@ -43,7 +43,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
                     .filter { it.line != null }
                     .map { it.line.toTransportLine(it.destination) }
             }
-            .distinctBy { it.id }
+            .distinctBy { it.destination to it.label }
 
         val departures = stationDepartures
             .orEmpty()

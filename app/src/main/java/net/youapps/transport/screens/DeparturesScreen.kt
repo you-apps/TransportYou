@@ -105,7 +105,8 @@ fun DeparturesScreen(
         sheetContent = {
             Column {
                 val lines by departuresModel.linesFlow.collectAsStateWithLifecycle()
-                val linesSorted = lines.sortedBy { it.type }
+                val linesSorted = lines
+                    .sortedWith(compareBy({ it.type }, { it.label }))
                 val departures by departuresModel.departuresFlow
                     .collectAsStateWithLifecycle()
 
