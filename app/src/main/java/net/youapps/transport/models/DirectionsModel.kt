@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -72,36 +73,43 @@ class DirectionsModel(
     private var tripsFirstPageContext: Any? = null
     private var tripsLastPageContext: Any? = null
 
-    fun queryTrips() = viewModelScope.launch(Dispatchers.IO) {
-        val (origin, destination) = (origin.value ?: return@launch) to (destination.value
-            ?: return@launch)
+    private var queryDeparturesJob: Job? = null
+    fun queryTrips() {
+        // cancel previous query request - otherwise this would be a race condition if one request
+        // finishes after another one has started
+        queryDeparturesJob?.cancel()
 
-        tripsFirstPageContext = null
-        tripsLastPageContext = null
-        _tripsLoadingState.emit(RefreshLoadingState.LOADING)
+        queryDeparturesJob = viewModelScope.launch(Dispatchers.IO) {
+            val (origin, destination) = (origin.value ?: return@launch) to (destination.value
+                ?: return@launch)
+
+            tripsFirstPageContext = null
+            tripsLastPageContext = null
+            _tripsLoadingState.emit(RefreshLoadingState.LOADING)
 
 
-        val tripsResp = try {
-            networkRepository.provider.queryTrips(
-                origin = origin, // start
-                destination = destination, // end
-                departureTime = if (isDepartureDate.value) date.value
-                    ?: ZonedDateTime.now() else null, // date
-                arrivalTime = if (!isDepartureDate.value) date.value
-                    ?: ZonedDateTime.now() else null, // is date departure date?
-                products = enabledProducts.value // advanced trip options
-            )
-        } catch (e: Exception) {
-            Log.e("fetching trips", e.stackTraceToString())
-            _tripsLoadingState.emit(RefreshLoadingState.ERROR)
-            return@launch
+            val tripsResp = try {
+                networkRepository.provider.queryTrips(
+                    origin = origin, // start
+                    destination = destination, // end
+                    departureTime = if (isDepartureDate.value) date.value
+                        ?: ZonedDateTime.now() else null, // date
+                    arrivalTime = if (!isDepartureDate.value) date.value
+                        ?: ZonedDateTime.now() else null, // is date departure date?
+                    products = enabledProducts.value // advanced trip options
+                )
+            } catch (e: Exception) {
+                Log.e("fetching trips", e.stackTraceToString())
+                _tripsLoadingState.emit(RefreshLoadingState.ERROR)
+                return@launch
+            }
+
+            tripsFirstPageContext = tripsResp.prevPagePagination
+            tripsLastPageContext = tripsResp.nextPagePagination
+
+            _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
+            _trips.emit(tripsResp.trips)
         }
-
-        tripsFirstPageContext = tripsResp.prevPagePagination
-        tripsLastPageContext = tripsResp.nextPagePagination
-
-        _tripsLoadingState.emit(RefreshLoadingState.INACTIVE)
-        _trips.emit(tripsResp.trips)
     }
 
     fun getMoreTrips(laterTrips: Boolean) = viewModelScope.launch(Dispatchers.IO) {
