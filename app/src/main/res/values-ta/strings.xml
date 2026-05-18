@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">தேடல்</string>
+    <string name="search">தேடு</string>
     <string name="origin">தோற்றம்</string>
     <string name="destination">இலக்கு</string>
     <string name="back">பின்</string>
@@ -40,4 +40,9 @@
     <string name="product_ferry">படகு</string>
     <string name="product_on_demand">தேவைக்கேற்ப கார்</string>
     <string name="transport_lines">போக்குவரத்து கோடுகள்</string>
+    <string name="walk">நட</string>
+    <string name="bike">இரு சக்கர வண்டி</string>
+    <string name="drive">ஓட்டு</string>
+    <string name="check_in">உள்பதிவு</string>
+    <string name="check_out">வெளிபதிவு</string>
 </resources>
