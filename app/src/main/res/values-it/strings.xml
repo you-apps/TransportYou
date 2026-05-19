@@ -32,4 +32,17 @@
     <string name="product_high_speed_train">Treno ad alta velocità</string>
     <string name="transport_network">Rete di trasporto</string>
     <string name="error_fetching_departures">Impossibile scaricare le partenze.</string>
+    <string name="transfer">Trasferisci</string>
+    <string name="transfer_impossible">Trasferimento impossibile</string>
+    <string name="approximately_abbr">ca.</string>
+    <string name="view_departures">Vedi partenze</string>
+    <string name="length_of_stay">Durata del soggiorno</string>
+    <string name="longitude">Longitudine</string>
+    <string name="latitude">Latitudine</string>
+    <string name="transport_lines">Linee di trasporto</string>
+    <string name="walk">A piedi</string>
+    <string name="bike">Bicicletta</string>
+    <string name="drive">Auto</string>
+    <string name="check_in">Check-in</string>
+    <string name="check_out">Check-out</string>
 </resources>
