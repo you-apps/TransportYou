@@ -42,4 +42,7 @@
     <string name="walk">Marche</string>
     <string name="bike">Vélo</string>
     <string name="drive">Voiture</string>
+    <string name="approximately_abbr">environ</string>
+    <string name="check_in">Arrivée</string>
+    <string name="check_out">Départ</string>
 </resources>
