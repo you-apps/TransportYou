@@ -27,7 +27,7 @@
     <string name="transfer_impossible">Přestup není možný</string>
     <string name="approximately_abbr">přibl.</string>
     <string name="view_departures">Zobrazit odjezdy</string>
-    <string name="length_of_stay">Délka zpoždění</string>
+    <string name="length_of_stay">Délka přestupu</string>
     <string name="longitude">Zeměpisná délka</string>
     <string name="latitude">Zeměpisná šířka</string>
     <string name="product_high_speed_train">Vysokorychlostní vlak</string>
@@ -43,6 +43,6 @@
     <string name="walk">Pěšky</string>
     <string name="bike">Na kole</string>
     <string name="drive">Autem</string>
-    <string name="check_in">Příjezd</string>
-    <string name="check_out">Odjezd</string>
+    <string name="check_in">Nástup</string>
+    <string name="check_out">Výstup</string>
 </resources>
