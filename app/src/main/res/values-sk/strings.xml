@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Vyhľadávanie</string>
+    <string name="search">Hľadať</string>
     <string name="back">Naspäť</string>
     <string name="clear">Vymazať</string>
     <string name="total">Všetky</string>
