@@ -21,7 +21,7 @@
     <string name="edit_locations">تعديل المواقع</string>
     <string name="refresh">إعادة التحميل</string>
     <string name="trip_cancelled">الرحلة مستحيلة أو أُلغيت.</string>
-    <string name="settings">الإعدادات</string>
+    <string name="settings">الاعدادات</string>
     <string name="error_fetching_departures">فشل جلب المغادرات.</string>
     <string name="transfer">تحويل</string>
     <string name="transfer_impossible">التحويل غير ممكن</string>
