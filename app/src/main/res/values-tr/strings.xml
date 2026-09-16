@@ -32,4 +32,17 @@
     <string name="product_cablecar">Teleferik</string>
     <string name="product_ferry">Feribot</string>
     <string name="product_on_demand">İsteğe bağlı araba</string>
+    <string name="transfer">Aktarma</string>
+    <string name="transfer_impossible">Aktarma yapılamaz</string>
+    <string name="approximately_abbr">yaklaşık</string>
+    <string name="view_departures">Kalkışları görüntüle</string>
+    <string name="length_of_stay">Kalış süresi</string>
+    <string name="longitude">Boylam</string>
+    <string name="latitude">Enlem</string>
+    <string name="transport_lines">Ulaşım hatları</string>
+    <string name="walk">Yürüyüş</string>
+    <string name="bike">Bisiklet</string>
+    <string name="drive">Sürüş</string>
+    <string name="check_in">Giriş</string>
+    <string name="check_out">Çıkış</string>
 </resources>
