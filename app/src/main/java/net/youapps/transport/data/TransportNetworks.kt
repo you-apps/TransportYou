@@ -43,6 +43,7 @@ import de.schildbach.pte.provider.hafas.VmtProvider
 import de.schildbach.pte.provider.hafas.ZvvProvider
 import de.schildbach.pte.provider.hafas.austria.VmobilProvider
 import de.schildbach.pte.provider.hafas.austria.VvtProvider
+import de.schildbach.pte.provider.motis.TransitousProvider
 import de.schildbach.pte.provider.other.VrsProvider
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import kotlin.io.encoding.Base64
@@ -78,13 +79,20 @@ enum class Continent {
 class TransportNetwork(
     val id: NetworkId,
     val name: String,
-    val country: Country,
-    val continent: Continent,
+    val country: Country?,
+    val continent: Continent?,
     val factory: () -> NetworkProvider
 )
 
 object TransportNetworks {
     val networks = arrayOf(
+        TransportNetwork(
+            id = NetworkId.TRANSITOUS,
+            name = "Transitious",
+            country = null,
+            continent = null,
+            factory = { TransitousProvider() }
+        ),
         TransportNetwork(
             id = NetworkId.DB,
             name = "DB International",

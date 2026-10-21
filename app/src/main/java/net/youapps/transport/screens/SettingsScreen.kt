@@ -28,8 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.schildbach.pte.NetworkId
 import net.youapps.transport.R
-import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.components.TransportNetworkRow
+import net.youapps.transport.components.generic.TooltipIconButton
 import net.youapps.transport.data.TransportNetworks
 import net.youapps.transport.models.SettingsModel
 
@@ -69,6 +69,7 @@ fun SettingsScreen(navController: NavController, settingsModel: SettingsModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 for ((group, networks) in networkGroups) {
+                    val (country, continent) = group
                     stickyHeader {
                         Row(
                             modifier = Modifier
@@ -84,8 +85,11 @@ fun SettingsScreen(navController: NavController, settingsModel: SettingsModel) {
                                 color = MaterialTheme.colorScheme.primary
                             )
 
+
                             Text(
-                                text = "${group.first.name} (${group.second.name})",
+                                text =
+                                    if (country != null && continent != null) "${country.name} (${continent.name})"
+                                    else stringResource(R.string.international),
                                 color = MaterialTheme.colorScheme.primary
                             )
 

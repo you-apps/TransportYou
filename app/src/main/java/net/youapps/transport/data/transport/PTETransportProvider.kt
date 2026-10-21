@@ -5,6 +5,7 @@ import de.schildbach.pte.dto.Line
 import de.schildbach.pte.dto.LocationType
 import de.schildbach.pte.dto.Position
 import de.schildbach.pte.dto.QueryTripsContext
+import de.schildbach.pte.dto.SuggestLocationsResult
 import de.schildbach.pte.dto.TripOptions
 import de.schildbach.pte.provider.NetworkProvider
 import net.youapps.transport.data.transport.model.Departure
@@ -26,7 +27,14 @@ import java.util.Date
 
 class PTETransportProvider(private val network: NetworkProvider) : TransportProvider {
     override suspend fun queryStations(query: String, maxAmount: Int): List<Location> {
-        return network.suggestLocations(query, setOf(LocationType.ANY), maxAmount)
+        val response = network.suggestLocations(query, null, maxAmount)
+
+        if (response.status != SuggestLocationsResult.Status.OK) {
+            Log.e("querying stations", "site down")
+            return emptyList()
+        }
+
+        return response
             ?.suggestedLocations?.mapNotNull { it.location }.orEmpty()
             .map { it.toLocation() }
     }
