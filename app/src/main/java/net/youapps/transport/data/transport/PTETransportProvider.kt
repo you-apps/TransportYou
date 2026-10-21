@@ -57,11 +57,11 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
 
         val lines = stationDepartures
             .flatMap { it.lines.orEmpty() }
-            .map { it.line.toTransportLine(it.destination) }
+            .map { it.line.toTransportLine(it.destination?.location) }
             .ifEmpty {
                 stationDepartures.flatMap { it.departures }
                     .filter { it.line != null }
-                    .map { it.line.toTransportLine(it.destination) }
+                    .map { it.line.toTransportLine(it.destination?.location) }
             }
             .distinctBy { it.destination to it.label }
 
@@ -70,7 +70,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
             .flatMap { it.departures }
             .map { dep ->
                 Departure(
-                    line = dep.line.toTransportLine(dep.destination),
+                    line = dep.line.toTransportLine(dep.destination?.location),
                     departure = EstimatedDateTime(
                         planned = dep.plannedTime?.toZonedDateTime(),
                         predicted = dep.predictedTime?.toZonedDateTime()
@@ -143,7 +143,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
     private fun de.schildbach.pte.dto.Trip.Leg.toTripLeg() = when (this) {
         is de.schildbach.pte.dto.Trip.Public -> {
             TripLeg.Public(
-                line = line.toTransportLine(destination),
+                line = line.toTransportLine(destination?.location),
                 arrival = arrivalStop.toStop(),
                 departure = departureStop.toStop(),
                 intermediateStops = intermediateStops?.map { it.toStop() }

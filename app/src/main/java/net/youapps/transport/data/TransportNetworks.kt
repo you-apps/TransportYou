@@ -27,13 +27,11 @@ import de.schildbach.pte.provider.efa.VvsProvider
 import de.schildbach.pte.provider.efa.VvvProvider
 import de.schildbach.pte.provider.efa.WienProvider
 import de.schildbach.pte.provider.hafas.AvvAachenProvider
-import de.schildbach.pte.provider.hafas.AvvAugsburgProvider
 import de.schildbach.pte.provider.hafas.BartProvider
 import de.schildbach.pte.provider.hafas.BvgProvider
 import de.schildbach.pte.provider.hafas.DsbProvider
 import de.schildbach.pte.provider.hafas.InvgProvider
 import de.schildbach.pte.provider.hafas.LuProvider
-import de.schildbach.pte.provider.hafas.NasaProvider
 import de.schildbach.pte.provider.hafas.NsProvider
 import de.schildbach.pte.provider.hafas.NvvProvider
 import de.schildbach.pte.provider.hafas.OebbProvider
@@ -101,7 +99,7 @@ object TransportNetworks {
             name = "Berliner Verkehrsbetriebe (BVG)",
             country = Country.Germany,
             continent = Continent.Europe,
-            factory = { BvgProvider("{\"aid\":\"1Rxs112shyHLatUX4fofnmdxK\",\"type\":\"AID\"}") }
+            factory = { BvgProvider.Legacy("{\"aid\":\"1Rxs112shyHLatUX4fofnmdxK\",\"type\":\"AID\"}") }
         ),
         TransportNetwork(
             id = NetworkId.NVV,
@@ -116,7 +114,7 @@ object TransportNetworks {
             country = Country.Germany,
             continent = Continent.Europe,
             factory = {
-                VbbProvider("{\"type\":\"AID\",\"aid\":\"hafas-vbb-apps\"}", "RCTJM2fFxFfxxQfI")
+                VbbProvider("RCTJM2fFxFfxxQfI")
             }
         ),
         TransportNetwork(
@@ -125,15 +123,6 @@ object TransportNetworks {
             country = Country.Germany,
             continent = Continent.Europe,
             factory = { BayernProvider() }
-        ),
-        TransportNetwork(
-            id = NetworkId.AVV_AUGSBURG,
-            name = "Augsburger Verkehrs- und Tarifverbund (AVV)",
-            country = Country.Germany,
-            continent = Continent.Europe,
-            factory = {
-                AvvAugsburgProvider("{\"type\":\"AID\",\"aid\":\"jK91AVVZU77xY5oH\"}")
-            }
         ),
         TransportNetwork(
             id = NetworkId.MVV,
@@ -219,13 +208,6 @@ object TransportNetworks {
             country = Country.Germany,
             continent = Continent.Europe,
             factory = { VvoProvider() }
-        ),
-        TransportNetwork(
-            id = NetworkId.NASA,
-            name = "Nahverkehrsservice Sachsen-Anhalt (NASA)",
-            country = Country.Germany,
-            continent = Continent.Europe,
-            factory = { NasaProvider("{\"aid\":\"nasa-apps\",\"type\":\"AID\"}") }
         ),
         TransportNetwork(
             id = NetworkId.VRR,

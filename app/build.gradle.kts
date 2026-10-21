@@ -55,6 +55,11 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        // https://github.com/bcgit/bc-java/issues/1685#issuecomment-2134861756
+        resources.excludes.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+    }
 }
 
 allprojects {
