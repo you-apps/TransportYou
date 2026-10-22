@@ -37,6 +37,7 @@ class PTETransportProvider(private val network: NetworkProvider) : TransportProv
         return response
             ?.suggestedLocations?.mapNotNull { it.location }.orEmpty()
             .map { it.toLocation() }
+            .filter { it.id != null }
     }
 
     private val allProducts = setOf(

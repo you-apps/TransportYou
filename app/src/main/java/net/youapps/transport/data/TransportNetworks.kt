@@ -278,7 +278,7 @@ object TransportNetworks {
             name = "Verkehrsverbund Rhein-Sieg (VRS)",
             country = Country.Germany,
             continent = Continent.Europe,
-            factory = { VrsProvider(VRS_CLIENT_CERTIFICATE) }
+            factory = { VrsProvider() }
         ),
         TransportNetwork(
             id = NetworkId.VMT,
