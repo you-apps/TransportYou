@@ -274,13 +274,6 @@ object TransportNetworks {
             factory = { VvvProvider() }
         ),
         TransportNetwork(
-            id = NetworkId.VRS,
-            name = "Verkehrsverbund Rhein-Sieg (VRS)",
-            country = Country.Germany,
-            continent = Continent.Europe,
-            factory = { VrsProvider() }
-        ),
-        TransportNetwork(
             id = NetworkId.VMT,
             name = "Verkehrsverbund Mittelthüringen (VMT)",
             country = Country.Germany,
