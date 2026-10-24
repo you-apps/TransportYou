@@ -12,7 +12,7 @@
     <string name="now">Maintenant</string>
     <string name="departure">Départ</string>
     <string name="arrival">Arrivée</string>
-    <string name="okay">Valider</string>
+    <string name="okay">Ok</string>
     <string name="cancel">Annuler</string>
     <string name="trip_time">Heure du voyage</string>
     <string name="save">Sauvegarder</string>

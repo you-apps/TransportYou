@@ -45,4 +45,5 @@
     <string name="drive">Їзда</string>
     <string name="check_in">Приїзд</string>
     <string name="check_out">Від’їзд</string>
+    <string name="international">Інтернаціональний</string>
 </resources>

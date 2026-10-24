@@ -45,4 +45,5 @@
     <string name="drive">Autosõit</string>
     <string name="check_in">Registreerumine</string>
     <string name="check_out">Väljakirjutamine</string>
+    <string name="international">Rahvusvaheline</string>
 </resources>
